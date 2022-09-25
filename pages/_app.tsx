@@ -1,8 +1,20 @@
-import '../styles/globals.css'
-import type { AppProps } from 'next/app'
+import type {AppProps} from "next/app";
+import Head from "next/head";
 
-function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
-}
+const FAVICONS = ["red.ico", "blue.ico", "yellow.ico", "green.ico"]
 
-export default MyApp
+const MyApp = ({Component, pageProps}: AppProps) => {
+	const favicon = '/favicons/' + FAVICONS[Math.floor(Math.random() * 4)];
+
+	return (
+		<>
+			<Head>
+				<title>Kahut!</title>
+				<link rel="icon" href={favicon}/>
+			</Head>
+			<Component {...pageProps} />
+		</>
+	);
+};
+
+export default MyApp;
