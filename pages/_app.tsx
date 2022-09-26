@@ -1,10 +1,13 @@
 import type {AppProps} from "next/app";
 import Head from "next/head";
+import {useApollo} from "../apollo/client";
+import {ApolloProvider} from "@apollo/client";
 
-const FAVICONS = ["red.ico", "blue.ico", "yellow.ico", "green.ico"]
+const FAVICONS = ["red.ico", "blue.ico", "yellow.ico", "green.ico"];
 
-const MyApp = ({Component, pageProps}: AppProps) => {
-	const favicon = '/favicons/' + FAVICONS[Math.floor(Math.random() * 4)];
+const App = ({Component, pageProps}: AppProps) => {
+	const apolloClient = useApollo((pageProps as any).initialApolloState);
+	const favicon = "/favicons/" + FAVICONS[Math.floor(Math.random() * 4)];
 
 	return (
 		<>
@@ -12,9 +15,11 @@ const MyApp = ({Component, pageProps}: AppProps) => {
 				<title>Kahut!</title>
 				<link rel="icon" href={favicon}/>
 			</Head>
-			<Component {...pageProps} />
+			<ApolloProvider client={apolloClient}>
+				<Component {...pageProps} />
+			</ApolloProvider>
 		</>
 	);
 };
 
-export default MyApp;
+export default App;
