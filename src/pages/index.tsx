@@ -6,11 +6,11 @@ import CommentReview from "../components/landing/CommentReview";
 import PopularityCounter from "../components/landing/PopularityCounter";
 import InfoCard from "../components/landing/InfoCard";
 import TextItem from "../components/landing/TextItem";
-import personImage1 from "../public/images/person.jpeg";
-import personImage2 from "../public/images/person2.jpeg";
-import hammerIcon from "../public/icons/hammer.svg";
-import bullhornIcon from "../public/icons/bullhorn.svg";
-import gamepadIcon from "../public/icons/gamepad.svg";
+import personImage1 from "../../public/images/person.jpeg";
+import personImage2 from "../../public/images/person2.jpeg";
+import hammerIcon from "../../public/icons/hammer.svg";
+import bullhornIcon from "../../public/icons/bullhorn.svg";
+import gamepadIcon from "../../public/icons/gamepad.svg";
 import FakeQuizButton from "../components/landing/FakeQuizButton";
 
 

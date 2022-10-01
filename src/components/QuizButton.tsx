@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import {color, theme} from "../utils/globalStyles";
-import shape1 from "../public/icons/shape1.svg";
-import shape2 from "../public/icons/shape2.svg";
-import shape3 from "../public/icons/shape3.svg";
-import shape4 from "../public/icons/shape4.svg";
+import shape1 from "../../public/icons/shape1.svg";
+import shape2 from "../../public/icons/shape2.svg";
+import shape3 from "../../public/icons/shape3.svg";
+import shape4 from "../../public/icons/shape4.svg";
 
 export enum ButtonColor {"RED", "BLUE", "YELLOW", "GREEN",};
 const colorByType = [theme.red, theme.frost3, theme.yellow, theme.green];
