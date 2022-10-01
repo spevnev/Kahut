@@ -5,8 +5,8 @@ type ResolverContext = {
 }
 
 const resolvers = {
-	Query: {},
-	Mutation: {},
+	// Query: {},
+	// Mutation: {},
 };
 
 export default resolvers;
