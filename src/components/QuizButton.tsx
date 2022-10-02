@@ -14,7 +14,7 @@ const shapeByType = [shape1, shape2, shape3, shape4];
 const Button = styled.button<{ background: string }>`
 	background: ${props => props.background};
 	width: 45vw;
-	border-radius: 5px;
+	border-radius: 7px;
 	border: none;
 	outline: none;
 	display: flex;

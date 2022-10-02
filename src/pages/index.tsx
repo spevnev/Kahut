@@ -15,11 +15,10 @@ import FakeQuizButton from "../components/landing/FakeQuizButton";
 
 
 const Page = styled.div`
-	width: 90vw;
+	width: 95vw;
 	height: 100%;
 	display: flex;
 	flex-direction: column;
-	//align-items: center;
 	margin: 0 auto;
 `;
 
@@ -86,16 +85,17 @@ const Landing: NextPage = () => (
 			</Row>
 			<Row>
 				<CommentReview user={{name: "Example 1", image: personImage1}}>
-					Text #1
+					Kahut is a fantastic way to engage every single student - even remotely.
 				</CommentReview>
 				<CommentReview user={{name: "Example 2", image: personImage2}}>
-					Text #2
+					Kahut has become one of our "flagship training tools". I believe Kahut is irreplaceable, as it involves learners throughout sessions and also helps
+					employees retain important information more effectively.
 				</CommentReview>
 			</Row>
 		</Column>
 	</Page>
 );
 
-// Static site generation
+export const getStaticProps = async () => ({props: {}});
 
 export default Landing;
