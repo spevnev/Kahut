@@ -8,7 +8,7 @@ import shape4 from "../../public/icons/shape4.svg";
 
 export enum ButtonColor {"RED", "BLUE", "YELLOW", "GREEN",};
 const colorByType = [theme.red, theme.frost3, theme.yellow, theme.green];
-const shapeByType = [shape1, shape2, shape3, shape4];
+const shapeByType = [shape1.src, shape2.src, shape3.src, shape4.src];
 
 
 const Button = styled.button<{ background: string }>`
@@ -49,7 +49,7 @@ type QuizButtonProps = {
 
 export const QuizButton = ({color, children = "", onClick = () => {}, className}: QuizButtonProps) => (
 	<Button onClick={onClick} background={colorByType[color]} className={className}>
-		<Shape src={shapeByType[color].src}/>
+		<Shape src={shapeByType[color]}/>
 		<Text>{children}</Text>
 	</Button>
 );

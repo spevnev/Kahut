@@ -6,7 +6,7 @@ import {color} from "../../utils/globalStyles";
 const Container = styled.div`
 	position: relative;
 	width: 46.5vw;
-	background: ${color("white0")};
+	background: ${color("white1")};
 	border-radius: 5px;
 	display: flex;
 	flex-direction: row;
@@ -20,7 +20,7 @@ const Container = styled.div`
 		left: 10%;
 		width: 15px;
 		height: 15px;
-		background: ${color("white0")};
+		background: ${color("white1")};
 		transform: translateX(-50%) translateY(50%) rotate(45deg);
 		border-radius: 3px;
 	}
@@ -61,16 +61,15 @@ type Props = {
 	children: string
 }
 
-const CommentReview = ({user: {name, image}, children}: Props) => {
-	return (
-		<Container>
-			<Image src={image.src} alt="Profile picture"/>
-			<Column>
-				<Quote>"{children}"</Quote>
-				<Name>{name}</Name>
-			</Column>
-		</Container>
-	);
-};
+const CommentReview = ({user: {name, image: {src: image}}, children}: Props) => (
+	<Container>
+		<Image src={image} alt="Profile picture"/>
+		<Column>
+			{/* eslint-disable-next-line react/no-unescaped-entities */}
+			<Quote>"{children}"</Quote>
+			<Name>{name}</Name>
+		</Column>
+	</Container>
+);
 
 export default CommentReview;

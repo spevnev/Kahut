@@ -12,20 +12,22 @@ import hammerIcon from "../../public/icons/hammer.svg";
 import bullhornIcon from "../../public/icons/bullhorn.svg";
 import gamepadIcon from "../../public/icons/gamepad.svg";
 import FakeQuizButton from "../components/landing/FakeQuizButton";
+import {color} from "../utils/globalStyles";
 
 
 const Page = styled.div`
-	width: 95vw;
-	height: 100%;
 	display: flex;
 	flex-direction: column;
 	margin: 0 auto;
+	align-items: center;
+	width: 100vw;
 `;
 
 const Row = styled.div`
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
+	margin: 20px 0;
 `;
 
 const Column = styled.div`
@@ -35,7 +37,8 @@ const Column = styled.div`
 
 const SubTitle = styled.h2`
 	font-size: 60px;
-	font-weight: 200;
+	font-weight: 100;
+	text-align: center;
 `;
 
 const MainText = styled.h1`
@@ -46,36 +49,34 @@ const SecondaryText = styled.h4`
 
 `;
 
+const TiltedContainer = styled(Column)`
+	background: ${color("black0")};
+	width: 100vw;
+	height: 60vh;
+	padding: 10vh 2.5vw;
+	clip-path: polygon(0 8vh, 100% 0, 100% 52vh, 0 100%);
+`;
+
 
 const Landing: NextPage = () => (
 	<Page>
 		<Header/>
-		<Row>
+		<Row style={{width: "95vw"}}>
 			<Column>
-				<MainText>
-
-				</MainText>
-				<SecondaryText>
-
-				</SecondaryText>
+				<MainText>Worst learning platform, that people hate.</MainText>
+				<SecondaryText>Improve learning by using this fun, innovative, and accessible testing service.</SecondaryText>
 			</Column>
 			<InfoCard/>
 		</Row>
-		<Column>
-			<SubTitle></SubTitle>
-			<Row>
-				<TextItem title="" icon={hammerIcon}>
-					description 1
-				</TextItem>
-				<TextItem title="" icon={bullhornIcon}>
-					description 2
-				</TextItem>
-				<TextItem title="" icon={gamepadIcon}>
-					description 3
-				</TextItem>
+		<TiltedContainer>
+			<SubTitle>Simple.</SubTitle>
+			<Row style={{width: "80vw", margin: "auto"}}>
+				<TextItem title="Create" icon={hammerIcon}>It only takes a few minutes to create a learning game on any topic.</TextItem>
+				<TextItem title="Share" icon={bullhornIcon}>Share a game with remote players to play together.</TextItem>
+				<TextItem title="Play" icon={gamepadIcon}>Game on! Join a Kahut game with a code provided by the host and answer questions.</TextItem>
 			</Row>
-		</Column>
-		<Column>
+		</TiltedContainer>
+		<Column style={{width: "95vw"}}>
 			<PopularityCounter/>
 			<Row>
 				<FakeQuizButton color={ButtonColor.RED}>Less than 0% of teachers use Kahut</FakeQuizButton>
@@ -88,6 +89,7 @@ const Landing: NextPage = () => (
 					Kahut is a fantastic way to engage every single student - even remotely.
 				</CommentReview>
 				<CommentReview user={{name: "Example 2", image: personImage2}}>
+					{/* eslint-disable-next-line react/no-unescaped-entities */}
 					Kahut has become one of our "flagship training tools". I believe Kahut is irreplaceable, as it involves learners throughout sessions and also helps
 					employees retain important information more effectively.
 				</CommentReview>
