@@ -27,7 +27,7 @@ const Row = styled.div`
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	margin: 20px 0;
+	padding: 20px 0;
 `;
 
 const Column = styled.div`
@@ -42,11 +42,15 @@ const SubTitle = styled.h2`
 `;
 
 const MainText = styled.h1`
-
+	font-size: 54px;
+	font-weight: 100;
+	color: ${color("white0")}
 `;
 
 const SecondaryText = styled.h4`
-
+	font-size: 18px;
+	font-weight: 200;
+	color: ${color("white2")}
 `;
 
 const TiltedContainer = styled(Column)`
@@ -57,17 +61,24 @@ const TiltedContainer = styled(Column)`
 	clip-path: polygon(0 8vh, 100% 0, 100% 52vh, 0 100%);
 `;
 
+const LandingContainer = styled(Row)`
+	width: 90vw;
+	height: 60vh;
+	align-items: center;
+`;
+
 
 const Landing: NextPage = () => (
 	<Page>
 		<Header/>
-		<Row style={{width: "95vw"}}>
-			<Column>
-				<MainText>Worst learning platform, that people hate.</MainText>
+		<LandingContainer>
+			<Column style={{width: "60vw"}}>
+				<MainText>Worst learning platform,</MainText>
+				<MainText>that people hate.</MainText>
 				<SecondaryText>Improve learning by using this fun, innovative, and accessible testing service.</SecondaryText>
 			</Column>
 			<InfoCard/>
-		</Row>
+		</LandingContainer>
 		<TiltedContainer>
 			<SubTitle>Simple.</SubTitle>
 			<Row style={{width: "80vw", margin: "auto"}}>

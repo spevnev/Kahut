@@ -9,12 +9,15 @@ type Props = {
 
 const useOnVisible = ({positionCoefficient, callback}: Props) => {
 	const ref = useRef();
+	const wasSeen = useRef(false);
 
 	const _callback = () => {
-		if (!isVisible(ref.current, positionCoefficient)) return;
+		if (wasSeen.current || !isVisible(ref.current, positionCoefficient)) return;
 
+		wasSeen.current = true;
 		window.removeEventListener("scroll", _callback);
 		window.removeEventListener("resize", _callback);
+
 		callback();
 	};
 

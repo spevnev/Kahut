@@ -13,7 +13,7 @@ const Text = styled.p<{ big?: any }>`
 	font-weight: 200;
 `;
 
-const SPEED = 1738;
+const SPEED = 1758;
 let _counter = 100000;
 const PopularityCounter = () => {
 	const [counter, setCounter] = useState(_counter);
@@ -24,7 +24,9 @@ const PopularityCounter = () => {
 		if (_counter > 0) setTimeout(decrease, 17);
 	};
 
-	const ref = useOnVisible({positionCoefficient: 3 / 4, callback: decrease});
+	const ref = useOnVisible({
+		positionCoefficient: 3 / 4, callback: decrease,
+	});
 
 	return (
 		<Container ref={ref}>
