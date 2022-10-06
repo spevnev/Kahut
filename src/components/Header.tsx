@@ -82,8 +82,8 @@ const Header = () => {
 					</Row>
 				</Row>
 				<Row>
-					<TextLink onClick={() => router.push("/login?signin")}>Sign in</TextLink>
-					<ButtonLink onClick={() => router.push("/login?signup")}>Sign up</ButtonLink>
+					<TextLink onClick={() => router.push("/login")}>Sign in</TextLink>
+					<ButtonLink onClick={() => router.push("/signup")}>Sign up</ButtonLink>
 				</Row>
 			</FixedContainer>
 		</>

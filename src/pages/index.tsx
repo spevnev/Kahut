@@ -100,7 +100,6 @@ const Landing: NextPage = () => (
 					Kahut is a fantastic way to engage every single student - even remotely.
 				</CommentReview>
 				<CommentReview user={{name: "Just a stranger", image: personImage2}}>
-					{/* eslint-disable-next-line react/no-unescaped-entities */}
 					Kahut has become one of our "flagship training tools". I believe Kahut is irreplaceable, as it involves learners throughout sessions and also helps
 					employees retain important information more effectively.
 				</CommentReview>

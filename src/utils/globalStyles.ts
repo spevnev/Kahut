@@ -6,6 +6,8 @@ export const theme: { [key: string]: string } = {
 	black2: "#434C5E",
 	black3: "#4C566A",
 
+	gray: "#8C9097",
+
 	white0: "#ECEFF4",
 	white1: "#E5E9F0",
 	white2: "#D8DEE9",

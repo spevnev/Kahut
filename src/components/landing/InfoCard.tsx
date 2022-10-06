@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import {color} from "../../utils/globalStyles";
-import Link from "next/link";
+import {useRouter} from "next/router";
 
 const Container = styled.div`
 	width: 27.5vw;
@@ -66,6 +66,7 @@ const Input = styled.input`
 `;
 
 const InfoCard = () => {
+	const router = useRouter();
 	const [code, setCode] = useState("");
 
 	useEffect(() => {
@@ -77,7 +78,7 @@ const InfoCard = () => {
 
 	return (
 		<Container>
-			<Button><Link href="/login">Sign up</Link></Button>
+			<Button onClick={() => router.push("/signup")}>Sign up</Button>
 			<Text>to get access to all features</Text>
 			<Br/>
 			<Text>or play without an account</Text>

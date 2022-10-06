@@ -75,7 +75,6 @@ const CommentReview = ({user: {name, image: {src: image}}, children}: Props) => 
 	<Container>
 		<Image src={image} alt="Profile picture"/>
 		<Column>
-			{/* eslint-disable-next-line react/no-unescaped-entities */}
 			<Quote>"{children}"</Quote>
 			<Name>{name}</Name>
 		</Column>
