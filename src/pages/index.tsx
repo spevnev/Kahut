@@ -96,10 +96,10 @@ const Landing: NextPage = () => (
 				<FakeQuizButton color={ButtonColor.GREEN}>Largest learning platform in the room</FakeQuizButton>
 			</Row>
 			<Row>
-				<CommentReview user={{name: "Example 1", image: personImage1}}>
+				<CommentReview user={{name: "A random dude", image: personImage1}}>
 					Kahut is a fantastic way to engage every single student - even remotely.
 				</CommentReview>
-				<CommentReview user={{name: "Example 2", image: personImage2}}>
+				<CommentReview user={{name: "Just a stranger", image: personImage2}}>
 					{/* eslint-disable-next-line react/no-unescaped-entities */}
 					Kahut has become one of our "flagship training tools". I believe Kahut is irreplaceable, as it involves learners throughout sessions and also helps
 					employees retain important information more effectively.
