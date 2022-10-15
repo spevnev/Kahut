@@ -2,6 +2,9 @@ import styled from "styled-components";
 import {color} from "../../utils/globalStyles";
 import React, {useEffect, useRef, useState} from "react";
 import {useRouter} from "next/router";
+import Header from "../Header";
+import closedEyeIcon from "../../../public/icons/closedEye.svg";
+import openedEyeIcon from "../../../public/icons/openedEye.svg";
 
 const Container = styled.div`
 	display: flex;
@@ -13,6 +16,7 @@ const Container = styled.div`
 	min-width: 400px;
 	height: 75vh;
 	padding-top: 20vh;
+	margin: 0 auto;
 `;
 
 const Column = styled.div`
@@ -20,6 +24,13 @@ const Column = styled.div`
 	flex-direction: column;
 	align-items: center;
 	width: 50%;
+`;
+
+const Row = styled.div`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	width: 100%;
 `;
 
 const Title = styled.h1`
@@ -76,6 +87,19 @@ const Button = styled.button`
 	}
 `;
 
+const ImageButton = styled(Button)`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 4px 10px;
+	margin: auto 0 auto 8px;
+
+	& img {
+		width: 16px;
+		height: 16px;
+	}
+`;
+
 const ErrorMessage = styled.p`
 	font-size: 16px;
 	color: ${color("red")};
@@ -95,6 +119,7 @@ const ERROR_DURATION = 3000;
 
 const Form = ({title, subtitle, link: {href, text: linkText}, inputs, onSubmit}: Props) => {
 	const router = useRouter();
+	const [visible, setVisible] = useState<{ [key: string]: boolean }>({});
 	const [values, setValues] = useState<{ [key: string]: string }>(inputs.reduce((obj, val) => ({...obj, [val.key || val.text]: ""}), {}));
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 	const timeout = useRef<NodeJS.Timeout | undefined>(undefined);
@@ -114,22 +139,38 @@ const Form = ({title, subtitle, link: {href, text: linkText}, inputs, onSubmit}:
 
 
 	return (
-		<Container>
-			<Column>
-				<Title>{title}</Title>
-				<SubTitle>{subtitle} <TextLink onClick={() => router.push(href)}>{linkText}</TextLink></SubTitle>
-			</Column>
+		<>
+			<Header/>
+			<Container>
+				<Column>
+					<Title>{title}</Title>
+					<SubTitle>{subtitle} <TextLink onClick={() => router.push(href)}>{linkText}</TextLink></SubTitle>
+				</Column>
 
-			<Column>
-				{inputs.map(({key, text, isSecret}) =>
-					<Input type={isSecret ? "password" : "text"} key={key || text} placeholder={text.slice(0, 1).toUpperCase() + text.slice(1)} value={values[key || text]}
-						   onInput={e => setValues({...values, [key || text]: (e.target as HTMLInputElement).value})}/>,
-				)}
+				<Column>
+					{/* TODO: To separate Inputs component! */}
+					{inputs.map(({key, text, isSecret}) => {
+							key = key || text;
 
-				<ErrorMessage style={errorMessage ? {} : {opacity: 0}}>{errorMessage || "."}</ErrorMessage>
-				<Button onClick={() => onSubmit(values, showError)}>Sign up</Button>
-			</Column>
-		</Container>
+							return (
+								<Row key={key}>
+									<Input type={isSecret && !visible[key] ? "password" : "text"} placeholder={text.slice(0, 1).toUpperCase() + text.slice(1)}
+										   value={values[key]} onInput={e => setValues({...values, [key!]: (e.target as HTMLInputElement).value})}/>
+									{isSecret &&
+										<ImageButton onClick={() => setVisible({...visible, [key!]: !visible[key!]})}>
+											<img src={visible[key] ? closedEyeIcon.src : openedEyeIcon.src}/>
+										</ImageButton>
+									}
+								</Row>
+							);
+						},
+					)}
+
+					<ErrorMessage style={errorMessage ? {} : {opacity: 0}}>{errorMessage || "."}</ErrorMessage>
+					<Button onClick={() => onSubmit(values, showError)}>Sign up</Button>
+				</Column>
+			</Container>
+		</>
 	);
 };
 

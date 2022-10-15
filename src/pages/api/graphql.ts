@@ -1,5 +1,5 @@
 import {NextApiRequest, NextApiResponse} from "next";
-import apollo, {connectionPromises} from "../../apollo/server";
+import apollo, {connectionPromises} from "./apollo-server";
 
 export const config = {api: {bodyParser: false}};
 

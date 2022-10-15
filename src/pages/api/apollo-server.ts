@@ -1,6 +1,6 @@
 import {PrismaClient} from "@prisma/client";
 import {ApolloServer} from "apollo-server-micro";
-import schema from "./schema";
+import schema from "../../graphql/schema";
 import {ApolloServerPluginLandingPageLocalDefault} from "apollo-server-core";
 
 const prismaClient = new PrismaClient();

@@ -6,7 +6,7 @@ const isOnServer = typeof window === "undefined";
 const createLink = (): ApolloLink => {
 	if (isOnServer) {
 		const {SchemaLink} = require("@apollo/client/link/schema");
-		const {schema} = require("./schema");
+		const {schema} = require("../graphql/schema");
 
 		return new SchemaLink({schema});
 	} else {

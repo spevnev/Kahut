@@ -1,5 +1,5 @@
 import type {AppProps} from "next/app";
-import {useApollo} from "../apollo/client";
+import {useApollo} from "../hooks/useApollo";
 import {ApolloProvider} from "@apollo/client";
 import GlobalStyles from "../utils/globalStyles";
 import Head from "next/head";
