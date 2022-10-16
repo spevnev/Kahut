@@ -11,12 +11,6 @@ const Quit = styled.img`
     top: 15px;
     left: 15px;
     cursor: pointer;
-    transition: all 0.2s;
-    transform: translateX(1px);
-
-    &:hover {
-        transform: translateX(-1px);
-    }
 `;
 
 const Container = styled.div`
