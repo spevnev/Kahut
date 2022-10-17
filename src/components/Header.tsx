@@ -4,6 +4,8 @@ import { color } from '../utils/globalStyles';
 import { useRouter } from 'next/router';
 import DropDown from './DropDown';
 import exitIcon from '../../public/icons/exit.svg';
+import { isAuthenticated, login } from '../utils/authentication';
+import { googleLogout } from '@react-oauth/google';
 
 const Container = styled.div`
     width: 100vw;
@@ -74,10 +76,6 @@ const Username = styled.p`
 const Header = () => {
     const router = useRouter();
 
-    const isAuthenticated = () => true;
-
-    const logout = () => {};
-
     const username = 'test';
     return (
         <>
@@ -92,18 +90,15 @@ const Header = () => {
                     </Row>
                 </Row>
 
-                {isAuthenticated() ? (
-                    <Row>
-                        <DropDown items={[{ title: 'Logout', icon: exitIcon, onClick: logout }]}>
+                <Row>
+                    {isAuthenticated() ? (
+                        <DropDown items={[{ title: 'Logout', icon: exitIcon, onClick: googleLogout }]}>
                             <Username>{username}</Username>
                         </DropDown>
-                    </Row>
-                ) : (
-                    <Row>
-                        <TextLink onClick={() => router.push('/login')}>Sign in</TextLink>
-                        <ButtonLink onClick={() => router.push('/signup')}>Sign up</ButtonLink>
-                    </Row>
-                )}
+                    ) : (
+                        <ButtonLink onClick={login}>Log in</ButtonLink>
+                    )}
+                </Row>
             </FixedContainer>
         </>
     );
