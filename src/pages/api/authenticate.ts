@@ -1,7 +1,7 @@
 import { LoginTicket, OAuth2Client, TokenPayload } from 'google-auth-library';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-const client = new OAuth2Client({ clientId: process.env.OAUTH_CLIENT_ID, clientSecret: process.env.OAUTH_SECRET, redirectUri: 'http://localhost:3000/' });
+const client = new OAuth2Client({ clientId: process.env.OAUTH_CLIENT_ID, clientSecret: process.env.OAUTH_SECRET });
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const { token } = req.query;
@@ -17,7 +17,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         return res.status(400);
     }
 
-    const { name, picture, email_verified } = payload;
+    const { name, picture, email, email_verified } = payload;
     if (!email_verified) return res.status(400);
 
     // TODO: login/signup + create jwt

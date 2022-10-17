@@ -1,16 +1,17 @@
-import React from "react";
-import {NextPage} from "next";
-import {useRouter} from "next/router";
+import React from 'react';
+import { NextPage } from 'next';
+import { useRouter } from 'next/router';
 
 const Game: NextPage = () => {
-	const router = useRouter();
-	const {id} = router.query;
+    const router = useRouter();
+    const { id } = router.query;
 
-	return (
-		<div>
-			<h1>{id}</h1>
-		</div>
-	);
+    return (
+        <div>
+            <h1>{id}</h1>
+            {/* Game with id [id] */}
+        </div>
+    );
 };
 
 export default Game;

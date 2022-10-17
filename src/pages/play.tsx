@@ -2,12 +2,8 @@ import React from 'react';
 import type { NextPage } from 'next';
 import styled from 'styled-components';
 
-const Test = styled.div`
-    background: 'red';
-`;
-
 const Play: NextPage = () => {
-    return Test.a;
+    return <div>{/* Code input + name input (locked if in account or with initial value) + button */}</div>;
 };
 
 export default Play;

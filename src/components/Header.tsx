@@ -4,6 +4,7 @@ import { color } from '../utils/globalStyles';
 import { useRouter } from 'next/router';
 import DropDown from './DropDown';
 import exitIcon from '../../public/icons/exit.svg';
+import profileIcon from '../../public/icons/profile.svg';
 import { isAuthenticated, login } from '../utils/authentication';
 import { googleLogout } from '@react-oauth/google';
 
@@ -92,7 +93,12 @@ const Header = () => {
 
                 <Row>
                     {isAuthenticated() ? (
-                        <DropDown items={[{ title: 'Logout', icon: exitIcon, onClick: googleLogout }]}>
+                        <DropDown
+                            items={[
+                                { title: 'Profile', icon: profileIcon, onClick: () => router.push('/me') },
+                                { title: 'Logout', icon: exitIcon, onClick: googleLogout },
+                            ]}
+                        >
                             <Username>{username}</Username>
                         </DropDown>
                     ) : (

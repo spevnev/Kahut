@@ -3,7 +3,6 @@ import { useApollo } from '../hooks/useApollo';
 import { ApolloProvider } from '@apollo/client';
 import GlobalStyles from '../utils/globalStyles';
 import Head from 'next/head';
-import { GoogleOAuthProvider } from '@react-oauth/google';
 import LoginProvider from '../components/LoginProvider';
 
 const App = ({ Component, pageProps }: AppProps) => {
