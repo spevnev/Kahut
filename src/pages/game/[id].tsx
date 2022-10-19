@@ -14,4 +14,9 @@ const Game: NextPage = () => {
     );
 };
 
+export const getServerSideProps = async () => {
+    // TODO: return {notFound: true} if there is no such pending game
+    return { props: {} };
+};
+
 export default Game;

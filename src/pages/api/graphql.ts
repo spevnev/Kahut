@@ -1,10 +1,10 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiHandler } from 'next';
 import apollo, { connectionPromises } from '../../graphql/apollo-server';
 
 export const config = { api: { bodyParser: false } };
 
-let apolloHandler: (req: NextApiRequest, res: NextApiResponse) => any | undefined;
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+let apolloHandler: NextApiHandler;
+const handler: NextApiHandler = async (req, res) => {
     if (req.method === 'OPTIONS') return res.end();
 
     if (!apolloHandler) {

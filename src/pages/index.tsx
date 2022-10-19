@@ -1,4 +1,5 @@
-import type { NextPage } from 'next';
+import React from 'react';
+import { NextPage } from 'next';
 import styled from 'styled-components';
 import Header from '../components/Header';
 import { ButtonColor } from '../components/QuizButton';
@@ -13,6 +14,7 @@ import bullhornIcon from '../../public/icons/bullhorn.svg';
 import gamepadIcon from '../../public/icons/gamepad.svg';
 import FakeQuizButton from '../components/landing/FakeQuizButton';
 import { color } from '../utils/globalStyles';
+import User from '../utils/user';
 
 const Page = styled.div`
     display: flex;
@@ -66,9 +68,13 @@ const LandingContainer = styled(Row)`
     align-items: center;
 `;
 
-const Landing: NextPage = () => (
+type Props = {
+    user: User;
+};
+
+const Landing: NextPage<Props> = ({ user }) => (
     <Page>
-        <Header />
+        <Header user={user} />
         <LandingContainer>
             <Column style={{ width: '60vw' }}>
                 <MainText>Worst learning platform,</MainText>

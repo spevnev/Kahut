@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, FunctionComponent, useState } from 'react';
 import styled from 'styled-components';
 import { color } from '../../utils/globalStyles';
 import { login } from '../../utils/authentication';
@@ -65,7 +65,7 @@ const Input = styled.input`
     box-shadow: inset 1px 2px 3px rgba(0, 0, 0, 0.2);
 `;
 
-const InfoCard = () => {
+const InfoCard: FunctionComponent = () => {
     const [code, setCode] = useState('');
 
     const onChange = (e: ChangeEvent) => {

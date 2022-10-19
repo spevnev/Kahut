@@ -1,9 +1,9 @@
+import { NextApiHandler } from 'next';
 import { LoginTicket, OAuth2Client, TokenPayload } from 'google-auth-library';
-import { NextApiRequest, NextApiResponse } from 'next';
 
 const client = new OAuth2Client({ clientId: process.env.OAUTH_CLIENT_ID, clientSecret: process.env.OAUTH_SECRET });
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const handler: NextApiHandler = async (req, res) => {
     const { token } = req.query;
     if (typeof token !== 'string') return res.status(400);
 

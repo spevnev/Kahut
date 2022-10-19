@@ -1,37 +1,38 @@
-import React, {useEffect, useRef} from "react";
+import { useEffect, useRef } from 'react';
 
-const isVisible = (el: HTMLElement | undefined, positionCoefficient: number = 1): boolean => el ? el.offsetTop < window.innerHeight * positionCoefficient + window.scrollY : false;
+const isVisible = (el: HTMLElement | undefined, positionCoefficient: number = 1): boolean =>
+    el ? el.offsetTop < window.innerHeight * positionCoefficient + window.scrollY : false;
 
 type Props = {
-	positionCoefficient?: number,
-	callback: () => any
-}
+    positionCoefficient?: number;
+    callback: () => any;
+};
 
-const useOnVisible = ({positionCoefficient, callback}: Props) => {
-	const ref = useRef();
-	const wasSeen = useRef(false);
+const useOnVisible = ({ positionCoefficient, callback }: Props) => {
+    const ref = useRef();
+    const wasSeen = useRef(false);
 
-	const _callback = () => {
-		if (wasSeen.current || !isVisible(ref.current, positionCoefficient)) return;
+    const _callback = () => {
+        if (wasSeen.current || !isVisible(ref.current, positionCoefficient)) return;
 
-		wasSeen.current = true;
-		window.removeEventListener("scroll", _callback);
-		window.removeEventListener("resize", _callback);
+        wasSeen.current = true;
+        window.removeEventListener('scroll', _callback);
+        window.removeEventListener('resize', _callback);
 
-		callback();
-	};
+        callback();
+    };
 
-	useEffect(() => {
-		window.addEventListener("scroll", _callback);
-		window.addEventListener("resize", _callback);
+    useEffect(() => {
+        window.addEventListener('scroll', _callback);
+        window.addEventListener('resize', _callback);
 
-		return () => {
-			window.removeEventListener("scroll", _callback);
-			window.removeEventListener("resize", _callback);
-		};
-	}, [_callback]);
+        return () => {
+            window.removeEventListener('scroll', _callback);
+            window.removeEventListener('resize', _callback);
+        };
+    }, []);
 
-	return ref;
+    return ref;
 };
 
 export default useOnVisible;

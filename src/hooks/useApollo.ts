@@ -19,8 +19,6 @@ const createApolloClient = () => new ApolloClient({ ssrMode: !isBrowser(), link:
 
 let apolloClient: ApolloClient<any> | undefined;
 export const initializeApollo = (initialState = null): ApolloClient<any> => {
-    if (initialState) console.log('!!!\ninitializeApollo has initialState\n!!!');
-
     const _apolloClient = apolloClient ?? createApolloClient();
     if (isBrowser() && !apolloClient) apolloClient = _apolloClient;
 

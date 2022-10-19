@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { FunctionComponent, ReactNode, useState } from 'react';
 import styled from 'styled-components';
 import { StaticImageData } from 'next/image';
 import { color } from '../utils/globalStyles';
@@ -65,10 +65,10 @@ type Item = {
 
 type Props = {
     items: Item[];
-    children: JSX.Element;
+    children: ReactNode;
 };
 
-const DropDown = ({ items, children }: Props) => {
+const DropDown: FunctionComponent<Props> = ({ items, children }) => {
     const [isOpened, setIsOpened] = useState(false);
 
     return (

@@ -1,13 +1,12 @@
-import React from 'react';
+import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
-import { color } from '../utils/globalStyles';
 import { useRouter } from 'next/router';
+import { color } from '../utils/globalStyles';
 import DropDown from './DropDown';
 import exitIcon from '../../public/icons/exit.svg';
 import profileIcon from '../../public/icons/profile.svg';
-import { login } from '../utils/authentication';
-import { googleLogout } from '@react-oauth/google';
-import useTokenData from '../hooks/useTokenData';
+import { login, logout } from '../utils/authentication';
+import User from '../utils/user';
 
 const Container = styled.div`
     width: 100vw;
@@ -68,12 +67,22 @@ const ButtonLink = styled(UnstyledLink)`
 const Username = styled.p`
     font-size: 20px;
     font-weight: 200;
+    margin-right: 8px;
+`;
+
+const UserIcon = styled.img`
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
     margin-right: 15px;
 `;
 
-const Header = () => {
+type Props = {
+    user: User;
+};
+
+const Header: FunctionComponent<Props> = ({ user }) => {
     const router = useRouter();
-    const { is_authenticated, username } = useTokenData();
 
     return (
         <>
@@ -83,20 +92,21 @@ const Header = () => {
                     <Title onClick={() => router.push('/')}>Kahut!</Title>
                     <Row>
                         <HeaderLink onClick={() => router.push('/games')}>Browse games</HeaderLink>
-                        {is_authenticated && <HeaderLink onClick={() => router.push('/my_games')}>My games</HeaderLink>}
+                        {user && <HeaderLink onClick={() => router.push('/my_games')}>My games</HeaderLink>}
                         <HeaderLink onClick={() => router.push('/play')}>Play</HeaderLink>
                     </Row>
                 </Row>
 
                 <Row>
-                    {is_authenticated ? (
+                    {user ? (
                         <DropDown
                             items={[
                                 { title: 'Profile', icon: profileIcon, onClick: () => router.push('/me') },
-                                { title: 'Logout', icon: exitIcon, onClick: googleLogout },
+                                { title: 'Logout', icon: exitIcon, onClick: logout },
                             ]}
                         >
-                            <Username>{username}</Username>
+                            <Username>{user.username}</Username>
+                            <UserIcon src={user.avatar} />
                         </DropDown>
                     ) : (
                         <ButtonLink onClick={login}>Log in</ButtonLink>

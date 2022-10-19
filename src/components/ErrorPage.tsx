@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { color } from '../utils/globalStyles';
@@ -38,7 +38,7 @@ type Props = {
     subtitle: string;
 };
 
-const ErrorPage = ({ title, subtitle }: Props) => {
+const ErrorPage: FunctionComponent<Props> = ({ title, subtitle }) => {
     const router = useRouter();
 
     return (

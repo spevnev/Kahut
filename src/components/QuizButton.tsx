@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import { color, theme } from '../utils/globalStyles';
 import shape1 from '../../public/icons/shape1.svg';
@@ -44,14 +44,14 @@ const Text = styled.p`
     margin-left: 10px;
 `;
 
-type QuizButtonProps = {
+type Props = {
     color: ButtonColor;
-    children?: string;
+    children: string;
     onClick?: () => void;
     className?: string;
 };
 
-export const QuizButton = ({ color, children = '', onClick = () => {}, className }: QuizButtonProps) => (
+export const QuizButton: FunctionComponent<Props> = ({ color, children, onClick = () => {}, className }) => (
     <Button onClick={onClick} background={colorByType[color]} className={className}>
         <Shape src={shapeByType[color]} />
         <Text>{children}</Text>
