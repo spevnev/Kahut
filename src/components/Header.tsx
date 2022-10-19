@@ -5,8 +5,9 @@ import { useRouter } from 'next/router';
 import DropDown from './DropDown';
 import exitIcon from '../../public/icons/exit.svg';
 import profileIcon from '../../public/icons/profile.svg';
-import { isAuthenticated, login } from '../utils/authentication';
+import { login } from '../utils/authentication';
 import { googleLogout } from '@react-oauth/google';
+import useTokenData from '../hooks/useTokenData';
 
 const Container = styled.div`
     width: 100vw;
@@ -51,10 +52,6 @@ const HeaderLink = styled(UnstyledLink)`
     font-weight: 200;
 `;
 
-const TextLink = styled(UnstyledLink)`
-    font-weight: 100;
-`;
-
 const ButtonLink = styled(UnstyledLink)`
     font-size: 16px;
     padding: 3px 20px;
@@ -76,8 +73,8 @@ const Username = styled.p`
 
 const Header = () => {
     const router = useRouter();
+    const { is_authenticated, username } = useTokenData();
 
-    const username = 'test';
     return (
         <>
             <Container /> {/* Empty container to have implicit margin where header should be */}
@@ -86,13 +83,13 @@ const Header = () => {
                     <Title onClick={() => router.push('/')}>Kahut!</Title>
                     <Row>
                         <HeaderLink onClick={() => router.push('/games')}>Browse games</HeaderLink>
-                        {isAuthenticated() && <HeaderLink onClick={() => router.push('/my_games')}>My games</HeaderLink>}
+                        {is_authenticated && <HeaderLink onClick={() => router.push('/my_games')}>My games</HeaderLink>}
                         <HeaderLink onClick={() => router.push('/play')}>Play</HeaderLink>
                     </Row>
                 </Row>
 
                 <Row>
-                    {isAuthenticated() ? (
+                    {is_authenticated ? (
                         <DropDown
                             items={[
                                 { title: 'Profile', icon: profileIcon, onClick: () => router.push('/me') },

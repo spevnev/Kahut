@@ -14,8 +14,9 @@ export const login = () => {
 export const getTokenData = (): any => {
     if (!isBrowser()) return null;
 
-    const token: string | null = document.cookie.split('; ').filter(cur => cur.split('=')[0] === 'token')[0];
+    const token: string | null = document.cookie
+        .split('; ')
+        .filter(cur => cur.split('=')[0] === 'token')[0]
+        .split('=')[1];
     return token ? jwt.decode(token) : null;
 };
-
-export const isAuthenticated = (): boolean => !!getTokenData();

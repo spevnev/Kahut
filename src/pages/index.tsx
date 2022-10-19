@@ -112,6 +112,4 @@ const Landing: NextPage = () => (
     </Page>
 );
 
-export const getStaticProps = async () => ({ props: {} });
-
 export default Landing;

@@ -5,19 +5,21 @@ import GlobalStyles from '../utils/globalStyles';
 import Head from 'next/head';
 import LoginProvider from '../components/LoginProvider';
 
-const App = ({ Component, pageProps }: AppProps) => {
+const App = ({ pageProps, Component }: AppProps) => {
     const apolloClient = useApollo((pageProps as any).initialApolloState);
 
     return (
-        <ApolloProvider client={apolloClient}>
+        <>
             <Head>
                 <title>Kahut!</title>
             </Head>
             <GlobalStyles />
-            <LoginProvider>
-                <Component {...pageProps} />
-            </LoginProvider>
-        </ApolloProvider>
+            <ApolloProvider client={apolloClient}>
+                <LoginProvider>
+                    <Component {...pageProps} />
+                </LoginProvider>
+            </ApolloProvider>
+        </>
     );
 };
 
