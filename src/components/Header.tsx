@@ -65,14 +65,14 @@ const ButtonLink = styled(UnstyledLink)`
 `;
 
 const Username = styled.p`
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 200;
-    margin-right: 8px;
+    margin: auto 8px auto 0;
 `;
 
 const UserIcon = styled.img`
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     margin-right: 15px;
 `;

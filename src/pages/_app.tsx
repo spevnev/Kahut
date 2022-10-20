@@ -7,6 +7,8 @@ import { ApolloProvider } from '@apollo/client';
 import { useApollo } from '../hooks/useApollo';
 import GlobalStyles from '../utils/globalStyles';
 import LoginProvider from '../components/LoginProvider';
+import { isBrowser } from '../utils/helper';
+import { getCookie } from '../utils/cookies';
 
 const MyApp = ({ pageProps, Component }: AppProps) => {
     const apolloClient = useApollo((pageProps as any).initialApolloState);
@@ -29,7 +31,7 @@ const MyApp = ({ pageProps, Component }: AppProps) => {
 MyApp.getInitialProps = async (appContext: AppContext) => {
     const appProps: any = await App.getInitialProps(appContext);
 
-    const token: string | undefined = (appContext.ctx.req as NextApiRequest).cookies.token;
+    const token: string | undefined = isBrowser() ? getCookie('token') : (appContext.ctx.req as NextApiRequest).cookies.token;
     const user = token ? jwt.decode(token) : null;
 
     return { pageProps: { ...appProps.pageProps, user } };
