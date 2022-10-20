@@ -48,8 +48,8 @@ const ListItem = styled.div`
 `;
 
 const ItemIcon = styled.img`
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
     margin-right: 5px;
 `;
 
