@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { StaticImageData } from 'next/image';
 import styled from 'styled-components';
-import { color } from '../../utils/globalStyles';
+import { color } from '../../styles/theme';
 
 const Container = styled.div`
     position: relative;

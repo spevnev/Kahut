@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
-import { color } from '../utils/globalStyles';
+import { color } from '../styles/theme';
 
 const Container = styled.div`
     margin: 0 auto;

@@ -2,7 +2,7 @@ import React from 'react';
 import { NextPage } from 'next';
 import { isBrowser } from '../utils/helper';
 import { useRouter } from 'next/router';
-import User from '../utils/user';
+import User from '../types/user';
 
 type Props = {
     user: User;

@@ -1,12 +1,12 @@
 import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
-import { color } from '../utils/globalStyles';
+import { color } from '../styles/theme';
 import DropDown from './DropDown';
 import exitIcon from '../../public/icons/exit.svg';
 import profileIcon from '../../public/icons/profile.svg';
 import { login, logout } from '../utils/authentication';
-import User from '../utils/user';
+import User from '../types/user';
 
 const Container = styled.div`
     width: 100vw;

@@ -5,7 +5,7 @@ import Head from 'next/head';
 import jwt from 'jsonwebtoken';
 import { ApolloProvider } from '@apollo/client';
 import { useApollo } from '../hooks/useApollo';
-import GlobalStyles from '../utils/globalStyles';
+import GlobalStyles from '../styles/globalStyles';
 import LoginProvider from '../components/LoginProvider';
 import { isBrowser } from '../utils/helper';
 import { getCookie } from '../utils/cookies';

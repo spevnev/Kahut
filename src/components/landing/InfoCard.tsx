@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FunctionComponent, useState } from 'react';
 import styled from 'styled-components';
-import { color } from '../../utils/globalStyles';
+import { color } from '../../styles/theme';
 import { login } from '../../utils/authentication';
 
 const Container = styled.div`

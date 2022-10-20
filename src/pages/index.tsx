@@ -13,8 +13,8 @@ import hammerIcon from '../../public/icons/hammer.svg';
 import bullhornIcon from '../../public/icons/bullhorn.svg';
 import gamepadIcon from '../../public/icons/gamepad.svg';
 import FakeQuizButton from '../components/landing/FakeQuizButton';
-import { color } from '../utils/globalStyles';
-import User from '../utils/user';
+import { color } from '../styles/globalStyles';
+import User from '../types/user';
 
 const Page = styled.div`
     display: flex;

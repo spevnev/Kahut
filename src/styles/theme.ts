@@ -1,6 +1,4 @@
-import { createGlobalStyle } from 'styled-components';
-
-export const theme: { [key: string]: string } = {
+const theme: { [key: string]: string } = {
     black0: '#2E3440',
     black1: '#3B4252',
     black2: '#434C5E',
@@ -30,19 +28,4 @@ export const color = (color: string) => {
     return (): string => theme[color];
 };
 
-const GlobalStyles = createGlobalStyle`
-	* {
-		padding: 0;
-		margin: 0;
-		box-sizing: border-box;
-		font-family: 'Inter Tight', sans-serif;
-		font-weight: 300;
-	}
-
-	body {
-		background: #3e4658;
-		color: ${color('white0')};
-	}
-`;
-
-export default GlobalStyles;
+export default theme;
