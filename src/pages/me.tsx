@@ -2,12 +2,12 @@ import React, { ChangeEvent, useState } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import { color } from '../styles/globalStyles';
+import { color } from '../styles/theme';
 import User from '../types/user';
 import { isBrowser } from '../utils/helper';
 import Header from '../components/Header';
 import useDebounce from '../hooks/useDebounce';
-import { setCookie } from '../utils/cookies';
+import StyledInput from '../components/Input';
 
 const Container = styled.div`
     display: flex;
@@ -45,21 +45,8 @@ const Icon = styled.img`
     margin-right: 15px;
 `;
 
-const Input = styled.input`
-    background: ${color('black0')};
-    outline: none;
-    border: none;
-    border-radius: 3px;
-    padding: 4px 12px;
-    font-size: 16px;
-    box-shadow: inset 1px 2px 2px rgba(0, 0, 0, 0.3);
-    color: ${color('white0')};
+const Input = styled(StyledInput)`
     width: 30vw;
-    margin-bottom: 5px;
-
-    &::placeholder {
-        color: ${color('white2')};
-    }
 `;
 
 type Props = {
@@ -71,17 +58,16 @@ const Profile: NextPage<Props> = ({ user: _user }) => {
     const [user, setUser] = useState(_user);
     const [username, setUsername] = useState(_user?.username);
 
-    const callback = (username: string) => {
-        // TODO: submit changes to the server
-    };
-
-    const debounce = useDebounce(callback, (_, cur) => cur, 500);
-
-    const onChange = (e: ChangeEvent) => {
-        const value = (e.target as HTMLInputElement).value;
-        setUsername(value);
-        debounce(value);
-    };
+    const debounce = useDebounce(
+        (username: string) => {
+            // TODO: submit changes to the server
+        },
+        (_, cur) => {
+            setUsername(cur);
+            return cur;
+        },
+        500
+    );
 
     if (isBrowser() && !user) router.push('/');
 
@@ -94,7 +80,7 @@ const Profile: NextPage<Props> = ({ user: _user }) => {
 
                 <Inputs>
                     <Label>Username</Label>
-                    <Input placeholder="Username" value={username} onChange={onChange} />
+                    <Input placeholder="Username" value={username} onChange={(e: ChangeEvent) => debounce((e.target as HTMLInputElement).value)} />
                     <Label>Email</Label>
                     <Input disabled={true} value={user.email} onChange={() => {}} />
                 </Inputs>

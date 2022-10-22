@@ -2,6 +2,7 @@ import React, { ChangeEvent, FunctionComponent, useState } from 'react';
 import styled from 'styled-components';
 import { color } from '../../styles/theme';
 import { login } from '../../utils/authentication';
+import StyledInput from '../Input';
 
 const Container = styled.div`
     width: 27.5vw;
@@ -53,16 +54,9 @@ const Br = styled.div`
     background: ${color('white0')};
 `;
 
-const Input = styled.input`
+const Input = styled(StyledInput)`
     width: 80%;
-    outline: none;
-    border: none;
-    border-radius: 5px;
-    background: ${color('black1')};
-    padding: 6px 10px;
-    color: ${color('white1')};
     font-size: 16px;
-    box-shadow: inset 1px 2px 3px rgba(0, 0, 0, 0.2);
 `;
 
 const InfoCard: FunctionComponent = () => {

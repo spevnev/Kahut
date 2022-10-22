@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { MouseEvent, useRef, useState } from 'react';
 import { NextPage } from 'next';
 import styled from 'styled-components';
 import GameCardType from '../../types/gameCard';
 import GameCard from '../../components/gameBrowser/GameCard';
 import Header from '../../components/Header';
 import User from '../../types/user';
+import SearchBar from '../../components/gameBrowser/SearchBar';
 
 // ! TEMP DATA
 const DATA: GameCardType[] = [
@@ -105,19 +106,6 @@ const DATA: GameCardType[] = [
         },
     },
     {
-        title: 'Someting else',
-        description: 'Some description.',
-        image: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdesignshack.net%2Fwp-content%2Fuploads%2Fplaceholder-image.png&f=1&nofb=1&ipt=60b55d3670b1f0935de040688f23d1e575c918947f5870a5fb52481c5662d807&ipo=images',
-        rating: 3.5,
-        players: 123,
-        id: 'hsa',
-        questions: 12,
-        user: {
-            username: 'Username',
-            avatar: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fspng.pngfind.com%2Fpngs%2Fs%2F610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png&f=1&nofb=1&ipt=8caaaebf308c8f5bee99fabaaf990a31b0d52c99bdeabf6e45f83cceac6b1288&ipo=images',
-        },
-    },
-    {
         title: "I don't know what else i can enter here",
         description: '',
         image: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2F736x%2F2c%2F7f%2F69%2F2c7f69bb875315e9a3107e3cd1f904c4.jpg&f=1&nofb=1&ipt=fb9eb0a9f3d51d56bf6bca132e7919713c09fbb2a65aafb202050f7153042aff&ipo=images',
@@ -146,13 +134,19 @@ const DATA: GameCardType[] = [
 ];
 
 const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    padding: 1vw;
+`;
+
+const Cards = styled.div`
     display: grid;
     grid-template-columns: repeat(auto-fill, max(min(15vw, 300px), 200px));
     grid-gap: max(min(2vw, 50px), 5px);
-    justify-content: space-around;
-    width: 100vw;
+    justify-content: space-between;
+    width: 100%;
     height: 100%;
-    padding: 5px;
+    margin-top: 1vw;
 `;
 
 type Props = {
@@ -160,14 +154,20 @@ type Props = {
 };
 
 const GameBrowser: NextPage<Props> = ({ user }) => {
+    const [showFilters, setShowFilters] = useState(false);
+
     return (
         <>
             <Header user={user} />
 
-            <Container>
-                {DATA.map(card => (
-                    <GameCard {...card} key={card.id} />
-                ))}
+            <Container onClick={e => setShowFilters((e.nativeEvent.composedPath() as HTMLElement[]).filter(el => el.id === 'searchbar').length > 0)}>
+                <SearchBar showFilters={showFilters} />
+
+                <Cards>
+                    {DATA.map(card => (
+                        <GameCard {...card} key={card.id} />
+                    ))}
+                </Cards>
             </Container>
         </>
     );
