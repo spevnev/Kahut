@@ -150,7 +150,7 @@ const Cards = styled.div`
 `;
 
 type Props = {
-    user: User;
+    user?: User;
 };
 
 const GameBrowser: NextPage<Props> = ({ user }) => {

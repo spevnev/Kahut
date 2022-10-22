@@ -78,7 +78,7 @@ const UserIcon = styled.img`
 `;
 
 type Props = {
-    user: User;
+    user?: User;
 };
 
 const Header: FunctionComponent<Props> = ({ user }) => {

@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import User from '../types/user';
 
 type Props = {
-    user: User;
+    user?: User;
 };
 
 const UsersGames: NextPage<Props> = ({ user }) => {

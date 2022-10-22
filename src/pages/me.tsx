@@ -50,7 +50,7 @@ const Input = styled(StyledInput)`
 `;
 
 type Props = {
-    user: User;
+    user?: User;
 };
 
 const Profile: NextPage<Props> = ({ user: _user }) => {
@@ -76,13 +76,13 @@ const Profile: NextPage<Props> = ({ user: _user }) => {
             <Header user={user} />
 
             <UserData>
-                <Icon src={user.avatar} />
+                <Icon src={user?.avatar} />
 
                 <Inputs>
                     <Label>Username</Label>
                     <Input placeholder="Username" value={username} onChange={(e: ChangeEvent) => debounce((e.target as HTMLInputElement).value)} />
                     <Label>Email</Label>
-                    <Input disabled={true} value={user.email} onChange={() => {}} />
+                    <Input disabled={true} value={user?.email} onChange={() => {}} />
                 </Inputs>
             </UserData>
         </Container>

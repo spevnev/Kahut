@@ -13,7 +13,7 @@ const Input = styled.input`
     box-shadow: inset 1px 2px 2px rgba(0, 0, 0, 0.3);
 
     &::placeholder {
-        color: ${color('white2')};
+        color: ${color('gray')};
     }
 `;
 

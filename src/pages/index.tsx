@@ -69,7 +69,7 @@ const LandingContainer = styled(Row)`
 `;
 
 type Props = {
-    user: User;
+    user?: User;
 };
 
 const Landing: NextPage<Props> = ({ user }) => (
