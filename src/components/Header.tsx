@@ -10,7 +10,7 @@ import User from '../types/user';
 
 const Container = styled.div`
     width: 100vw;
-    height: 5vh;
+    height: 4vh;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -40,7 +40,7 @@ const Title = styled.h2`
 `;
 
 const UnstyledLink = styled.a`
-    font-size: 18px;
+    font-size: 16px;
     text-decoration: none;
     color: ${color('white0')};
     cursor: pointer;
@@ -65,16 +65,16 @@ const ButtonLink = styled(UnstyledLink)`
 `;
 
 const Username = styled.p`
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 200;
-    margin: auto 8px auto 0;
+    margin: auto 4px auto 0;
 `;
 
 const UserIcon = styled.img`
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
-    margin-right: 15px;
+    margin-right: 10px;
 `;
 
 type Props = {

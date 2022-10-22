@@ -81,7 +81,7 @@ const Landing: NextPage<Props> = ({ user }) => (
                 <MainText>that people hate.</MainText>
                 <SecondaryText>Improve learning by using this fun, innovative, and accessible testing service.</SecondaryText>
             </Column>
-            <InfoCard />
+            {!user && <InfoCard />}
         </LandingContainer>
         <TiltedContainer>
             <SubTitle>Simple.</SubTitle>

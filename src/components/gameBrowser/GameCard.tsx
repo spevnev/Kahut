@@ -41,7 +41,7 @@ const Icon = styled.img`
 `;
 
 const TextContainer = styled.div`
-    padding: 6px 10px;
+    padding: 4px 10px;
     width: 100%;
     height: 100%;
     display: flex;
@@ -50,7 +50,7 @@ const TextContainer = styled.div`
 `;
 
 const Title = styled.p`
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 200;
     color: ${color('white0')};
     letter-spacing: -0.2px;
@@ -58,7 +58,7 @@ const Title = styled.p`
 `;
 
 const Description = styled.p`
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 200;
     color: ${color('white1')};
     letter-spacing: -0.1px;
