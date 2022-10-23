@@ -8,7 +8,7 @@ import InputColumn from './FilterColumn';
 const Container = styled.div<{ popupOpened: boolean }>`
     width: 100%;
     border-radius: 5px;
-    background: ${color('black0')};
+    background: ${color('black3')};
     outline: none;
     border: none;
     border-radius: 5px;
@@ -67,7 +67,7 @@ const SearchBar: FunctionComponent<Props> = ({ showFilters, hideFilters }) => {
     const [prompt, setPrompt] = useState('');
 
     const inputDebounce = useDebounce(
-        (prompt: string) => console.log(prompt),
+        (prompt: string) => {},
         (_, cur: string) => {
             setPrompt(cur);
             return cur;
