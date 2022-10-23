@@ -1,4 +1,3 @@
-import React from 'react';
 import { NextApiRequest } from 'next';
 import App, { AppContext, AppProps } from 'next/app';
 import Head from 'next/head';
@@ -6,12 +5,15 @@ import jwt from 'jsonwebtoken';
 import { ApolloProvider } from '@apollo/client';
 import { useApollo } from '../hooks/useApollo';
 import GlobalStyles from '../styles/globalStyles';
-import LoginProvider from '../components/LoginProvider';
 import { isBrowser } from '../utils/helper';
 import { getCookie } from '../utils/cookies';
+import GoogleAuthProvider from '../components/GoogleAuthProvider';
+import User from '../types/user';
 
-const MyApp = ({ pageProps, Component }: AppProps) => {
-    const apolloClient = useApollo((pageProps as any).initialApolloState);
+type Props = AppProps & { props: { user?: User }; pageProps: any };
+
+const MyApp = ({ pageProps, props, Component }: Props) => {
+    const apolloClient = useApollo(pageProps.initialApolloState);
 
     return (
         <>
@@ -20,9 +22,9 @@ const MyApp = ({ pageProps, Component }: AppProps) => {
             </Head>
             <GlobalStyles />
             <ApolloProvider client={apolloClient}>
-                <LoginProvider>
+                <GoogleAuthProvider user={props.user}>
                     <Component {...pageProps} />
-                </LoginProvider>
+                </GoogleAuthProvider>
             </ApolloProvider>
         </>
     );
@@ -34,7 +36,7 @@ MyApp.getInitialProps = async (appContext: AppContext) => {
     const token: string | undefined = isBrowser() ? getCookie('token') : (appContext.ctx.req as NextApiRequest).cookies.token;
     const user = token ? jwt.decode(token) : null;
 
-    return { pageProps: { ...appProps.pageProps, user } };
+    return { pageProps: { ...appProps.pageProps }, props: { user } };
 };
 
 export default MyApp;

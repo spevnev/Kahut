@@ -1,18 +1,14 @@
 import { NextPage } from 'next';
 import styled from 'styled-components';
+import { AuthProps } from '../../components/GoogleAuthProvider';
 import Header from '../../components/Header';
-import User from '../../types/user';
 
 const Container = styled.div``;
 
-type Props = {
-    user?: User;
-};
-
-const EditGame: NextPage<Props> = ({ user }) => {
+const EditGame: NextPage<AuthProps> = ({ auth }) => {
     return (
         <Container>
-            <Header user={user} />
+            <Header auth={auth} />
         </Container>
     );
 };

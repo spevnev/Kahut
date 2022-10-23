@@ -5,8 +5,7 @@ import { color } from '../styles/theme';
 import DropDown from './DropDown';
 import exitIcon from '../../public/icons/exit.svg';
 import profileIcon from '../../public/icons/profile.svg';
-import { login, logout } from '../utils/authentication';
-import User from '../types/user';
+import { AuthProps } from './GoogleAuthProvider';
 
 const Container = styled.div`
     width: 100vw;
@@ -77,11 +76,7 @@ const UserIcon = styled.img`
     margin-right: 10px;
 `;
 
-type Props = {
-    user?: User;
-};
-
-const Header: FunctionComponent<Props> = ({ user }) => {
+const Header: FunctionComponent<AuthProps> = ({ user: _user, auth: { user, login, logout } }) => {
     const router = useRouter();
 
     return (

@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import GameCardType from '../../types/gameCard';
 import GameCard from '../../components/gameBrowser/GameCard';
 import Header from '../../components/Header';
-import User from '../../types/user';
 import SearchBar from '../../components/gameBrowser/SearchBar';
+import { AuthProps } from '../../components/GoogleAuthProvider';
 
 const Container = styled.div`
     display: flex;
@@ -23,18 +23,17 @@ const Cards = styled.div`
     margin-top: 1vw;
 `;
 
-type Props = {
-    user?: User;
+type Props = AuthProps & {
     cards: GameCardType[];
     disableSearch?: boolean;
 };
 
-const GameBrowser: NextPage<Props> = ({ user, cards, disableSearch }) => {
+const GameBrowser: NextPage<Props> = ({ auth, cards, disableSearch }) => {
     const [showFilters, setShowFilters] = useState(false);
 
     return (
         <>
-            <Header user={user} />
+            <Header auth={auth} />
 
             <Container onClick={e => setShowFilters((e.nativeEvent.composedPath() as HTMLElement[]).filter(el => el.id === 'searchbar').length > 0)}>
                 {!disableSearch && <SearchBar showFilters={showFilters} hideFilters={() => setShowFilters(false)} />}

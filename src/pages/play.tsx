@@ -3,8 +3,8 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import StyledInput from '../components/Input';
 import styled from 'styled-components';
-import User from '../types/user';
 import Header from '../components/Header';
+import { AuthProps } from '../components/GoogleAuthProvider';
 
 const Container = styled.div`
     display: flex;
@@ -20,11 +20,7 @@ const Input = styled(StyledInput)`
     width: 30vw;
 `;
 
-type Props = {
-    user?: User;
-};
-
-const Play: NextPage<Props> = ({ user }) => {
+const Play: NextPage<AuthProps> = ({ user, auth }) => {
     const router = useRouter();
     const [code, setCode] = useState(router.query.code || '');
     const [username, setUsername] = useState(user?.username || '');
@@ -37,9 +33,9 @@ const Play: NextPage<Props> = ({ user }) => {
 
     return (
         <Container>
-            <Header user={user} />
+            <Header auth={auth} />
             <Input placeholder="Username" value={username} onChange={(e: ChangeEvent) => setUsername((e.target as HTMLInputElement).value)} disabled={!!user} />
-            <Input placeholder="Code" value={code} onChange={(e: ChangeEvent) => setCode((e.target as HTMLInputElement).value)} maxLength={6} />
+            <Input placeholder="Code" value={code} onChange={(e: ChangeEvent) => setCode((e.target as HTMLInputElement).value.toUpperCase())} maxLength={6} />
         </Container>
     );
 };

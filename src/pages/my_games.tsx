@@ -1,17 +1,16 @@
 import { GetServerSideProps, NextPage } from 'next';
+import { AuthProps } from '../components/GoogleAuthProvider';
 import GameCard from '../types/gameCard';
-import User from '../types/user';
 import GameBrowser from './games';
 
-type Props = {
-    user?: User;
+type Props = AuthProps & {
     cards: GameCard[];
 };
 
-const UsersGames: NextPage<Props> = ({ cards, user }) => <GameBrowser user={user} cards={cards} disableSearch={true} />;
+const UsersGames: NextPage<Props> = props => <GameBrowser {...props} disableSearch={true} />;
 
 export const getServerSideProps: GetServerSideProps = async ({}) => {
-    // fetch user's games
+    // TODO: fetch user's games
     return { props: { cards: [] } };
 };
 

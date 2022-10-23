@@ -7,3 +7,5 @@ export const getCookie = (cookie: string): any => {
 };
 
 export const setCookie = (key: string, value: any) => (document.cookie = `${key}=${value}`);
+
+export const deleteCookie = (key: string) => (document.cookie = `${key}=;max-age=-99999;`);
