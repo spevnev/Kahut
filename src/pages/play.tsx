@@ -5,6 +5,7 @@ import StyledInput from '../components/Input';
 import styled from 'styled-components';
 import Header from '../components/Header';
 import { AuthProps } from '../components/GoogleAuthProvider';
+import { color } from '../styles/theme';
 
 const Container = styled.div`
     display: flex;
@@ -15,9 +16,21 @@ const Container = styled.div`
     justify-content: center;
 `;
 
+const Title = styled.h1`
+    font-size: 60px;
+    font-weight: 600;
+    font-style: italic;
+    color: ${color('white0')};
+    margin-bottom: 10px;
+`;
+
 const Input = styled(StyledInput)`
-    margin: 4px 0;
+    margin: 3px 0;
     width: 30vw;
+    background: ${color('black3')};
+    padding: 6px 16px;
+    font-size: 18px;
+    text-align: center;
 `;
 
 const Play: NextPage<AuthProps> = ({ user, auth }) => {
@@ -34,6 +47,8 @@ const Play: NextPage<AuthProps> = ({ user, auth }) => {
     return (
         <Container>
             <Header auth={auth} />
+
+            <Title>Kahut!</Title>
             <Input placeholder="Username" value={username} onChange={(e: ChangeEvent) => setUsername((e.target as HTMLInputElement).value)} disabled={!!user} />
             <Input placeholder="Code" value={code} onChange={(e: ChangeEvent) => setCode((e.target as HTMLInputElement).value.toUpperCase())} maxLength={6} />
         </Container>
