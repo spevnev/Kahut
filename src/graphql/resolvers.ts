@@ -1,12 +1,12 @@
-import {PrismaClient} from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
 
 type ResolverContext = {
-	db: PrismaClient
-}
+    db: PrismaClient;
+};
 
 const resolvers = {
-	// Query: {},
-	// Mutation: {},
+    // Query: {},
+    // Mutation: {},
 };
 
 export default resolvers;

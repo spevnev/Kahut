@@ -1,4 +1,4 @@
-import React, { FunctionComponent, ReactNode, useState } from 'react';
+import { FunctionComponent, ReactNode, useState } from 'react';
 import styled from 'styled-components';
 import { StaticImageData } from 'next/image';
 import { color } from '../styles/theme';

@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import { FunctionComponent } from 'react';
 import { StaticImageData } from 'next/image';
 import styled from 'styled-components';
 import { color } from '../../styles/theme';

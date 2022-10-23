@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import theme, { color } from '../styles/theme';
 import shape1 from '../../public/icons/shape1.svg';

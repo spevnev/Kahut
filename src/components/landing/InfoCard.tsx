@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FunctionComponent, useState } from 'react';
+import { ChangeEvent, FunctionComponent, useState } from 'react';
 import styled from 'styled-components';
 import { color } from '../../styles/theme';
 import { login } from '../../utils/authentication';

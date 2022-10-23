@@ -1,5 +1,4 @@
-import React from 'react';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 
 const Game: NextPage = () => {
@@ -14,7 +13,7 @@ const Game: NextPage = () => {
     );
 };
 
-export const getServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
     // TODO: return {notFound: true} if there is no such pending game
     return { props: {} };
 };

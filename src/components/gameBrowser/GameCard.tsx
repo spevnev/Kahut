@@ -13,7 +13,7 @@ const Container = styled.div`
     min-width: 200px;
     width: 15vw;
     max-width: 300px;
-    height: 275px;
+    min-height: 275px;
     background: ${color('black0')};
     border-radius: 5px;
     overflow: hidden;
@@ -38,6 +38,7 @@ const Icon = styled.img`
     width: 10px;
     height: 10px;
     margin-left: 2px;
+    margin-bottom: 2px;
 `;
 
 const TextContainer = styled.div`
@@ -65,7 +66,7 @@ const Description = styled.p`
 `;
 
 const SecondaryText = styled.p`
-    font-size: 9px;
+    font-size: 9.5px;
     font-weight: 300;
     color: ${color('white2')};
 `;

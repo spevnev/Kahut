@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import StyledInput from '../components/Input';
@@ -32,7 +32,7 @@ const Play: NextPage<Props> = ({ user }) => {
     useEffect(() => {
         if (code.length !== 6) return;
 
-        // TODO:!
+        // TODO: Check if lobby exists ? redirect to it : show error
     }, [code]);
 
     return (

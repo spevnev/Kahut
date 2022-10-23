@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from 'react';
+import { FunctionComponent, useState } from 'react';
 import styled from 'styled-components';
 import useOnVisible from '../../hooks/useOnVisible';
 

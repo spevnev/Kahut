@@ -14,18 +14,17 @@ const Radio = styled.input.attrs(props => ({ type: 'radio' }))`
         position: absolute;
         left: 0;
         top: 0;
-        width: 12px;
-        height: 12px;
-        border: 1px solid ${color('white2')};
+        width: 15px;
+        height: 15px;
         border-radius: 100%;
-        background: ${color('white0')};
+        background: ${color('white2')};
         cursor: pointer;
     }
 
     &:after {
         content: '';
-        width: 10px;
-        height: 10px;
+        width: 11px;
+        height: 11px;
         background: ${color('frost0')};
         position: absolute;
         top: 2px;

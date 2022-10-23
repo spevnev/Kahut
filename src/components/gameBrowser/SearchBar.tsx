@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FunctionComponent, RefObject, useState } from 'react';
+import { ChangeEvent, FunctionComponent, useState } from 'react';
 import styled from 'styled-components';
 import searchIcon from '../../../public/icons/search.svg';
 import { color } from '../../styles/theme';
@@ -59,9 +59,10 @@ const PopupContainer = styled.div`
 
 type Props = {
     showFilters: boolean;
+    hideFilters: () => void;
 };
 
-const SearchBar: FunctionComponent<Props> = ({ showFilters }) => {
+const SearchBar: FunctionComponent<Props> = ({ showFilters, hideFilters }) => {
     const [filters, setFilters] = useState<{ [key: string]: any }>({});
     const [prompt, setPrompt] = useState('');
 
@@ -82,7 +83,7 @@ const SearchBar: FunctionComponent<Props> = ({ showFilters }) => {
 
     return (
         <Container id="searchbar" popupOpened={showFilters}>
-            <Icon src={searchIcon.src} onClick={() => {}} />
+            <Icon src={searchIcon.src} onClick={() => hideFilters()} />
             <Input placeholder="Search..." value={prompt} onChange={(e: ChangeEvent) => inputDebounce((e.target as HTMLInputElement).value)} />
 
             {showFilters && (
