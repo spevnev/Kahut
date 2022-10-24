@@ -1,11 +1,11 @@
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useContext } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { color } from '../styles/theme';
 import DropDown from './DropDown';
 import exitIcon from '../../public/icons/exit.svg';
 import profileIcon from '../../public/icons/profile.svg';
-import { AuthProps } from './GoogleAuthProvider';
+import { AuthContext } from '../providers/GoogleAuthProvider';
 
 const Container = styled.div`
     width: 100vw;
@@ -76,7 +76,8 @@ const UserIcon = styled.img`
     margin-right: 10px;
 `;
 
-const Header: FunctionComponent<AuthProps> = ({ user: _user, auth: { user, login, logout } }) => {
+const Header: FunctionComponent = () => {
+    const { user, login, logout } = useContext(AuthContext);
     const router = useRouter();
 
     return (

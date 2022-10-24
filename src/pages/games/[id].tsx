@@ -4,7 +4,6 @@ import { color } from '../../styles/theme';
 import GameCard from '../../types/gameCard';
 import Header from '../../components/Header';
 import { useRouter } from 'next/router';
-import { AuthProps } from '../../components/GoogleAuthProvider';
 
 const Container = styled.div`
     display: flex;
@@ -105,13 +104,13 @@ const UserIcon = styled.img`
     margin-right: 5px;
 `;
 
-type Props = AuthProps & {
+type Props = {
     card: GameCard;
     isCreator: boolean;
 };
 
 const numberFormatter = Intl.NumberFormat('en', { notation: 'compact' });
-const GameDetails: NextPage<Props> = ({ auth, isCreator, card: { id, image, title, description, questions, players, rating, user: creator } }) => {
+const GameDetails: NextPage<Props> = ({ isCreator, card: { id, image, title, description, questions, players, rating, user: creator } }) => {
     const router = useRouter();
 
     const startGame = () => {
@@ -120,7 +119,7 @@ const GameDetails: NextPage<Props> = ({ auth, isCreator, card: { id, image, titl
 
     return (
         <Container>
-            <Header auth={auth} />
+            <Header />
 
             <ImageContainer>
                 <img style={{ width: '100%' }} src={image} alt="Game's image" />

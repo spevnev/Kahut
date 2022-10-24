@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useContext, useState } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
@@ -7,7 +7,7 @@ import { isBrowser } from '../utils/helper';
 import Header from '../components/Header';
 import useDebounce from '../hooks/useDebounce';
 import StyledInput from '../components/Input';
-import { AuthProps } from '../components/GoogleAuthProvider';
+import { AuthContext } from '../providers/GoogleAuthProvider';
 
 const Container = styled.div`
     display: flex;
@@ -49,10 +49,9 @@ const Input = styled(StyledInput)`
     width: 30vw;
 `;
 
-const Profile: NextPage<AuthProps> = ({ auth }) => {
-    const { user, setUser } = auth;
-
+const Profile: NextPage = () => {
     const router = useRouter();
+    const { user, setUser } = useContext(AuthContext);
     const [username, setUsername] = useState(user?.username);
 
     const debounce = useDebounce(
@@ -78,7 +77,7 @@ const Profile: NextPage<AuthProps> = ({ auth }) => {
 
     return (
         <Container>
-            <Header auth={auth} />
+            <Header />
 
             <UserData>
                 <Icon src={user?.avatar} />

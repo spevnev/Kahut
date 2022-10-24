@@ -1,7 +1,7 @@
-import { ChangeEvent, FunctionComponent, useState } from 'react';
+import { ChangeEvent, FunctionComponent, useContext, useState } from 'react';
 import styled from 'styled-components';
+import { AuthContext } from '../../providers/GoogleAuthProvider';
 import { color } from '../../styles/theme';
-import { AuthProps } from '../GoogleAuthProvider';
 import StyledInput from '../Input';
 
 const Container = styled.div`
@@ -59,7 +59,8 @@ const Input = styled(StyledInput)`
     font-size: 16px;
 `;
 
-const InfoCard: FunctionComponent<AuthProps> = ({ auth: { login } }) => {
+const InfoCard: FunctionComponent = () => {
+    const { login } = useContext(AuthContext);
     const [code, setCode] = useState('');
 
     const onChange = (e: ChangeEvent) => {

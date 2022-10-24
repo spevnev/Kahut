@@ -13,7 +13,6 @@ import bullhornIcon from '../../public/icons/bullhorn.svg';
 import gamepadIcon from '../../public/icons/gamepad.svg';
 import FakeQuizButton from '../components/landing/FakeQuizButton';
 import { color } from '../styles/theme';
-import { AuthProps } from '../components/GoogleAuthProvider';
 
 const Page = styled.div`
     display: flex;
@@ -67,16 +66,16 @@ const LandingContainer = styled(Row)`
     align-items: center;
 `;
 
-const Landing: NextPage<AuthProps> = ({ auth }) => (
+const Landing: NextPage = () => (
     <Page>
-        <Header auth={auth} />
+        <Header />
         <LandingContainer>
             <Column style={{ width: '60vw' }}>
                 <MainText>Worst learning platform,</MainText>
                 <MainText>that people hate.</MainText>
                 <SecondaryText>Improve learning by using this fun, innovative, and accessible testing service.</SecondaryText>
             </Column>
-            {!auth.user && <InfoCard auth={auth} />}
+            <InfoCard />
         </LandingContainer>
         <TiltedContainer>
             <SubTitle>Simple.</SubTitle>

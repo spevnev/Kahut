@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { color } from '../styles/theme';
 
-const Radio = styled.input.attrs(props => ({ type: 'radio' }))`
+const Radio = styled.input.attrs(_ => ({ type: 'radio' }))`
     & {
         position: relative;
         width: 12px;

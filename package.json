@@ -11,6 +11,7 @@
     "@apollo/client": "^3.6.9",
     "@prisma/client": "^4.4.0",
     "@react-oauth/google": "^0.2.8",
+    "@types/uuid": "^8.3.4",
     "apollo-server-micro": "^3.10.2",
     "google-auth-library": "^8.5.2",
     "graphql": "^15.8.0",
@@ -18,7 +19,8 @@
     "next": "^12.3.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "styled-components": "^5.3.5"
+    "styled-components": "^5.3.5",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@svgr/webpack": "^6.4.0",

@@ -7,7 +7,8 @@ import { useApollo } from '../hooks/useApollo';
 import GlobalStyles from '../styles/globalStyles';
 import { isBrowser } from '../utils/helper';
 import { getCookie } from '../utils/cookies';
-import GoogleAuthProvider from '../components/GoogleAuthProvider';
+import GoogleAuthProvider from '../providers/GoogleAuthProvider';
+import FileUploadProvider from '../providers/FileUploadProvider';
 import User from '../types/user';
 
 type Props = AppProps & { props: { user?: User }; pageProps: any };
@@ -23,7 +24,9 @@ const MyApp = ({ pageProps, props, Component }: Props) => {
             <GlobalStyles />
             <ApolloProvider client={apolloClient}>
                 <GoogleAuthProvider user={props.user}>
-                    <Component {...pageProps} />
+                    <FileUploadProvider>
+                        <Component {...pageProps} />
+                    </FileUploadProvider>
                 </GoogleAuthProvider>
             </ApolloProvider>
         </>

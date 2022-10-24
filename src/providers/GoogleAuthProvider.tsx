@@ -1,9 +1,17 @@
-import { FunctionComponent, ReactElement, useState } from 'react';
+import { createContext, FunctionComponent, ReactElement, useRef, useState } from 'react';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import jwt from 'jsonwebtoken';
 import User from '../types/user';
-import React from 'react';
 import { deleteCookie, setCookie } from '../utils/cookies';
+
+export type AuthContextData = {
+    user?: User;
+    login: () => void;
+    logout: () => void;
+    setUser: (user: User) => void;
+};
+
+export const AuthContext = createContext<AuthContextData>({ login: () => {}, logout: () => {}, setUser: () => {} });
 
 type Props = {
     children: ReactElement;
@@ -12,14 +20,12 @@ type Props = {
 
 const GoogleAuthProvider: FunctionComponent<Props> = ({ children, user: _user }) => {
     const [user, setUser] = useState(_user);
+    const loginRef = useRef<any>();
 
     const login = () => {
-        if (user) return;
+        if (user || !loginRef.current) return;
 
-        const container = document.getElementById('google-auth-button-container');
-        if (!container) throw new Error('Authentication error!');
-
-        const el = container.children[0].children[0].children[0].children[0] as HTMLElement;
+        const el = (loginRef.current as HTMLElement).children[0].children[0].children[0].children[0] as HTMLElement;
         if (!el) throw new Error('Authentication error!');
 
         el.click();
@@ -43,23 +49,13 @@ const GoogleAuthProvider: FunctionComponent<Props> = ({ children, user: _user })
 
     return (
         <GoogleOAuthProvider clientId="292475380059-dqvd5h3kthcn8gibomg1ak4vhhjv6mca.apps.googleusercontent.com">
-            {React.Children.map(children, child => React.cloneElement(child, { user, auth: { user, login, logout, setUser } }))}
+            <AuthContext.Provider value={{ user, login, logout, setUser }}>{children}</AuthContext.Provider>
 
-            <div style={{ display: 'none' }} id="google-auth-button-container">
+            <div style={{ display: 'none' }} ref={loginRef}>
                 <GoogleLogin onSuccess={onSuccess} state_cookie_domain="single_host_origin" />
             </div>
         </GoogleOAuthProvider>
     );
-};
-
-export type AuthProps = {
-    user?: User;
-    auth: {
-        user?: User;
-        login: () => void;
-        logout: () => void;
-        setUser: (user: User) => void;
-    };
 };
 
 export default GoogleAuthProvider;

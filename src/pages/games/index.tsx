@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import styled from 'styled-components';
+import { v4 as generateUUID } from 'uuid';
 import GameCardType from '../../types/gameCard';
 import GameCard from '../../components/gameBrowser/GameCard';
 import Header from '../../components/Header';
 import SearchBar from '../../components/gameBrowser/SearchBar';
-import { AuthProps } from '../../components/GoogleAuthProvider';
+import { color } from '../../styles/theme';
+import { useRouter } from 'next/router';
 
 const Container = styled.div`
     display: flex;
@@ -23,26 +25,58 @@ const Cards = styled.div`
     margin-top: 1vw;
 `;
 
-type Props = AuthProps & {
+const CreateButton = styled.button`
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    height: 32px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 200;
+    border: none;
+    outline: none;
+    background: ${color('frost1')};
+    color: ${color('white1')};
+    cursor: pointer;
+    transition: background 0.2s;
+
+    &:hover {
+        background: ${color('frost0')};
+    }
+`;
+
+type Props = {
     cards: GameCardType[];
-    disableSearch?: boolean;
+    showMyGames?: boolean;
 };
 
-const GameBrowser: NextPage<Props> = ({ auth, cards, disableSearch }) => {
+const GameBrowser: NextPage<Props> = ({ cards, showMyGames }) => {
+    const router = useRouter();
     const [showFilters, setShowFilters] = useState(false);
+
+    const createGame = async () => {
+        const uuid = generateUUID();
+
+        // create new game
+
+        router.push(`/edit/${uuid}`);
+    };
 
     return (
         <>
-            <Header auth={auth} />
+            <Header />
 
             <Container onClick={e => setShowFilters((e.nativeEvent.composedPath() as HTMLElement[]).filter(el => el.id === 'searchbar').length > 0)}>
-                {!disableSearch && <SearchBar showFilters={showFilters} hideFilters={() => setShowFilters(false)} />}
+                {!showMyGames && <SearchBar showFilters={showFilters} hideFilters={() => setShowFilters(false)} />}
 
                 <Cards>
                     {cards.map(card => (
                         <GameCard {...card} key={card.id} />
                     ))}
                 </Cards>
+
+                {showMyGames && <CreateButton onClick={createGame}>Create Game +</CreateButton>}
             </Container>
         </>
     );

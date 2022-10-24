@@ -1,11 +1,11 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import StyledInput from '../components/Input';
 import styled from 'styled-components';
 import Header from '../components/Header';
-import { AuthProps } from '../components/GoogleAuthProvider';
 import { color } from '../styles/theme';
+import { AuthContext } from '../providers/GoogleAuthProvider';
 
 const Container = styled.div`
     display: flex;
@@ -33,7 +33,8 @@ const Input = styled(StyledInput)`
     text-align: center;
 `;
 
-const Play: NextPage<AuthProps> = ({ user, auth }) => {
+const Play: NextPage = () => {
+    const { user } = useContext(AuthContext);
     const router = useRouter();
     const [code, setCode] = useState(router.query.code || '');
     const [username, setUsername] = useState(user?.username || '');
@@ -46,7 +47,7 @@ const Play: NextPage<AuthProps> = ({ user, auth }) => {
 
     return (
         <Container>
-            <Header auth={auth} />
+            <Header />
 
             <Title>Kahut!</Title>
             <Input placeholder="Username" value={username} onChange={(e: ChangeEvent) => setUsername((e.target as HTMLInputElement).value)} disabled={!!user} />
