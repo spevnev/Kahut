@@ -1,12 +1,42 @@
 import { NextApiHandler } from 'next';
+import sizeOf from 'image-size';
+import FormData from 'form-data';
+import axios from 'axios';
+
+const MIN_IMAGE_SIZE = [256, 256];
+const MAX_IMAGE_SIZE = [2560, 1600];
 
 const handler: NextApiHandler = async (req, res) => {
     if (req.method !== 'POST') return res.status(405).send({ message: 'Only POST requests are allowed!' });
 
-    const body = req.body;
-    console.log(body);
+    let image = req.body;
+    if (!image) return res.status(400).send({ message: 'Body must contain Base64 Encoded image!' });
+    image = image.split(';base64,')[1];
 
-    res.status(200);
+    const { width, height } = sizeOf(Buffer.from(image, 'base64'));
+    if (!width || !height) throw new Error('Image has no size!');
+    if (width < MIN_IMAGE_SIZE[0] || height < MIN_IMAGE_SIZE[1])
+        return res.status(400).send({ message: `Width must be <= ${MIN_IMAGE_SIZE[0]} and Height must be <= ${MIN_IMAGE_SIZE[1]}` });
+    if (width > MAX_IMAGE_SIZE[0] || height > MAX_IMAGE_SIZE[1])
+        return res.status(400).send({ message: `Width must be <= ${MAX_IMAGE_SIZE[0]} and Height must be <= ${MAX_IMAGE_SIZE[1]}` });
+
+    if (!process.env.IMG_UPLOAD_API_KEY) throw new Error('Error - no image api key!');
+    const payload = new FormData();
+    payload.append('key', process.env.IMG_UPLOAD_API_KEY);
+    payload.append('image', image);
+
+    const {
+        data: {
+            data: {
+                medium: { url: preview },
+                image: { url: hd },
+            },
+        },
+    } = await axios.post(`https://api.imgbb.com/1/upload`, payload, payload.getHeaders());
+
+    res.status(200).send({ preview, hd });
 };
+
+export const config = { api: { bodyParser: { sizeLimit: '10mb' } } };
 
 export default handler;

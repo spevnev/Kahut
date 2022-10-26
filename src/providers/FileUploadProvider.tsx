@@ -1,23 +1,43 @@
 import { createContext, useRef } from 'react';
 import { FunctionComponent, ReactElement } from 'react';
 
-export type FileUploadContextData = {
-    openUpload: () => void;
+type FileUploadContextData = {
+    upload: (callback: (img: string) => void) => void;
 };
 
-export const FileUploadContext = createContext({});
+export const FileUploadContext = createContext<FileUploadContextData>({ upload: () => () => {} });
 
 type Props = { children: ReactElement };
 
 const FileUploadProvider: FunctionComponent<Props> = ({ children }) => {
-    const inputRef = useRef<any>();
+    const inputRef = useRef<HTMLInputElement | null>(null);
+    const callbackFunction = useRef<(img: string) => void>();
 
-    const openUpload = () => inputRef.current && inputRef.current.click();
+    const upload = (callback: (img: string) => void) => {
+        if (!inputRef.current) return;
+
+        callbackFunction.current = callback;
+        inputRef.current.click();
+    };
+
+    const onChange = () => {
+        if (!inputRef.current) throw new Error('Error uploading file!');
+        const file = inputRef.current.files![0];
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+            const result = reader.result;
+            if (!result || typeof result !== 'string' || !callbackFunction.current) throw new Error('Error uploading file!');
+
+            callbackFunction.current(result);
+        };
+        reader.readAsDataURL(file);
+    };
 
     return (
         <div>
-            <FileUploadContext.Provider value={{ openUpload }}>{children}</FileUploadContext.Provider>
-            <input type="file" ref={inputRef} style={{ display: 'none' }} />
+            <FileUploadContext.Provider value={{ upload }}>{children}</FileUploadContext.Provider>
+            <input type="file" ref={inputRef} style={{ display: 'none' }} onChange={onChange} />
         </div>
     );
 };

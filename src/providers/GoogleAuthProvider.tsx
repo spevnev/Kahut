@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import User from '../types/user';
 import { deleteCookie, setCookie } from '../utils/cookies';
 
-export type AuthContextData = {
+type AuthContextData = {
     user?: User;
     login: () => void;
     logout: () => void;
