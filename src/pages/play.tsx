@@ -37,7 +37,7 @@ const Play: NextPage = () => {
     const { user } = useContext(AuthContext);
     const router = useRouter();
     const [code, setCode] = useState(router.query.code || '');
-    const [username, setUsername] = useState(user?.username || '');
+    const [username, setUsername] = useState(user?.name || '');
 
     useEffect(() => {
         if (code.length !== 6) return;

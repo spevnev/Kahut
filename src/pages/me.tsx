@@ -52,7 +52,7 @@ const Input = styled(StyledInput)`
 const Profile: NextPage = () => {
     const router = useRouter();
     const { user, setUser } = useContext(AuthContext);
-    const [username, setUsername] = useState(user?.username);
+    const [username, setUsername] = useState(user?.name);
 
     const debounce = useDebounce(
         async (username: string) => {
@@ -64,7 +64,7 @@ const Profile: NextPage = () => {
             // if (!token) return;
             // setCookie('token', token);
 
-            setUser({ ...user, username });
+            setUser({ ...user, name: username });
         },
         (_, cur) => {
             setUsername(cur);
@@ -80,7 +80,7 @@ const Profile: NextPage = () => {
             <Header />
 
             <UserData>
-                <Icon src={user?.avatar} />
+                <Icon src={user?.picture} />
 
                 <Inputs>
                     <Label>Username</Label>

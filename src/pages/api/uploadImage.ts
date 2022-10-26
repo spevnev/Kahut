@@ -2,12 +2,16 @@ import { NextApiHandler } from 'next';
 import sizeOf from 'image-size';
 import FormData from 'form-data';
 import axios from 'axios';
+import { verifyJwt } from '../../utils/jwt';
 
 const MIN_IMAGE_SIZE = [256, 256];
 const MAX_IMAGE_SIZE = [2560, 1600];
 
 const handler: NextApiHandler = async (req, res) => {
     if (req.method !== 'POST') return res.status(405).send({ message: 'Only POST requests are allowed!' });
+
+    const { token } = req.cookies;
+    if (!token || !(await verifyJwt(token))) return res.status(401).send({ message: 'Unauthorized' });
 
     let image = req.body;
     if (!image) return res.status(400).send({ message: 'Body must contain Base64 Encoded image!' });

@@ -1,5 +1,5 @@
 import { NextApiHandler } from 'next';
-import apollo, { connectionPromises } from '../../graphql/apollo-server';
+import apollo, { connectionPromises } from '../../graphql/apolloServer';
 
 export const config = { api: { bodyParser: false } };
 

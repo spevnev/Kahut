@@ -1,6 +1,6 @@
 type User = {
-    username: string;
-    avatar: string;
+    name: string;
+    picture: string;
     email: string;
 };
 

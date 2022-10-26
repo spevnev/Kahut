@@ -101,8 +101,8 @@ const Header: FunctionComponent = () => {
                                 { title: 'Logout', icon: exitIcon, onClick: logout },
                             ]}
                         >
-                            <Username>{user.username}</Username>
-                            <UserIcon src={user.avatar} />
+                            <Username>{user.name}</Username>
+                            <UserIcon src={user.picture} />
                         </DropDown>
                     ) : (
                         <ButtonLink onClick={login}>Log in</ButtonLink>

@@ -18,7 +18,6 @@ const EditGame: NextPage<Props> = ({ game: _game }) => {
     const setGame = useDebounce(
         async game => {
             // TODO: update data on the server
-            console.log(game);
             prevGameRef.current = game;
             setIsSafeToLeave(true);
         },

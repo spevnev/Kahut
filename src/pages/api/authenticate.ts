@@ -1,5 +1,6 @@
 import { NextApiHandler } from 'next';
 import { LoginTicket, OAuth2Client, TokenPayload } from 'google-auth-library';
+import { createJwt } from '../../utils/jwt';
 
 const client = new OAuth2Client({ clientId: process.env.OAUTH_CLIENT_ID, clientSecret: process.env.OAUTH_SECRET });
 
@@ -20,11 +21,9 @@ const handler: NextApiHandler = async (req, res) => {
     const { name, picture, email, email_verified } = payload;
     if (!email_verified) return res.status(400);
 
-    // TODO: login/signup + create jwt
+    const jwtToken = await createJwt({ name, picture, email });
 
-    res.status(200).send({
-        token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkpvaG4gRG9lIiwiZW1haWwiOiJqb2huZG9lQGdtYWlsLmNvbSIsImF2YXRhciI6Imh0dHBzOi8vZXh0ZXJuYWwtY29udGVudC5kdWNrZHVja2dvLmNvbS9pdS8_dT1odHRwcyUzQSUyRiUyRnNwbmcucG5nZmluZC5jb20lMkZwbmdzJTJGcyUyRjYxMC02MTA0NDUxX2ltYWdlLXBsYWNlaG9sZGVyLXBuZy11c2VyLXByb2ZpbGUtcGxhY2Vob2xkZXItaW1hZ2UtcG5nLnBuZyZmPTEmbm9mYj0xJmlwdD04Y2FhYWViZjMwOGM4ZjViZWU5OWZhYmFhZjk5MGEzMWIwZDUyYzk5YmRlYWJmNmU0NWY4M2NjZWFjNmIxMjg4Jmlwbz1pbWFnZXMifQ.ia6bcZyfX-mgY6LavUtRfOUVlBs6DvUqNoS0gxdaA54',
-    });
+    res.status(200).send({ token: jwtToken });
 };
 
 export default handler;
