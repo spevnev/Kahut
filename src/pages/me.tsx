@@ -6,7 +6,7 @@ import { color } from '../styles/theme';
 import { isBrowser } from '../utils/helper';
 import Header from '../components/Header';
 import useDebounce from '../hooks/useDebounce';
-import StyledInput from '../components/Input';
+import StyledInput from '../components/BoxInput';
 import { AuthContext } from '../providers/GoogleAuthProvider';
 
 const Container = styled.div`

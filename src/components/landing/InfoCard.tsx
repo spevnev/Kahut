@@ -2,7 +2,7 @@ import { ChangeEvent, FunctionComponent, useContext, useState } from 'react';
 import styled from 'styled-components';
 import { AuthContext } from '../../providers/GoogleAuthProvider';
 import { color } from '../../styles/theme';
-import StyledInput from '../Input';
+import StyledInput from '../BoxInput';
 
 const Container = styled.div`
     width: 27.5vw;

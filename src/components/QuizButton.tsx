@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'react';
+import { FunctionComponent, ReactNode } from 'react';
 import styled from 'styled-components';
 import theme, { color } from '../styles/theme';
 import shape1 from '../../public/icons/shape1.svg';
@@ -12,7 +12,7 @@ export enum ButtonColor {
     'YELLOW',
     'GREEN',
 }
-const colorByType = [theme.red, theme.frost3, theme.yellow, theme.green];
+const colorByType = [theme.red, theme.frost2, theme.yellow, theme.green];
 const shapeByType = [shape1.src, shape2.src, shape3.src, shape4.src];
 
 const Button = styled.button<{ background: string }>`
@@ -34,7 +34,7 @@ const Button = styled.button<{ background: string }>`
 `;
 
 const Shape = styled.img`
-    width: 36px;
+    min-width: 36px;
     height: 36px;
 `;
 
@@ -46,7 +46,7 @@ const Text = styled.p`
 
 type Props = {
     color: ButtonColor;
-    children: string;
+    children: string | ReactNode;
     onClick?: () => void;
     className?: string;
 };
@@ -54,8 +54,9 @@ type Props = {
 export const QuizButton: FunctionComponent<Props> = ({ color, children, onClick = () => {}, className }) => (
     <Button onClick={onClick} background={colorByType[color]} className={className}>
         <Shape src={shapeByType[color]} />
-        <Text>{children}</Text>
+        {typeof children === 'string' ? <Text>{children}</Text> : children}
     </Button>
 );
 
+export const ShallowQuizButton = Button;
 export default QuizButton;

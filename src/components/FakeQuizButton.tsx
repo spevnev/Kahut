@@ -1,4 +1,4 @@
-import QuizButton from '../QuizButton';
+import QuizButton from './QuizButton';
 import styled from 'styled-components';
 
 const FakeQuizButton = styled(QuizButton)`

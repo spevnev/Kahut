@@ -11,7 +11,7 @@ import personImage2 from '../../public/images/person2.jpeg';
 import hammerIcon from '../../public/icons/hammer.svg';
 import bullhornIcon from '../../public/icons/bullhorn.svg';
 import gamepadIcon from '../../public/icons/gamepad.svg';
-import FakeQuizButton from '../components/landing/FakeQuizButton';
+import FakeQuizButton from '../components/FakeQuizButton';
 import { color } from '../styles/theme';
 
 const Page = styled.div`

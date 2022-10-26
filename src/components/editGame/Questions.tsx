@@ -1,10 +1,21 @@
-import { FunctionComponent } from 'react';
+import { Fragment } from 'react';
+import { FunctionComponent, useState } from 'react';
 import styled from 'styled-components';
 import { v4 as generateUUID } from 'uuid';
 import GameData from '../../types/gameData';
+import FoldedQuestion from './FoldedQuestion';
 import Question, { QuestionContainer } from './Question';
 
 const Container = styled.div``;
+
+const NewQuestion = styled(QuestionContainer)`
+    cursor: pointer;
+    transition: filter 0.2s;
+
+    &:hover {
+        filter: brightness(0.9);
+    }
+`;
 
 type Props = {
     game: GameData;
@@ -12,6 +23,8 @@ type Props = {
 };
 
 const Questions: FunctionComponent<Props> = ({ game, setGame }) => {
+    const [openedQuestions, _setOpenedQuestions] = useState(new Array(game.questions.length).fill(false));
+
     const newQuestion = () => {
         setGame({
             ...game,
@@ -20,26 +33,38 @@ const Questions: FunctionComponent<Props> = ({ game, setGame }) => {
                 {
                     id: generateUUID(),
                     title: 'New Question',
-                    type: 'radio',
-                    time: 30,
-                    answers: ['1', '2', '3', '4'],
-                    correctAnswer: [1],
+                    type: 'single',
+                    time: 20,
+                    choices: ['', '', '', ''],
+                    answers: [0],
                     image: undefined,
                 },
             ],
         });
+
+        _setOpenedQuestions([...openedQuestions, true]);
     };
+
+    const setOpenedQuestions = (el_idx: number, new_value: boolean) => _setOpenedQuestions(openedQuestions.map((cur, idx) => (idx === el_idx ? new_value : cur)));
 
     return (
         <Container>
-            {game.questions.map(question => (
-                <Question
-                    key={question.id}
-                    question={question}
-                    setQuestion={value => setGame({ ...game, questions: game.questions.map(cur => (cur === question ? value : cur)) })}
-                />
+            {game.questions.map((question, idx) => (
+                <Fragment key={question.id}>
+                    {openedQuestions[idx] ? (
+                        <Question
+                            question={question}
+                            setQuestion={new_question => setGame({ ...game, questions: game.questions.map((value, j) => (j === idx ? new_question : value)) })}
+                            closeQuestion={() => setOpenedQuestions(idx, false)}
+                        />
+                    ) : (
+                        <div onClick={() => setOpenedQuestions(idx, true)}>
+                            <FoldedQuestion question={question} />
+                        </div>
+                    )}
+                </Fragment>
             ))}
-            <QuestionContainer onClick={newQuestion}>+</QuestionContainer>
+            <NewQuestion onClick={newQuestion}>New Question</NewQuestion>
         </Container>
     );
 };

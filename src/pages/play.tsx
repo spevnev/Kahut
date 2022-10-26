@@ -1,7 +1,7 @@
 import { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import StyledInput from '../components/Input';
+import StyledInput from '../components/BoxInput';
 import styled from 'styled-components';
 import Header from '../components/Header';
 import { color } from '../styles/theme';

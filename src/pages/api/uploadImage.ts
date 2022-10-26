@@ -25,16 +25,9 @@ const handler: NextApiHandler = async (req, res) => {
     payload.append('key', process.env.IMG_UPLOAD_API_KEY);
     payload.append('image', image);
 
-    const {
-        data: {
-            data: {
-                medium: { url: preview },
-                image: { url: hd },
-            },
-        },
-    } = await axios.post(`https://api.imgbb.com/1/upload`, payload, payload.getHeaders());
+    const { data } = await axios.post(`https://api.imgbb.com/1/upload`, payload, payload.getHeaders());
 
-    res.status(200).send({ preview, hd });
+    res.status(200).send({ url: data.data.image.url });
 };
 
 export const config = { api: { bodyParser: { sizeLimit: '10mb' } } };

@@ -4,8 +4,8 @@ export type Question = {
     image?: string;
     type: string;
     time: number;
-    answers: string[];
-    correctAnswer: number[];
+    choices: string[];
+    answers: number[];
 };
 
 type GameData = {
