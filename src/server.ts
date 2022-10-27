@@ -8,19 +8,23 @@ import schema from './graphql/schema';
 
 const PORT = Number(process.env.PORT) || '3000';
 const IS_DEV = process.env.NODE_ENV !== 'production';
+const GRAPHQL_ENDPOINT = '/api/graphql';
 
-const app = next({ dev: IS_DEV });
-const nextHandler = app.getRequestHandler();
+const nextApp = next({ dev: IS_DEV });
+const nextHandler = nextApp.getRequestHandler();
 
-app.prepare().then(async () => {
-    const apolloServer = await createApolloHandler();
-    const apolloHandler = apolloServer.createHandler({ path: '/api/graphql' });
+nextApp.prepare().then(async () => {
+    const apolloApp = await createApolloHandler();
+    const apolloHandler = apolloApp.createHandler({ path: GRAPHQL_ENDPOINT });
 
-    const nextServer = createServer(async (req: IncomingMessage, res: ServerResponse) => {
+    const wsServer = new WebSocketServer({ noServer: true, path: GRAPHQL_ENDPOINT });
+    useServer({ schema }, wsServer);
+
+    const httpServer = createServer(async (req: IncomingMessage, res: ServerResponse) => {
         try {
             const parsedUrl = parse(req.url!, true);
 
-            if (parsedUrl.pathname === '/api/graphql') await apolloHandler(req, res);
+            if (parsedUrl.pathname === GRAPHQL_ENDPOINT) await apolloHandler(req, res);
             else await nextHandler(req, res, parsedUrl);
         } catch (e) {
             console.error(e);
@@ -29,8 +33,11 @@ app.prepare().then(async () => {
         }
     });
 
-    const wsServer = new WebSocketServer({ server: nextServer, path: '/api/graphql' });
-    useServer({ schema }, wsServer);
+    httpServer.listen(PORT);
 
-    nextServer.listen(PORT);
+    httpServer.on('upgrade', (request, socket, head) => {
+        if (request.url === GRAPHQL_ENDPOINT) {
+            wsServer.handleUpgrade(request, socket, head, socket => wsServer.emit('connection', socket, request));
+        }
+    });
 });
