@@ -3,15 +3,28 @@ import { ApolloClient, ApolloLink, InMemoryCache } from '@apollo/client';
 import { isBrowser } from '../utils/helper';
 
 const createLink = (): ApolloLink => {
-    if (!isBrowser()) {
+    if (isBrowser()) {
+        const { split, HttpLink } = require('@apollo/client');
+        const { getMainDefinition } = require('@apollo/client/utilities');
+        const { GraphQLWsLink } = require('@apollo/client/link/subscriptions');
+        const { createClient } = require('graphql-ws');
+
+        const httpLink = new HttpLink({ uri: '/api/graphql', credentials: 'same-origin' });
+        const wsLink = new GraphQLWsLink(createClient({ uri: '/api/graphql' }));
+
+        return split(
+            ({ query }: any) => {
+                const definition = getMainDefinition(query);
+                return definition.kind === 'OperationDefinition' && definition.operation === 'subscription';
+            },
+            wsLink,
+            httpLink
+        );
+    } else {
         const { SchemaLink } = require('@apollo/client/link/schema');
         const { schema } = require('../graphql/schema');
 
         return new SchemaLink({ schema });
-    } else {
-        const { HttpLink } = require('@apollo/client/link/http');
-
-        return new HttpLink({ uri: '/api/graphql', credentials: 'same-origin' });
     }
 };
 

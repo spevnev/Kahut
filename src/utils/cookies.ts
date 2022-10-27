@@ -1,11 +1,11 @@
-export const getCookie = (cookie: string): any => {
+export const getCookie = (key: string): any => {
     const cookies = document.cookie.split('; ');
-    const matching = cookies.filter(cur => cur.split('=')[0] === cookie);
+    const matching = cookies.filter(cur => cur.split('=')[0] === key);
     if (matching.length !== 1) return null;
 
-    return matching[0].slice(cookie.length + 1);
+    return matching[0].slice(key.length + 1);
 };
 
-export const setCookie = (key: string, value: any) => (document.cookie = `${key}=${value}`);
+export const setCookie = (key: string, value: any) => (document.cookie = `${key}=${value};`);
 
-export const deleteCookie = (key: string) => (document.cookie = `${key}=;max-age=-99999;`);
+export const deleteCookie = (key: string) => (document.cookie = `${key}=;max-age=0;`);
