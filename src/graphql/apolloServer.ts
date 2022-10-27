@@ -3,15 +3,20 @@ import { ApolloServer } from 'apollo-server-micro';
 import schema from './schema';
 import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 
-const prismaClient = new PrismaClient();
-const apollo = new ApolloServer({
-    schema,
-    cache: 'bounded',
-    csrfPrevention: true,
-    plugins: [ApolloServerPluginLandingPageLocalDefault({ embed: true })],
-    context: { db: prismaClient },
-});
+const createApolloHandler = async (): Promise<ApolloServer> => {
+    const prismaClient = new PrismaClient();
+    const apollo = new ApolloServer({
+        schema,
+        cache: 'bounded',
+        csrfPrevention: true,
+        plugins: [ApolloServerPluginLandingPageLocalDefault({ embed: true })],
+        context: { db: prismaClient },
+    });
 
-export const connectionPromises: Promise<void>[] = [prismaClient.$connect(), apollo.start()];
+    return new Promise(async res => {
+        await Promise.all([apollo.start(), prismaClient.$connect()]);
+        res(apollo);
+    });
+};
 
-export default apollo;
+export default createApolloHandler;
