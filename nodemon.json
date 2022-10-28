@@ -1,4 +1,5 @@
 {
-    "watch": ["src/server.ts"],
+    "watch": ["src/server.ts", "src/graphql"],
+    "ext": "js,json,ts,tsx",
     "exec": "ts-node --project tsconfig.server.json src/server.ts"
 }
