@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { createJwt } from '../utils/jwt';
-import pubsub from './pubsub';
+import pubsub from '../clients/pubSubClient';
 
 type ResolverContext = { db: PrismaClient };
 

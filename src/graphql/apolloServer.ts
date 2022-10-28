@@ -1,6 +1,6 @@
 import { ApolloServer } from 'apollo-server-micro';
 import schema from './schema';
-import prismaClient from '../db/prismaClient';
+import prismaClient from '../clients/prismaClient';
 import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 
 const createApolloHandler = async (): Promise<ApolloServer> => {
