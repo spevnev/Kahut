@@ -36,7 +36,7 @@ const MyApp = ({ pageProps, props, Component }: Props) => {
 MyApp.getInitialProps = async (appContext: AppContext) => {
     const appProps: any = await App.getInitialProps(appContext);
 
-    const token: string | undefined = isBrowser() ? getCookie('token') : (appContext.ctx.req as NextApiRequest).cookies.token;
+    const token: string | undefined = isBrowser() ? getCookie('token') : (appContext.ctx.req as NextApiRequest)?.cookies?.token;
     const user = token ? jwt.decode(token) : null;
 
     return { pageProps: { ...appProps.pageProps }, props: { user } };
