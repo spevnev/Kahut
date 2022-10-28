@@ -1,11 +1,10 @@
-import { ChangeEvent, useContext, useState } from 'react';
+import { useContext } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { color } from '../styles/theme';
 import { isBrowser } from '../utils/helper';
 import Header from '../components/Header';
-import useDebounce from '../hooks/useDebounce';
 import StyledInput from '../components/BoxInput';
 import { AuthContext } from '../providers/GoogleAuthProvider';
 
@@ -51,42 +50,23 @@ const Input = styled(StyledInput)`
 
 const Profile: NextPage = () => {
     const router = useRouter();
-    const { user, setUser } = useContext(AuthContext);
-    const [username, setUsername] = useState(user?.name);
-
-    const debounce = useDebounce(
-        async (username: string) => {
-            if (!user) return;
-
-            // TODO: submit changes to the server + update token
-            // const req = await ;
-            // const {token} = await req.json();
-            // if (!token) return;
-            // setCookie('token', token);
-
-            setUser({ ...user, name: username });
-        },
-        (_, cur) => {
-            setUsername(cur);
-            return cur;
-        },
-        500
-    );
+    const { user } = useContext(AuthContext);
 
     if (isBrowser() && !user) router.push('/');
 
+    const { name, email, picture } = user!;
     return (
         <Container>
             <Header />
 
             <UserData>
-                <Icon src={user?.picture} />
+                <Icon src={picture} />
 
                 <Inputs>
                     <Label>Username</Label>
-                    <Input placeholder="Username" value={username} onChange={(e: ChangeEvent) => debounce((e.target as HTMLInputElement).value)} />
+                    <Input disabled={true} value={name} onChange={() => {}} />
                     <Label>Email</Label>
-                    <Input disabled={true} value={user?.email} onChange={() => {}} />
+                    <Input disabled={true} value={email} onChange={() => {}} />
                 </Inputs>
             </UserData>
         </Container>
