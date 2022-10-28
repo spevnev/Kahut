@@ -4,6 +4,7 @@
     "private": true,
     "scripts": {
         "dev": "NODE_ENV=development nodemon",
+        "dev-prisma": "nodemon --config nodemon.prisma.json",
         "build": "next build && tsc --project tsconfig.server.json",
         "start": "cross-env NODE_ENV=production node dist/server.js"
     },
