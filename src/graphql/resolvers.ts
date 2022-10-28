@@ -1,6 +1,9 @@
 import { PrismaClient } from '@prisma/client';
 import { createJwt } from '../utils/jwt';
 import pubsub from '../clients/pubSubClient';
+import jwt from 'jsonwebtoken';
+
+const GAME_TOKEN_DURATION = 60 * 30; // (s); = 0.5h
 
 type ResolverContext = { db: PrismaClient };
 
@@ -10,19 +13,14 @@ const resolvers = {
         joinLobby: async (_parent: any, { username, code }: { username: string; code: string }, { db }: ResolverContext, _info: any): Promise<string | null> => {
             if (code.length !== 6 || username.length < 4 || username.length > 30) return null;
 
-            // TODO: check if username is unique + add
+            // prisma kinda stinks - tell greg that i love sql more - it's more flexible
 
-            const exp = Math.floor(Date.now() / 1000) + 60 * 30; // now + 0.5h
+            const exp = Math.floor(Date.now() / 1000) + GAME_TOKEN_DURATION;
             return createJwt({ username, code, exp });
         },
     },
     Subscription: {
-        onGameEvent: {
-            subscribe: (_parent: any, { token }: { token: string }) => {
-                // TODO: check token
-                return pubsub.asyncIterator('GAME_EVENT'); // TODO: append game id to 'GAME_EVENT'
-            },
-        },
+        onGameEvent: { subscribe: async (_parent: any, { token }: { token: string }) => pubsub.asyncIterator(`GAME_EVENT_${(jwt.decode(token) as any).code}`) },
     },
 };
 
