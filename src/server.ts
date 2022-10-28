@@ -1,7 +1,7 @@
 import next from 'next';
 import { parse } from 'url';
 import { createServer, IncomingMessage, ServerResponse } from 'http';
-import { WebSocketServer } from 'ws';
+import { ServerOptions, WebSocketServer } from 'ws';
 import { useServer } from 'graphql-ws/lib/use/ws';
 import createApolloHandler from './graphql/apolloServer';
 import schema from './graphql/schema';
@@ -16,10 +16,6 @@ const nextHandler = nextApp.getRequestHandler();
 nextApp.prepare().then(async () => {
     const apolloApp = await createApolloHandler();
     const apolloHandler = apolloApp.createHandler({ path: GRAPHQL_ENDPOINT });
-
-    const wsServer = new WebSocketServer({ noServer: true, path: GRAPHQL_ENDPOINT });
-    useServer({ schema }, wsServer);
-
     const httpServer = createServer(async (req: IncomingMessage, res: ServerResponse) => {
         try {
             const parsedUrl = parse(req.url!, true);
@@ -35,9 +31,10 @@ nextApp.prepare().then(async () => {
 
     httpServer.listen(PORT);
 
-    httpServer.on('upgrade', (request, socket, head) => {
-        if (request.url === GRAPHQL_ENDPOINT) {
-            wsServer.handleUpgrade(request, socket, head, socket => wsServer.emit('connection', socket, request));
-        }
-    });
+    const wssOptions: ServerOptions = { path: GRAPHQL_ENDPOINT };
+    if (IS_DEV) wssOptions.port = Number(PORT) + 1;
+    else wssOptions.server = httpServer;
+
+    const wsServer = new WebSocketServer(wssOptions);
+    useServer({ schema }, wsServer);
 });

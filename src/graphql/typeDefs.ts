@@ -2,15 +2,15 @@ import { gql } from '@apollo/client';
 
 const typeDefs = gql`
     type Query {
-        placeholder: boolean
+        placeholder: Boolean!
     }
 
     type Mutation {
-        placeholder: Null
+        joinLobby(username: String!, code: String!): String
     }
 
     type Subscription {
-        placeholder: Null
+        onGameEvent(token: String!): String!
     }
 `;
 

@@ -1,4 +1,8 @@
+import { isBrowser } from './helper';
+
 export const getCookie = (key: string): any => {
+    if (!isBrowser()) return null;
+
     const cookies = document.cookie.split('; ');
     const matching = cookies.filter(cur => cur.split('=')[0] === key);
     if (matching.length !== 1) return null;

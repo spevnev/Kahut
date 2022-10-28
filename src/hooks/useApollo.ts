@@ -10,7 +10,9 @@ const createLink = (): ApolloLink => {
         const { createClient } = require('graphql-ws');
 
         const httpLink = new HttpLink({ uri: '/api/graphql', credentials: 'same-origin' });
-        const wsLink = new GraphQLWsLink(createClient({ uri: '/api/graphql' }));
+        const wsLink = new GraphQLWsLink(
+            createClient(process.env.NODE_ENV === 'development' ? { url: 'ws://localhost:3001/api/graphql' } : { uri: '/api/graphql' })
+        );
 
         return split(
             ({ query }: any) => {
