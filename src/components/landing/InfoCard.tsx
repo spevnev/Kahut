@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { AuthContext } from '../../providers/GoogleAuthProvider';
 import { color } from '../../styles/theme';
 import StyledInput from '../BoxInput';
+import Button from '../Button';
 
 const Container = styled.div`
     width: 27.5vw;
@@ -15,30 +16,6 @@ const Container = styled.div`
     border-radius: 10px;
     box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.2);
     padding: 20px 0;
-`;
-
-const Button = styled.div`
-    width: 80%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    background: ${color('frost1')};
-    transition: background-color 0.2s;
-    cursor: pointer;
-    border-radius: 3px;
-    padding: 5px;
-
-    &:hover {
-        background: ${color('frost0')};
-    }
-
-    & a {
-        color: ${color('white0')};
-        text-decoration: none;
-        font-size: 24px;
-        font-weight: 200;
-    }
 `;
 
 const Text = styled.h4`
@@ -72,7 +49,9 @@ const InfoCard: FunctionComponent = () => {
 
     return (
         <Container>
-            <Button onClick={login}>Log in</Button>
+            <Button style={{ width: '80%' }} onClick={login}>
+                Log in{' '}
+            </Button>
             <Text>to get access to all features</Text>
             <Br />
             <Text>or play without an account</Text>
