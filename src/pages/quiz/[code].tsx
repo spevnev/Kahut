@@ -12,7 +12,6 @@ type Props = { gameToken: string };
 
 const Game: NextPage<Props> = ({ gameToken }) => {
     const { data } = useSubscription(GAME_SUBSCRIPTION, { variables: { token: getCookie('game_token') || gameToken } });
-    console.log(data);
 
     return <div></div>;
 };

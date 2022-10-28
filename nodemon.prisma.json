@@ -1,4 +1,0 @@
-{
-    "watch": ["schema.prisma"],
-    "exec": "npx prisma generate && npx prisma db push"
-}
