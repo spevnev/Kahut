@@ -6,6 +6,7 @@ import { useServer } from 'graphql-ws/lib/use/ws';
 import createApolloHandler from './graphql/apolloServer';
 import schema from './graphql/schema';
 import { verifyJwt } from './utils/jwt';
+import initDB from './db/initDB';
 
 const PORT = Number(process.env.PORT) || '3000';
 const IS_DEV = process.env.NODE_ENV !== 'production';
@@ -15,8 +16,11 @@ const nextApp = next({ dev: IS_DEV });
 const nextHandler = nextApp.getRequestHandler();
 
 nextApp.prepare().then(async () => {
+    initDB();
+
     const apolloApp = await createApolloHandler();
     const apolloHandler = apolloApp.createHandler({ path: GRAPHQL_ENDPOINT });
+
     const httpServer = createServer(async (req: IncomingMessage, res: ServerResponse) => {
         try {
             const parsedUrl = parse(req.url!, true);
@@ -29,7 +33,6 @@ nextApp.prepare().then(async () => {
             res.end();
         }
     });
-
     httpServer.listen(PORT);
 
     const wssOptions: ServerOptions = { path: GRAPHQL_ENDPOINT };
@@ -43,6 +46,6 @@ nextApp.prepare().then(async () => {
         const token = req.headers.cookie.split('game_token=')[1].split(';')[0];
         if (!token || !(await verifyJwt(token))) return socket.terminate();
     });
-    
+
     useServer({ schema }, wsServer);
 });

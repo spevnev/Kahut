@@ -1,6 +1,8 @@
-import { DBClient } from './client';
+import getClient from './client';
 
-const initDB = async (client: DBClient) => {
+const initDB = async () => {
+    const client = await getClient();
+
     try {
         await client.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`, []);
 
