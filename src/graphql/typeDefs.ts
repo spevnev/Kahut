@@ -13,6 +13,7 @@ const typeDefs = gql`
     type Mutation {
         joinLobby(username: String!, code: String!, picture: String): String
         createLobby(game_id: String!, token: String!): CreateLobbyResponse!
+        startLobby(code: String!, game_token: String!): Boolean!
     }
 
     type Subscription {
