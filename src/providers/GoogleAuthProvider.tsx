@@ -1,5 +1,5 @@
 import { createContext, FunctionComponent, ReactElement, useRef, useState } from 'react';
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { GoogleOAuthProvider, GoogleLogin, CredentialResponse } from '@react-oauth/google';
 import jwt from 'jsonwebtoken';
 import User from '../types/user';
 import { deleteCookie, setCookie } from '../utils/cookies';
@@ -31,7 +31,7 @@ const GoogleAuthProvider: FunctionComponent<Props> = ({ children, user: _user })
         el.click();
     };
 
-    const onSuccess = async (obj: any) => {
+    const onSuccess = async (obj: CredentialResponse) => {
         const res = await fetch(`${location.origin}/api/authenticate?token=${obj.credential}`);
         const { token } = await res.json();
         if (!token) throw new Error('No token!');

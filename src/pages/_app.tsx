@@ -14,7 +14,7 @@ import User from '../types/user';
 type Props = AppProps & { props: { user?: User }; pageProps: any };
 
 const MyApp = ({ pageProps, props, Component }: Props) => {
-    const apolloClient = useApollo(pageProps.initialApolloState);
+    const apolloClient = useApollo();
 
     return (
         <>
@@ -34,7 +34,7 @@ const MyApp = ({ pageProps, props, Component }: Props) => {
 };
 
 MyApp.getInitialProps = async (appContext: AppContext) => {
-    const appProps: any = await App.getInitialProps(appContext);
+    const appProps = await App.getInitialProps(appContext);
 
     const token: string | undefined = isBrowser() ? getCookie('token') : (appContext.ctx.req as NextApiRequest)?.cookies?.token;
     const user = token ? jwt.decode(token) : null;

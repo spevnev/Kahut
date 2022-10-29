@@ -1,4 +1,4 @@
-import { FunctionComponent, useState } from 'react';
+import { FunctionComponent, RefObject, useState } from 'react';
 import styled from 'styled-components';
 import useOnVisible from '../../hooks/useOnVisible';
 
@@ -8,7 +8,7 @@ const Container = styled.div<{ ref: any }>`
     align-items: center;
 `;
 
-const Text = styled.p<{ big?: any }>`
+const Text = styled.p<{ big?: boolean }>`
     font-size: ${props => (props.big ? 28 : 16)}px;
     font-weight: 200;
 `;

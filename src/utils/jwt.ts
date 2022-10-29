@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-export const createJwt = (data: any, expiresIn?: number): Promise<string> => {
+export const createJwt = (data: { [key: string]: any }, expiresIn?: number): Promise<string> => {
     const exp = Math.floor(Date.now() / 1000) + (expiresIn || 0);
     const payload = expiresIn ? { ...data, exp } : data;
 

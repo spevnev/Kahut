@@ -33,11 +33,11 @@ const createLink = (): ApolloLink => {
 const createApolloClient = () => new ApolloClient({ ssrMode: !isBrowser(), link: createLink(), cache: new InMemoryCache() });
 
 let apolloClient: ApolloClient<any> | undefined;
-export const initializeApollo = (initialState = null): ApolloClient<any> => {
+export const initializeApollo = (): ApolloClient<any> => {
     const _apolloClient = apolloClient ?? createApolloClient();
     if (isBrowser() && !apolloClient) apolloClient = _apolloClient;
 
     return _apolloClient;
 };
 
-export const useApollo = (initialState: any) => useMemo(() => initializeApollo(initialState), [initialState]);
+export const useApollo = () => useMemo(() => initializeApollo(), []);
