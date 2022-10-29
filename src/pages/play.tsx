@@ -71,18 +71,19 @@ const Play: NextPage = () => {
 
     useEffect(() => () => timeout.current && clearTimeout(timeout.current), []);
 
-    const joinGame = () => {
+    const joinGame = async () => {
         if (code.length !== 6) return;
-        if (username.length < 4) return showError('Username must be longer than 4!');
-        if (username.length > 30) return showError("Username mustn't be longer than 30!");
+        if (username.length < 1) return showError("Username can't be empty!");
+        if (username.length > 30) return showError("Username can't be longer than 30!");
 
-        joinLobby({ variables: { username, code, picture: user?.picture } }).then(({ data: { joinLobby: token } }) => {
-            if (!token) return showError('Duplicate username!');
+        const { data } = await joinLobby({ variables: { username, code, picture: user?.picture } });
 
-            const { exp } = jwt.decode(token) as { exp: number };
-            setCookie('game_token', token, new Date(exp * 1000).toUTCString());
-            router.push(`/quiz/${code}`);
-        });
+        const { joinLobby: token } = data;
+        if (!token) return showError('Duplicate username!');
+
+        const { exp } = jwt.decode(token) as { exp: number };
+        setCookie('game_token', token, new Date(exp * 1000).toUTCString());
+        router.push(`/lobby/${code}`);
     };
 
     return (

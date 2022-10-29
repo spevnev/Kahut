@@ -1,9 +1,15 @@
 import { GetServerSideProps, NextPage } from 'next';
 import styled from 'styled-components';
+import { useRouter } from 'next/router';
+import { useContext } from 'react';
+import { gql, useMutation } from '@apollo/client';
+import jwt from 'jsonwebtoken';
 import { color } from '../../styles/theme';
 import GameCard from '../../types/gameCard';
 import Header from '../../components/Header';
-import { useRouter } from 'next/router';
+import { AuthContext } from '../../providers/GoogleAuthProvider';
+import { numberFormatter } from '../../utils/helper';
+import { getCookie, setCookie } from '../../utils/cookies';
 
 const Container = styled.div`
     display: flex;
@@ -109,12 +115,31 @@ type Props = {
     isCreator: boolean;
 };
 
-const numberFormatter = Intl.NumberFormat('en', { notation: 'compact' });
-const GameDetails: NextPage<Props> = ({ isCreator, card: { id, image, title, description, questions, players, rating, user: creator } }) => {
-    const router = useRouter();
+const CREATE_LOBBY_MUTATION = gql`
+    mutation createLobby($game_id: String!, $token: String!) {
+        createLobby(game_id: $game_id, token: $token) {
+            code
+            token
+        }
+    }
+`;
 
-    const startGame = () => {
-        // TODO: user ? redirect to lobby : < Popup text="you have to register to create game" />
+const GameDetails: NextPage<Props> = ({ isCreator, card: { id, image, title, description, questions, players, rating, user: creator } }) => {
+    const { user } = useContext(AuthContext);
+    const router = useRouter();
+    const [createLobby] = useMutation(CREATE_LOBBY_MUTATION);
+
+    const startGame = async () => {
+        if (!user) return;
+
+        const { data } = await createLobby({ variables: { game_id: id, token: getCookie('token') } });
+
+        const { code, token } = data.createLobby;
+        if (!code || !token) return;
+
+        const { exp } = jwt.decode(token) as { exp: number };
+        setCookie('game_token', token, new Date(exp * 1000).toUTCString());
+        router.push(`/lobby/${code}`);
     };
 
     return (
@@ -138,7 +163,9 @@ const GameDetails: NextPage<Props> = ({ isCreator, card: { id, image, title, des
 
             <Buttons>
                 {isCreator && <SecondaryButton onClick={() => router.push(`/edit/${id}`)}>Edit</SecondaryButton>}
-                <PrimaryButton onClick={startGame}>Host game</PrimaryButton>
+                <PrimaryButton onClick={startGame} disabled={!user}>
+                    Host game
+                </PrimaryButton>
             </Buttons>
         </Container>
     );
@@ -151,7 +178,18 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     return {
         props: {
             isCreator: false,
-            card: {},
+            card: {
+                id: '123e4567-e89b-12d3-a456-426614174000',
+                title: 'sth',
+                rating: 4,
+                questions: 7,
+                players: 1,
+                description: '',
+                user: {
+                    avatar: '',
+                    username: 'sth',
+                },
+            },
         },
     };
 };

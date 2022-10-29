@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import GameCardProps from '../../types/gameCard';
 import { color } from '../../styles/theme';
 import starIcon from '../../../public/icons/star.svg';
-import { limitStringTo } from '../../utils/helper';
+import { limitStringTo, numberFormatter } from '../../utils/helper';
 
 const Container = styled.div`
     display: flex;
@@ -85,7 +85,6 @@ const UserIcon = styled.img`
     margin-right: 5px;
 `;
 
-const numberFormatter = Intl.NumberFormat('en', { notation: 'compact' });
 const GameCard: FunctionComponent<GameCardProps> = ({ image, title, description, id, questions, players, rating, user }) => {
     const router = useRouter();
 

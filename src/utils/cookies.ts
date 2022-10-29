@@ -10,6 +10,6 @@ export const getCookie = (key: string): any => {
     return matching[0].slice(key.length + 1);
 };
 
-export const setCookie = (key: string, value: any, exp?: string) => (document.cookie = `${key}=${value};${exp ? `expires=${exp};` : ''}`);
+export const setCookie = (key: string, value: any, exp?: string) => (document.cookie = `${key}=${value};path=/;${exp ? `expires=${exp};` : ''}`);
 
 export const deleteCookie = (key: string) => (document.cookie = `${key}=;max-age=0;`);

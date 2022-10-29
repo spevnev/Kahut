@@ -17,8 +17,12 @@ const Game: NextPage<Props> = ({ gameToken }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+    const gameToken = req?.cookies?.game_token;
+    if (!gameToken) return { notFound: true };
+
     // TODO: return {notFound: true} if there is no such pending game
-    return { props: { gameToken: req.cookies.game_token } };
+
+    return { props: { gameToken } };
 };
 
 export default Game;
