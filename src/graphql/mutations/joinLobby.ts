@@ -1,7 +1,7 @@
 import { createJwt } from '../../utils/jwt';
 import { GAME_TOKEN_DURATION, ResolverContext } from '../resolvers';
 
-export const JOIN_LOBBY = `INSERT INTO players(username, picture, game_id) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING;`;
+export const JOIN_LOBBY = `INSERT INTO players(username, picture, code) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING;`;
 
 const joinLobby = async (
     _parent: void,
@@ -13,7 +13,7 @@ const joinLobby = async (
     const res = await db.query(JOIN_LOBBY, [username, picture, code]);
     if (res.rowCount === 0) return null;
 
-    return createJwt({ username, code }, GAME_TOKEN_DURATION);
+    return createJwt({ username, picture, code, isHost: false }, GAME_TOKEN_DURATION);
 };
 
 export default joinLobby;

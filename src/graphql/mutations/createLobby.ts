@@ -4,7 +4,7 @@ import { createJwt, verifyJwt } from '../../utils/jwt';
 import { GAME_TOKEN_DURATION, ResolverContext } from '../resolvers';
 import { JOIN_LOBBY } from './joinLobby';
 
-const CREATE_LOBBY = `INSERT INTO lobbies(host, game_id) VALUES ($1, $2) ON CONFLICT DO NOTHING RETURNING code;`;
+const CREATE_LOBBY = `INSERT INTO lobbies(game_id) VALUES ($1) ON CONFLICT DO NOTHING RETURNING code;`;
 
 const createLobby = async (
     _parent: void,
@@ -14,13 +14,13 @@ const createLobby = async (
     if (!(await verifyJwt(token))) return { token: null, code: null };
     const { name, email, picture } = jwt.decode(token) as User;
 
-    const res = await db.query(CREATE_LOBBY, [email, game_id]);
+    const res = await db.query(CREATE_LOBBY, [game_id]);
     const code = res.rowCount === 1 ? res.rows[0].code : null;
     if (!code) return { token: null, code: null };
 
     await db.query(JOIN_LOBBY, [name, picture, code]);
 
-    const game_token = await createJwt({ username: name, code }, GAME_TOKEN_DURATION);
+    const game_token = await createJwt({ username: name, picture, code, isHost: true }, GAME_TOKEN_DURATION);
     return { code, token: game_token };
 };
 

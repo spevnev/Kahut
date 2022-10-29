@@ -47,7 +47,6 @@ const initDB = async () => {
             `CREATE TABLE IF NOT EXISTS lobbies(
                 id      BIGSERIAL,
                 code    TEXT      NOT NULL DEFAULT(generate_code(currval(pg_get_serial_sequence('lobbies', 'id')))),
-                host    TEXT      NOT NULL,
                 game_id UUID      NOT NULL
             );`,
             []
@@ -59,11 +58,11 @@ const initDB = async () => {
                 picture  TEXT DEFAULT(null),
                 username TEXT NOT NULL,
                 score    INT  NOT NULL DEFAULT(0),
-                game_id  TEXT NOT NULL
+                code     TEXT NOT NULL
             );`,
             []
         );
-        await client.query(`CREATE UNIQUE INDEX IF NOT EXISTS players_idx ON players (game_id, username);`, []);
+        await client.query(`CREATE UNIQUE INDEX IF NOT EXISTS players_idx ON players (code, username);`, []);
 
         // await client.query(
         //     `CREATE TABLE IF NOT EXISTS games(
