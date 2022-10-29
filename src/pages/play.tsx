@@ -9,6 +9,7 @@ import { AuthContext } from '../providers/GoogleAuthProvider';
 import { gql, useMutation } from '@apollo/client';
 import StyledButton from '../components/Button';
 import { setCookie } from '../utils/cookies';
+import jwt from 'jsonwebtoken';
 
 const Container = styled.div`
     display: flex;
@@ -47,8 +48,8 @@ const Button = styled(StyledButton)`
 `;
 
 const JOIN_LOBBY = gql`
-    mutation joinLobby($username: String!, $code: String!) {
-        joinLobby(username: $username, code: $code)
+    mutation joinLobby($username: String!, $code: String!, $picture: String) {
+        joinLobby(username: $username, code: $code, picture: $picture)
     }
 `;
 
@@ -75,10 +76,11 @@ const Play: NextPage = () => {
         if (username.length < 4) return showError('Username must be longer than 4!');
         if (username.length > 30) return showError("Username mustn't be longer than 30!");
 
-        joinLobby({ variables: { username, code } }).then(({ data: { joinLobby: token } }) => {
+        joinLobby({ variables: { username, code, picture: user?.picture } }).then(({ data: { joinLobby: token } }) => {
             if (!token) return showError('Duplicate username!');
 
-            setCookie('game_token', token);
+            const { exp } = jwt.decode(token) as { exp: number };
+            setCookie('game_token', token, new Date(exp * 1000).toUTCString());
             router.push(`/quiz/${code}`);
         });
     };

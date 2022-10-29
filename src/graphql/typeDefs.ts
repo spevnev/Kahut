@@ -6,7 +6,7 @@ const typeDefs = gql`
     }
 
     type Mutation {
-        joinLobby(username: String!, code: String!): String
+        joinLobby(username: String!, code: String!, picture: String): String
     }
 
     type Subscription {
