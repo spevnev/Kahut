@@ -1,6 +1,7 @@
 import { ClientConfig } from 'pg';
 import { v4 as generateUUID } from 'uuid';
 import GenericClient from './client';
+import dateToString from './utils';
 
 export type PublisherConfig = {
     batch_size?: number;
@@ -28,7 +29,11 @@ class Publisher extends GenericClient<PublisherConfig> {
 
     private async _pub() {
         const values = this.batch
-            .map(({ data, uuid, scheduleAt }) => `('${uuid}', ${this.client.escapeLiteral(JSON.stringify(data))}, ${scheduleAt || "'-infinity'"})`)
+            .map(({ data: _data, uuid, scheduleAt: _scheduleAt }) => {
+                const data = this.client.escapeLiteral(JSON.stringify(_data));
+                const scheduleAt = _scheduleAt ? `'${dateToString(_scheduleAt)}'` : "'-infinity'";
+                return `('${uuid}',${data},${scheduleAt})`;
+            })
             .join(', ');
 
         this.batch = [];

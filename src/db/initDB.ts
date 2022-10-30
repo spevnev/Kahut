@@ -78,8 +78,15 @@ const initDB = async () => {
 
         await client.query(
             `CREATE TABLE IF NOT EXISTS questions(
-                id      UUID NOT NULL,
-                game_id TEXT NOT NULL
+                id       UUID   NOT NULL,
+                order_id BIGSERIAL,
+                game_id  UUID   NOT NULL,
+                title    TEXT   NOT NULL,
+                image    TEXT,
+                type     TEXT   NOT NULL,
+                time     INT    NOT NULL,
+                choices  TEXT[] NOT NULL,
+                answers  INT[]  NOT NULL
             );`,
             []
         );

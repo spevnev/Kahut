@@ -1,10 +1,10 @@
 import Subscriber from './subscriber';
 import startGame from '../../jobs/startGame';
+import Publisher from './publisher';
+import { ClientConfig } from 'pg';
 import showQuestion from '../../jobs/showQuestion';
 import showAnswer from '../../jobs/showAnswer';
 import endGame from '../../jobs/endGame';
-import Publisher from './publisher';
-import { ClientConfig } from 'pg';
 
 const SCHEMA = 'job_schedulers';
 
@@ -22,15 +22,20 @@ export type Publishers = {
     endGamePub: Publisher;
 };
 
+let publishers: Publishers;
 export const getPublishers = (): Publishers => {
-    if (!CONNECTION_CONFIG.connectionString) CONNECTION_CONFIG.connectionString = process.env.DB_CONNECTION_STRING;
+    if (!publishers) {
+        if (!CONNECTION_CONFIG.connectionString) CONNECTION_CONFIG.connectionString = process.env.DB_CONNECTION_STRING;
 
-    return {
-        startGamePub: new Publisher(START_GAME, CONNECTION_CONFIG, {}, SCHEMA),
-        showQuestionPub: new Publisher(SHOW_QUESTION, CONNECTION_CONFIG, {}, SCHEMA),
-        showAnswerPub: new Publisher(SHOW_ANSWER, CONNECTION_CONFIG, {}, SCHEMA),
-        endGamePub: new Publisher(END_GAME, CONNECTION_CONFIG, {}, SCHEMA),
-    };
+        publishers = {
+            startGamePub: new Publisher(START_GAME, CONNECTION_CONFIG, {}, SCHEMA),
+            showQuestionPub: new Publisher(SHOW_QUESTION, CONNECTION_CONFIG, {}, SCHEMA),
+            showAnswerPub: new Publisher(SHOW_ANSWER, CONNECTION_CONFIG, {}, SCHEMA),
+            endGamePub: new Publisher(END_GAME, CONNECTION_CONFIG, {}, SCHEMA),
+        };
+    }
+
+    return publishers;
 };
 
 export const initSubscribers = (): void => {

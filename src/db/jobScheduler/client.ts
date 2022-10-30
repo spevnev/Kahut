@@ -23,6 +23,7 @@ class GenericClient<T> {
             throw new Error('Error connecting to DB!');
         }
 
+        const indexName = this.client.escapeIdentifier(`job_scheduler_${this.table}_idx`);
         this.table = this.client.escapeIdentifier(this.table);
         this.schema = this.client.escapeIdentifier(this.schema);
 
@@ -42,8 +43,9 @@ class GenericClient<T> {
                 []
             );
 
-            await this.client.query(`CREATE INDEX IF NOT EXISTS job_scheduler_idx ON ${this.table} (order_id ASC, taken_until ASC);`, []);
+            await this.client.query(`CREATE INDEX IF NOT EXISTS ${indexName} ON ${this.table} (order_id ASC, taken_until ASC);`, []);
         } catch (e) {
+            console.error(e);
             throw new Error('Error initializing table!');
         }
     }
