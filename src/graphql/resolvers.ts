@@ -1,10 +1,6 @@
-import pubsub from './pubSubClient';
 import jwt from 'jsonwebtoken';
-import { DBClient } from '../db/client';
 import joinLobby from './mutations/joinLobby';
 import createLobby from './mutations/createLobby';
-
-export type ResolverContext = { db: DBClient };
 
 export const GAME_TOKEN_DURATION = 60 * 45; // 45m
 

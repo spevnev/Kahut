@@ -1,7 +1,13 @@
 import { ApolloServer } from 'apollo-server-micro';
 import schema from './schema';
 import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
-import getClient from '../db/client';
+import getClient, { DBClient } from '../db/client';
+import { getPublishers, Publishers } from '../db/jobScheduler/schedulers';
+
+export type ResolverContext = {
+    db: DBClient;
+    pubs: Publishers;
+};
 
 const createApolloHandler = async (): Promise<ApolloServer> => {
     const plugins = [];
@@ -13,7 +19,7 @@ const createApolloHandler = async (): Promise<ApolloServer> => {
         cache: 'bounded',
         csrfPrevention: true,
         plugins,
-        context: { db: await getClient() },
+        context: { db: await getClient(), pubs: getPublishers() } as ResolverContext,
     });
 
     await apollo.start();

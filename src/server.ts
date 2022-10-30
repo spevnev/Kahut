@@ -7,7 +7,7 @@ import createApolloHandler from './graphql/apolloServer';
 import schema from './graphql/schema';
 import { verifyJwt } from './utils/jwt';
 import initDB from './db/initDB';
-import { initSchedulers } from './db/jobScheduler/schedulers';
+import { initSubscribers } from './db/jobScheduler/schedulers';
 
 const PORT = Number(process.env.PORT) || '3000';
 const IS_DEV = process.env.NODE_ENV !== 'production';
@@ -17,7 +17,7 @@ const nextApp = next({ dev: IS_DEV });
 const nextHandler = nextApp.getRequestHandler();
 
 nextApp.prepare().then(async () => {
-    initSchedulers();
+    initSubscribers();
     initDB();
 
     const apolloApp = await createApolloHandler();
