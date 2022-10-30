@@ -28,7 +28,7 @@ class Publisher extends GenericClient<PublisherConfig> {
 
     private async _pub() {
         const values = this.batch
-            .map(({ data, uuid, scheduleAt }) => `('${uuid}', ${this.client.escapeLiteral(JSON.stringify(data))}, ${scheduleAt || '-infinity'})`)
+            .map(({ data, uuid, scheduleAt }) => `('${uuid}', ${this.client.escapeLiteral(JSON.stringify(data))}, ${scheduleAt || "'-infinity'"})`)
             .join(', ');
 
         this.batch = [];
