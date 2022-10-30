@@ -47,7 +47,8 @@ const initDB = async () => {
             `CREATE TABLE IF NOT EXISTS lobbies(
                 id      BIGSERIAL,
                 code    TEXT      NOT NULL DEFAULT(generate_code(currval(pg_get_serial_sequence('lobbies', 'id')))),
-                game_id UUID      NOT NULL
+                game_id UUID      NOT NULL,
+                state   TEXT      NOT NULL DEFAULT('OPEN')
             );`,
             []
         );
@@ -64,26 +65,25 @@ const initDB = async () => {
         );
         await client.query(`CREATE UNIQUE INDEX IF NOT EXISTS players_idx ON players (code, username);`, []);
 
-        // await client.query(
-        //     `CREATE TABLE IF NOT EXISTS games(
-        //         uuid        UUID NOT NULL UNIQUE,
-        //         title       TEXT NOT NULL,
-        //         description TEXT NOT NULL,
-        //         image       TEXT NOT NULL
-        //     );`,
-        //     []
-        // );
+        await client.query(
+            `CREATE TABLE IF NOT EXISTS games(
+                id          UUID NOT NULL,
+                title       TEXT NOT NULL,
+                description TEXT NOT NULL,
+                image       TEXT NOT NULL
+            );`,
+            []
+        );
+        await client.query(`CREATE UNIQUE INDEX IF NOT EXISTS games_idx ON games (id);`, []);
 
-        // await client.query(
-        //     `CREATE TABLE IF NOT EXISTS questions(
-        //         id      UUID NOT NULL UNIQUE,
-        //         game_id TEXT NOT NULL,
-        //     );`,
-        //     []
-        // );
-
-        // await client.query(`CREATE INDEX IF NOT EXISTS _idx ON  ()`, []);
-        // await client.query(``, []);
+        await client.query(
+            `CREATE TABLE IF NOT EXISTS questions(
+                id      UUID NOT NULL,
+                game_id TEXT NOT NULL
+            );`,
+            []
+        );
+        await client.query(`CREATE UNIQUE INDEX IF NOT EXISTS questions_idx ON questions (id);`, []);
     } catch (e) {
         throw new Error('Error while initializing DB! ' + e);
     }
