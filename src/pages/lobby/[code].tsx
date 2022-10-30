@@ -1,20 +1,43 @@
-import { gql, useSubscription } from '@apollo/client';
+import { gql, useSubscription, useMutation } from '@apollo/client';
 import { GetServerSideProps, NextPage } from 'next';
+import jwt from 'jsonwebtoken';
 import { getCookie } from '../../utils/cookies';
 import GameToken from '../../types/gameToken';
 
+const START_GAME = gql`
+    mutation startLobby($game_token: String!) {
+        startLobby(game_token: $game_token)
+    }
+`;
+
 const GAME_SUBSCRIPTION = gql`
-    subscription gameSubscription($token: String!) {
-        onGameEvent(token: $token)
+    subscription gameSubscription($game_token: String!) {
+        onGameEvent(game_token: $game_token) {
+            event
+            data {
+                title
+                image
+            }
+        }
     }
 `;
 
 type Props = { gameToken: string };
 
 const Game: NextPage<Props> = ({ gameToken }) => {
-    const { data } = useSubscription(GAME_SUBSCRIPTION, { variables: { token: getCookie('game_token') || gameToken } });
+    const game_token = getCookie('game_token') || gameToken;
+    const { isHost } = jwt.decode(gameToken) as GameToken;
 
-    return <div></div>;
+    const [startGame] = useMutation(START_GAME, { variables: { game_token } });
+    const { data: subscriptionData } = useSubscription(GAME_SUBSCRIPTION, { variables: { game_token } });
+    const { event, data } = subscriptionData?.onGameEvent || { event: null, data: null };
+
+    return (
+        <div>
+            {isHost && <button onClick={() => startGame()}>START</button>}
+            <h1>{event === 'START' && data.title}</h1>
+        </div>
+    );
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {

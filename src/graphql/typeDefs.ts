@@ -1,6 +1,16 @@
 import { gql } from '@apollo/client';
 
 const typeDefs = gql`
+    type StartGameData {
+        title: String!
+        image: String!
+    }
+
+    type GameEvent {
+        event: String!
+        data: StartGameData!
+    }
+
     type CreateLobbyResponse {
         code: String
         token: String
@@ -17,7 +27,7 @@ const typeDefs = gql`
     }
 
     type Subscription {
-        onGameEvent(token: String!): String!
+        onGameEvent(game_token: String!): GameEvent
     }
 `;
 
