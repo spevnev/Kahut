@@ -1,5 +1,5 @@
-import GameEventData from '../types/gameEventData';
 
-const startGame = async (data: GameEventData) => {};
+const startGame = async ({ lobbyId }: { lobbyId: string }) => {
+};
 
 export default startGame;

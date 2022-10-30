@@ -1,5 +1,10 @@
-import GameEventData from '../types/gameEventData';
+import getClient from '../db/client';
 
-const showQuestion = async (data: GameEventData) => {};
+const showQuestion = async () => {
+    const client = await getClient();
+
+    // send question
+    // schedule show answer
+};
 
 export default showQuestion;
