@@ -10,6 +10,7 @@ import { gql, useMutation } from '@apollo/client';
 import StyledButton from '../components/Button';
 import { setCookie } from '../utils/cookies';
 import jwt from 'jsonwebtoken';
+import GameToken from '../types/gameToken';
 
 const Container = styled.div`
     display: flex;
@@ -81,7 +82,7 @@ const Play: NextPage = () => {
         const { joinLobby: token } = data;
         if (!token) return showError('Duplicate username!');
 
-        const { exp } = jwt.decode(token) as { exp: number };
+        const { exp } = jwt.decode(token) as GameToken;
         setCookie('game_token', token, new Date(exp * 1000).toUTCString());
         router.push(`/lobby/${code}`);
     };

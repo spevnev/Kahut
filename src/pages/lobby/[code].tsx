@@ -1,6 +1,7 @@
 import { gql, useSubscription } from '@apollo/client';
 import { GetServerSideProps, NextPage } from 'next';
 import { getCookie } from '../../utils/cookies';
+import GameToken from '../../types/gameToken';
 
 const GAME_SUBSCRIPTION = gql`
     subscription gameSubscription($token: String!) {
@@ -16,9 +17,9 @@ const Game: NextPage<Props> = ({ gameToken }) => {
     return <div></div>;
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {
     const gameToken = req?.cookies?.game_token;
-    if (!gameToken) return { notFound: true };
+    if (!gameToken || (jwt.decode(gameToken) as GameToken).code !== query.code) return { notFound: true };
 
     // TODO: return {notFound: true} if there is no such pending game
 
