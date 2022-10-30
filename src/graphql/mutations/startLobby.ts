@@ -1,14 +1,15 @@
 import jwt from 'jsonwebtoken';
+import GameToken from '../../types/gameToken';
 import { verifyJwt } from '../../utils/jwt';
+import { ResolverContext } from '../apolloServer';
 
-const startLobby = async (_parent: void, { code, game_token }: { code: string; game_token: string }): Promise<boolean> => {
+const startLobby = async (_parent: void, { game_token }: { game_token: string }, { pubs: { startGamePub } }: ResolverContext): Promise<boolean> => {
     if (!(await verifyJwt(game_token))) return false;
 
-    const { isHost } = jwt.decode(game_token) as { isHost: boolean };
+    const { isHost, code } = jwt.decode(game_token) as GameToken;
     if (!isHost) return false;
 
-    // TODO: publish start job
-
+    startGamePub.pub({ lobbyId: code });
     return true;
 };
 

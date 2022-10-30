@@ -1,5 +1,7 @@
 import { createJwt } from '../../utils/jwt';
-import { GAME_TOKEN_DURATION, ResolverContext } from '../resolvers';
+import { ResolverContext } from '../apolloServer';
+
+export const GAME_TOKEN_DURATION = 60 * 45; // 45m
 
 export const JOIN_LOBBY = `INSERT INTO players(username, picture, code) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING;`;
 

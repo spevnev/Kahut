@@ -1,12 +1,11 @@
 import jwt from 'jsonwebtoken';
 import joinLobby from './mutations/joinLobby';
 import createLobby from './mutations/createLobby';
-
-export const GAME_TOKEN_DURATION = 60 * 45; // 45m
+import startLobby from './mutations/startLobby';
 
 const resolvers = {
     Query: {},
-    Mutation: { joinLobby, createLobby },
+    Mutation: { joinLobby, createLobby, startLobby },
     Subscription: {
         onGameEvent: { subscribe: async (_parent: any, { token }: { token: string }) => pubsub.asyncIterator(`GAME_EVENT_${(jwt.decode(token) as any).code}`) },
     },

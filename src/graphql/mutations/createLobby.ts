@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
 import User from '../../types/user';
 import { createJwt, verifyJwt } from '../../utils/jwt';
-import { GAME_TOKEN_DURATION, ResolverContext } from '../resolvers';
-import { JOIN_LOBBY } from './joinLobby';
+import { ResolverContext } from '../apolloServer';
+import { GAME_TOKEN_DURATION, JOIN_LOBBY } from './joinLobby';
 
 const CREATE_LOBBY = `INSERT INTO lobbies(game_id) VALUES ($1) ON CONFLICT DO NOTHING RETURNING code;`;
 
@@ -12,7 +12,7 @@ const createLobby = async (
     { db }: ResolverContext
 ): Promise<{ token: string | null; code: string | null }> => {
     if (!(await verifyJwt(token))) return { token: null, code: null };
-    const { name, email, picture } = jwt.decode(token) as User;
+    const { name, picture } = jwt.decode(token) as User;
 
     const res = await db.query(CREATE_LOBBY, [game_id]);
     const code = res.rowCount === 1 ? res.rows[0].code : null;
