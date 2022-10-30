@@ -1,14 +1,9 @@
 import { gql } from '@apollo/client';
 
 const typeDefs = gql`
-    type StartGameData {
-        title: String!
-        image: String!
-    }
-
     type GameEvent {
         event: String!
-        data: StartGameData!
+        data: String!
     }
 
     type CreateLobbyResponse {

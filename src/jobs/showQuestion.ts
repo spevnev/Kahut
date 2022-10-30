@@ -5,11 +5,14 @@ import { publish } from '../graphql/gamePubSub';
 const showQuestion = async ({ lobbyId, gameId, idx }: { lobbyId: string; gameId: string; idx: number }) => {
     const client = await getClient();
 
-    const res = await client.query(`SELECT * FROM questions q INNER JOIN games g ON q.game_id = g.id WHERE g.id = $1 ORDER BY order_id;`, [gameId]);
+    const res = await client.query(
+        `SELECT q.id, q.title, q.image, q.type, q.time, q.choices, q.answers FROM questions q INNER JOIN games g ON q.game_id = g.id WHERE g.id = $1 ORDER BY order_id;`,
+        [gameId]
+    );
     const data = res.rows[idx];
     console.log(data);
 
-    publish(lobbyId, { event: 'QUESTION', data: { question: data } });
+    publish(lobbyId, { event: 'QUESTION', data: { question: { ...data, answers: undefined } } });
 
     const finishTime = Date.now() + data.time * 1000;
     await getPublishers().showAnswerPub.pub({ lobbyId, answers: data.answers, idx, finishTime }, new Date(finishTime));
