@@ -1,6 +1,11 @@
 import { gql } from '@apollo/client';
 
 const typeDefs = gql`
+    type Player {
+        username: String!
+        picture: String
+    }
+
     type GameEvent {
         event: String!
         data: String!
@@ -12,7 +17,7 @@ const typeDefs = gql`
     }
 
     type Query {
-        placeholder: Boolean!
+        getPlayers(game_token: String!): [Player!]
     }
 
     type Mutation {

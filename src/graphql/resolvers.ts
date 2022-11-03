@@ -5,9 +5,10 @@ import startLobby from './mutations/startLobby';
 import GameTokenData from '../types/gameToken';
 import pubsub from './gamePubSub';
 import submitAnswer from './mutations/submitAnswer';
+import getPlayers from './queries/getPlayers';
 
 const resolvers = {
-    Query: {},
+    Query: { getPlayers },
     Mutation: { joinLobby, createLobby, startLobby, submitAnswer },
     Subscription: {
         onGameEvent: {

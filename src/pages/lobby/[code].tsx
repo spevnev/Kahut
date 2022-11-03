@@ -2,12 +2,22 @@ import { gql, useSubscription } from '@apollo/client';
 import { GetServerSideProps, NextPage } from 'next';
 import jwt from 'jsonwebtoken';
 import GameTokenData from '../../types/gameToken';
-import Lobby, { Player } from '../../components/game/Lobby';
 import { useEffect, useRef } from 'react';
+import Lobby from '../../components/game/Lobby';
 import QuestionPage from '../../components/game/QuestionPage';
 import GameStart from '../../components/game/GameStart';
 import GameEnd from '../../components/game/GameEnd';
 import Leaderboard from '../../components/game/Leaderboard';
+import Player from '../../types/player';
+
+const GET_PLAYERS = gql`
+    query getPlayers($game_token: String!) {
+        getPlayers(game_token: $game_token) {
+            username
+            picture
+        }
+    }
+`;
 
 const GAME_SUBSCRIPTION = gql`
     subscription gameSubscription($game_token: String!) {
@@ -85,7 +95,7 @@ const Game: NextPage<Props> = ({ gameToken, players: _players }) => {
     const { data } = useSubscription(GAME_SUBSCRIPTION, { variables: { game_token: gameToken } });
     const { idle, playerJoining, startGame, showQuestion, showAnswer, endGame } = parseEvent(data);
 
-    const players = useRef(_players);
+    const playersRef = useRef(_players);
 
     useEffect(() => {
         if (!playerJoining) return;
@@ -95,13 +105,13 @@ const Game: NextPage<Props> = ({ gameToken, players: _players }) => {
     }, [playerJoining]);
 
     return (
-        <GameContext.Provider value={{ gameToken, gameData }}>
-            {idle && <Lobby players={players.current} />}
-            {startGame && <GameStart {...startGame} />}
-            {showQuestion && <QuestionPage {...showQuestion} />}
-            {showAnswer && <Leaderboard {...showAnswer} />}
-            {endGame && <GameEnd {...endGame} />}
-        </GameContext.Provider>
+        <>
+            {idle && <Lobby players={playersRef.current} gameToken={gameToken} gameData={gameData} />}
+            {startGame && <GameStart {...startGame} gameToken={gameToken} gameData={gameData} />}
+            {showQuestion && <QuestionPage {...showQuestion} gameToken={gameToken} gameData={gameData} />}
+            {showAnswer && <Leaderboard {...showAnswer} players={playersRef.current} gameToken={gameToken} gameData={gameData} />}
+            {endGame && <GameEnd {...endGame} players={playersRef.current} gameToken={gameToken} gameData={gameData} />}
+        </>
     );
 };
 
@@ -109,13 +119,13 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query }) => 
     const gameToken = req?.cookies?.game_token;
     if (!gameToken || (jwt.decode(gameToken) as GameTokenData).code !== query.code) return { notFound: true };
 
-    // TODO: return {notFound: true} if there is no such pending game
     // const apollo = createApolloClient();
+    // const { data } = await apollo.query({ query: GET_PLAYERS, variables: { game_token: gameToken } });
+    // const players: Player[] = data.getPlayers;
 
-    // TODO: fetch on server side players who are already in lobby
-    const players: Player[] = [];
+    // if (!players) return { notFound: true };
 
-    return { props: { gameToken, players } };
+    return { props: { gameToken, players: [] } };
 };
 
 export default Game;
