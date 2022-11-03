@@ -6,11 +6,17 @@ import { GAME_TOKEN_DURATION, JOIN_LOBBY } from './joinLobby';
 
 const CREATE_LOBBY = `INSERT INTO lobbies(game_id) VALUES ($1) ON CONFLICT DO NOTHING RETURNING code;`;
 
-const createLobby = async (
-    _parent: void,
-    { token, game_id }: { token: string; game_id: string },
-    { db }: ResolverContext
-): Promise<{ token: string | null; code: string | null }> => {
+type CreateLobbyArgs = {
+    token: string;
+    game_id: string;
+};
+
+type CreateLobbyResponse = {
+    token: string | null;
+    code: string | null;
+};
+
+const createLobby = async (_parent: void, { token, game_id }: CreateLobbyArgs, { db }: ResolverContext): Promise<CreateLobbyResponse> => {
     if (!(await verifyJwt(token))) return { token: null, code: null };
     const { name, picture } = jwt.decode(token) as User;
 
