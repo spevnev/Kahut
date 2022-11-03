@@ -1,21 +1,13 @@
-import getClient from '../db/client';
 import { getPublishers } from '../db/jobScheduler/schedulers';
 import { publish } from '../graphql/gamePubSub';
+import { Question } from '../types/gameData';
 
-const showQuestion = async ({ lobbyId, gameId, idx }: { lobbyId: string; gameId: string; idx: number }) => {
-    const client = await getClient();
+const showQuestion = async ({ lobbyId, questions }: { lobbyId: string; questions: Question[] }) => {
+    const question = questions[questions.length - 1];
+    publish(lobbyId, { event: 'SHOW_QUESTION', data: { ...question, answers: undefined } });
 
-    const res = await client.query(
-        `SELECT q.id, q.title, q.image, q.type, q.time, q.choices, q.answers FROM questions q INNER JOIN games g ON q.game_id = g.id WHERE g.id = $1 ORDER BY order_id;`,
-        [gameId]
-    );
-    const data = res.rows[idx];
-    console.log(data);
-
-    publish(lobbyId, { event: 'QUESTION', data: { question: { ...data, answers: undefined } } });
-
-    const finishTime = Date.now() + data.time * 1000;
-    await getPublishers().showAnswerPub.pub({ lobbyId, answers: data.answers, idx, finishTime }, new Date(finishTime));
+    const finishTime = Date.now() + question.time * 1000;
+    await getPublishers().showAnswerPub.pub({ lobbyId, questions, finishTime }, new Date(finishTime));
 };
 
 export default showQuestion;
