@@ -107,6 +107,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query }) => 
     if (!gameToken || (jwt.decode(gameToken) as GameTokenData).code !== query.code) return { notFound: true };
 
     // TODO: return {notFound: true} if there is no such pending game
+    // const apollo = createApolloClient();
 
     // TODO: fetch on server side players who are already in lobby
     const players: Player[] = [];

@@ -8,10 +8,9 @@ import schema from './graphql/schema';
 import { verifyJwt } from './utils/jwt';
 import initDB from './db/initDB';
 import { initSubscribers } from './db/jobScheduler/schedulers';
+import { GRAPHQL_ENDPOINT, PORT, WS_PORT } from './utils/urls';
 
-const PORT = Number(process.env.PORT) || '3000';
 const IS_DEV = process.env.NODE_ENV !== 'production';
-const GRAPHQL_ENDPOINT = '/api/graphql';
 
 const nextApp = next({ dev: IS_DEV });
 const nextHandler = nextApp.getRequestHandler();
@@ -38,7 +37,7 @@ nextApp.prepare().then(async () => {
     httpServer.listen(PORT);
 
     const wssOptions: ServerOptions = { path: GRAPHQL_ENDPOINT };
-    if (IS_DEV) wssOptions.port = Number(PORT) + 1;
+    if (IS_DEV) wssOptions.port = WS_PORT;
     else wssOptions.server = httpServer;
 
     const wsServer = new WebSocketServer(wssOptions);
