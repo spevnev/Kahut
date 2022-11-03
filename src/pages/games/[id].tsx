@@ -10,7 +10,7 @@ import Header from '../../components/Header';
 import { AuthContext } from '../../providers/GoogleAuthProvider';
 import { numberFormatter } from '../../utils/helper';
 import { getCookie, setCookie } from '../../utils/cookies';
-import GameToken from '../../types/gameToken';
+import GameTokenData from '../../types/gameToken';
 
 const Container = styled.div`
     display: flex;
@@ -138,7 +138,7 @@ const GameDetails: NextPage<Props> = ({ isCreator, card: { id, image, title, des
         const { code, token } = data.createLobby;
         if (!code || !token) return;
 
-        const { exp } = jwt.decode(token) as GameToken;
+        const { exp } = jwt.decode(token) as GameTokenData;
         setCookie('game_token', token, new Date(exp * 1000).toUTCString());
         router.push(`/lobby/${code}`);
     };

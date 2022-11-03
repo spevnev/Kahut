@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import joinLobby from './mutations/joinLobby';
 import createLobby from './mutations/createLobby';
 import startLobby from './mutations/startLobby';
-import GameToken from '../types/gameToken';
+import GameTokenData from '../types/gameToken';
 import pubsub from './gamePubSub';
 
 const resolvers = {
@@ -11,7 +11,7 @@ const resolvers = {
     Subscription: {
         onGameEvent: {
             subscribe: async (_parent: void, { game_token }: { game_token: string }) => {
-                const code = (jwt.decode(game_token) as GameToken).code;
+                const { code } = jwt.decode(game_token) as GameTokenData;
                 return pubsub.asyncIterator(`GAME_EVENT_${code}`);
             },
         },
