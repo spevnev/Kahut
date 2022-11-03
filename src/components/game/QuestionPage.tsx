@@ -1,10 +1,15 @@
-import { FunctionComponent, useContext } from 'react';
-import { GameContext, ShowQuestionData } from '../../pages/lobby/[code]';
+import { FunctionComponent, useState } from 'react';
+import { GamePageProps, ShowQuestionData } from '../../pages/lobby/[code]';
 
-const QuestionPage: FunctionComponent<ShowQuestionData> = ({ title, image, type, choices, time }) => {
-    const { gameToken, gameData } = useContext(GameContext);
 
-    return <div></div>;
+type Props = GamePageProps & ShowQuestionData;
+
+const QuestionPage: FunctionComponent<Props> = ({ id, title, image, type, choices, time, gameToken }) => {
+
+    return (
+        <div>
+        </div>
+    );
 };
 
 export default QuestionPage;

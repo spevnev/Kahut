@@ -1,9 +1,9 @@
-import { FunctionComponent, useContext } from 'react';
-import { GameContext, StartGameData } from '../../pages/lobby/[code]';
+import { FunctionComponent } from 'react';
+import { GamePageProps, StartGameData } from '../../pages/lobby/[code]';
 
-const GameStart: FunctionComponent<StartGameData> = ({ title, image }) => {
-    const { gameToken, gameData } = useContext(GameContext);
+type Props = GamePageProps & StartGameData;
 
+const GameStart: FunctionComponent<Props> = ({ title, image }) => {
     return <div></div>;
 };
 

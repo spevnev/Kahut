@@ -2,8 +2,8 @@ import { gql, useSubscription } from '@apollo/client';
 import { GetServerSideProps, NextPage } from 'next';
 import jwt from 'jsonwebtoken';
 import GameTokenData from '../../types/gameToken';
-import { createContext, useEffect, useRef } from 'react';
 import Lobby, { Player } from '../../components/game/Lobby';
+import { useEffect, useRef } from 'react';
 import QuestionPage from '../../components/game/QuestionPage';
 import GameStart from '../../components/game/GameStart';
 import GameEnd from '../../components/game/GameEnd';
@@ -26,6 +26,7 @@ export type StartGameData = {
 };
 
 export type ShowQuestionData = {
+    id: string;
     title: string;
     image?: string;
     choices: string[];
@@ -68,8 +69,10 @@ const parseEvent: ParseEvent = res => {
     return { idle: true };
 };
 
-// @ts-ignore
-export const GameContext = createContext<{ gameToken: string; gameData: GameTokenData }>({});
+export type GamePageProps = {
+    gameToken: string;
+    gameData: GameTokenData;
+};
 
 type Props = {
     gameToken: string;

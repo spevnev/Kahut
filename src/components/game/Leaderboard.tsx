@@ -1,9 +1,10 @@
-import { FunctionComponent, useContext } from 'react';
-import { GameContext, ShowAnswerData } from '../../pages/lobby/[code]';
+import { FunctionComponent } from 'react';
+import { GamePageProps, ShowAnswerData } from '../../pages/lobby/[code]';
+import { Player } from './Lobby';
 
-const Leaderboard: FunctionComponent<ShowAnswerData> = ({}) => {
-    const { gameToken, gameData } = useContext(GameContext);
+type Props = GamePageProps & ShowAnswerData & { players: Player[] };
 
+const Leaderboard: FunctionComponent<Props> = ({}) => {
     return <div></div>;
 };
 
