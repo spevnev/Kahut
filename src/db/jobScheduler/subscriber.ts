@@ -112,6 +112,7 @@ class Subscriber extends GenericClient<SubscriberConfig> {
                         await this.callback(data);
                         finishedJobs.add(job_id);
                     } catch (e) {
+                        console.error(e);
                         return;
                     }
                 })

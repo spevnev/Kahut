@@ -91,6 +91,18 @@ const initDB = async () => {
             []
         );
         await client.query(`CREATE UNIQUE INDEX IF NOT EXISTS questions_idx ON questions (id);`, []);
+
+        await client.query(
+            `CREATE TABLE IF NOT EXISTS answers(
+                username    TEXT  NOT NULL,
+                lobby_id    TEXT  NOT NULL,
+                question_id TEXT  NOT NULL,
+                answered_at TEXT  NOT NULL,
+                answers     INT[] NOT NULL
+            );`,
+            []
+        );
+        // TODO: index: (lobby_id) or (lobby_id, question_id); 2nd can also be unique ;;; TEST
     } catch (e) {
         throw new Error('Error while initializing DB! ' + e);
     }

@@ -19,6 +19,7 @@ const typeDefs = gql`
         joinLobby(username: String!, code: String!, picture: String): String
         createLobby(game_id: String!, token: String!): CreateLobbyResponse!
         startLobby(game_token: String!): Boolean!
+        submitAnswer(game_token: String!, question_id: String!, answers: [Int!]!): Boolean!
     }
 
     type Subscription {

@@ -4,10 +4,11 @@ import createLobby from './mutations/createLobby';
 import startLobby from './mutations/startLobby';
 import GameTokenData from '../types/gameToken';
 import pubsub from './gamePubSub';
+import submitAnswer from './mutations/submitAnswer';
 
 const resolvers = {
     Query: {},
-    Mutation: { joinLobby, createLobby, startLobby },
+    Mutation: { joinLobby, createLobby, startLobby, submitAnswer },
     Subscription: {
         onGameEvent: {
             subscribe: async (_parent: void, { game_token }: { game_token: string }) => {
