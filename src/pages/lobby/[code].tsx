@@ -9,12 +9,16 @@ import GameStart from '../../components/game/GameStart';
 import GameEnd from '../../components/game/GameEnd';
 import Leaderboard from '../../components/game/Leaderboard';
 import Player from '../../types/player';
+import createApolloClient from '../../graphql/apolloClient';
 
-const GET_PLAYERS = gql`
-    query getPlayers($game_token: String!) {
-        getPlayers(game_token: $game_token) {
-            username
-            picture
+const GET_LOBBY_INFO = gql`
+    query getLobbyInfo($game_token: String!) {
+        getLobby(game_token: $game_token) {
+            players {
+                username
+                picture
+            }
+            state
         }
     }
 `;
@@ -119,13 +123,15 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query }) => 
     const gameToken = req?.cookies?.game_token;
     if (!gameToken || (jwt.decode(gameToken) as GameTokenData).code !== query.code) return { notFound: true };
 
-    // const apollo = createApolloClient();
-    // const { data } = await apollo.query({ query: GET_PLAYERS, variables: { game_token: gameToken } });
-    // const players: Player[] = data.getPlayers;
+    const apollo = createApolloClient();
 
-    // if (!players) return { notFound: true };
+    const { data } = await apollo.query({ query: GET_LOBBY_INFO, variables: { game_token: gameToken } });
+    if (!data.getLobby) return { notFound: true };
 
-    return { props: { gameToken, players: [] } };
+    const lobbyState = data.getLobby.state;
+    if (lobbyState === 'CLOSED') return { notFound: true };
+
+    return { props: { gameToken, players: data.getLobby.players, lobbyState } };
 };
 
 export default Game;

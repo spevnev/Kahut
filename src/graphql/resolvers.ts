@@ -1,14 +1,14 @@
 import jwt from 'jsonwebtoken';
 import joinLobby from './mutations/joinLobby';
 import createLobby from './mutations/createLobby';
-import startLobby from './mutations/startLobby';
+import startLobby from './mutations/startGame';
 import GameTokenData from '../types/gameToken';
 import pubsub from './gamePubSub';
 import submitAnswer from './mutations/submitAnswer';
-import getPlayers from './queries/getPlayers';
+import getLobby from './queries/getLobby';
 
 const resolvers = {
-    Query: { getPlayers },
+    Query: { getLobby },
     Mutation: { joinLobby, createLobby, startLobby, submitAnswer },
     Subscription: {
         onGameEvent: {

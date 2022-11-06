@@ -16,8 +16,13 @@ const typeDefs = gql`
         token: String
     }
 
+    type GetLobbyResponse {
+        state: String!
+        players: [Player!]!
+    }
+
     type Query {
-        getPlayers(game_token: String!): [Player!]
+        getLobby(game_token: String!): GetLobbyResponse
     }
 
     type Mutation {
