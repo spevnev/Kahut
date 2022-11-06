@@ -17,31 +17,32 @@ type Props = GamePageProps & ShowQuestionData;
 
 const QuestionPage: FunctionComponent<Props> = ({ id, title, image, type, choices, time, gameToken }) => {
     const [answers, setAnswers] = useState<number[]>([]);
+    const [canAnswer, setCanAnswer] = useState(true);
     const [_submitAnswer] = useMutation(SUBMIT_ANSWER);
 
     const submitAnswer = async () => {
         const { data } = await _submitAnswer({ variables: { game_token: gameToken, question_id: id, answers: answers } });
 
-        if (data.submitAnswer) {
-            // TODO: lock other buttons
-        }
+        if (data.submitAnswer) setCanAnswer(false);
     };
 
     return (
         <div>
-            {choices.map((text, idx) => (
-                <QuizButton key={idx} color={idx}>
-                    {type === 'single' ? (
-                        <Radio name="radio" checked={answers[0] === idx} onChange={() => setAnswers([idx])} />
-                    ) : (
-                        <Checkbox
-                            checked={answers.filter(val => val === idx).length > 0}
-                            onChange={e => setAnswers(e.target.checked ? [...answers, idx] : answers.filter(val => val !== idx))}
-                        />
-                    )}
-                    <h2>{text}</h2>
-                </QuizButton>
-            ))}
+            {choices.map((text, idx) => {
+                const checkboxOnChange = () => canAnswer && setAnswers(answers.includes(idx) ? answers.filter(val => val !== idx) : [...answers, idx]);
+                const radioOnChange = () => canAnswer && setAnswers([idx]);
+
+                return (
+                    <QuizButton key={idx} color={idx} disabled={!canAnswer} onClick={type === 'single' ? radioOnChange : checkboxOnChange}>
+                        {type === 'single' ? (
+                            <Radio name="radio" checked={answers[0] === idx} onChange={radioOnChange} disabled={!canAnswer} />
+                        ) : (
+                            <Checkbox checked={answers.filter(val => val === idx).length > 0} onChange={checkboxOnChange} disabled={!canAnswer} />
+                        )}
+                        <h2>{text}</h2>
+                    </QuizButton>
+                );
+            })}
             <Button onClick={submitAnswer}>Submit answer</Button>
         </div>
     );
