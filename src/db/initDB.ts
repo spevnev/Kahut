@@ -59,11 +59,12 @@ const initDB = async () => {
                 picture  TEXT DEFAULT(null),
                 username TEXT NOT NULL,
                 score    INT  NOT NULL DEFAULT(0),
-                code     TEXT NOT NULL
+                answers  INT  NOT NULL DEFAULT(0), 
+                lobby_id TEXT NOT NULL
             );`,
             []
         );
-        await client.query(`CREATE UNIQUE INDEX IF NOT EXISTS players_idx ON players (code, username);`, []);
+        await client.query(`CREATE UNIQUE INDEX IF NOT EXISTS players_idx ON players (lobby_id, username);`, []);
 
         await client.query(
             `CREATE TABLE IF NOT EXISTS games(
