@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { gql } from 'apollo-server-core';
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useState } from 'react';
 import { GamePageProps } from '../../pages/lobby/[code]';
 import Player from '../../types/player';
 
@@ -10,12 +10,31 @@ const START_GAME = gql`
     }
 `;
 
-type Props = GamePageProps & { players: Player[] };
+type Props = GamePageProps & {
+    players: Player[];
+    closeLobby: () => void;
+};
 
-const Lobby: FunctionComponent<Props> = ({ players, gameToken, gameData }) => {
-    const [startGame] = useMutation(START_GAME, { variables: { game_token: gameToken } });
+const Lobby: FunctionComponent<Props> = ({ players, gameToken, gameData, closeLobby }) => {
+    const [_startGame] = useMutation(START_GAME, { variables: { game_token: gameToken } });
+    const [canStart, setCanStart] = useState(gameData.isHost);
 
-    return <div>{gameData.isHost && <button onClick={() => startGame()}>START</button>}</div>;
+    const startGame = () => {
+        _startGame();
+        setCanStart(false);
+        closeLobby();
+    };
+
+    return (
+        <div>
+            <div>
+                {players.map(({ username }) => (
+                    <p key={username}>{username}</p>
+                ))}
+            </div>
+            {canStart && <button onClick={startGame}>START</button>}
+        </div>
+    );
 };
 
 export default Lobby;
