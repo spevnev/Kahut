@@ -18,7 +18,7 @@ const Checkbox = styled.input.attrs(_ => ({ type: 'checkbox' }))`
         height: 15px;
         border-radius: 2px;
         background: ${color('white2')};
-        cursor: pointer;
+        cursor: ${props => (props.disabled ? 'default' : 'pointer')};
     }
 
     &:after {
@@ -31,6 +31,7 @@ const Checkbox = styled.input.attrs(_ => ({ type: 'checkbox' }))`
         left: 2px;
         border-radius: 2px;
         transition: all 0.2s ease;
+        cursor: ${props => (props.disabled ? 'default' : 'pointer')};
     }
 
     &:not(:checked):after {

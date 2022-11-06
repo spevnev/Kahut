@@ -32,6 +32,7 @@ const Title = styled.h1`
 const Input = styled(StyledInput)`
     margin: 3px 0;
     width: 30vw;
+    min-width: 300px;
     background: ${color('black3')};
     padding: 6px 16px;
     font-size: 18px;
@@ -44,6 +45,7 @@ const ErrorMessage = styled.p`
 `;
 
 const Button = styled(StyledButton)`
+    min-width: 200px;
     width: 20vw;
     margin: 10px 0;
 `;

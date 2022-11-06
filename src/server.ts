@@ -42,10 +42,12 @@ nextApp.prepare().then(async () => {
 
     const wsServer = new WebSocketServer(wssOptions);
     wsServer.on('connection', async (socket: WebSocket, req: IncomingMessage) => {
-        if (!req.headers.cookie) return socket.terminate();
-
-        const token = req.headers.cookie.split('game_token=')[1].split(';')[0];
-        if (!token || !(await verifyJwt(token))) return socket.terminate();
+        try {
+            const token = req.headers?.cookie?.split('game_token=')[1].split(';')[0];
+            if (!token || !(await verifyJwt(token))) return socket.terminate();
+        } catch (e) {
+            return socket.terminate();
+        }
     });
 
     useServer({ schema }, wsServer);

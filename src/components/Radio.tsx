@@ -18,7 +18,7 @@ const Radio = styled.input.attrs(_ => ({ type: 'radio' }))`
         height: 15px;
         border-radius: 100%;
         background: ${color('white2')};
-        cursor: pointer;
+        cursor: ${props => (props.disabled ? 'default' : 'pointer')};
     }
 
     &:after {
@@ -31,6 +31,7 @@ const Radio = styled.input.attrs(_ => ({ type: 'radio' }))`
         left: 1px;
         border-radius: 100%;
         transition: all 0.2s ease;
+        cursor: ${props => (props.disabled ? 'default' : 'pointer')};
     }
 
     &:not(:checked):after {

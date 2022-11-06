@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { ChangeEvent, FunctionComponent, useContext, useState } from 'react';
 import styled from 'styled-components';
 import { AuthContext } from '../../providers/GoogleAuthProvider';
@@ -39,10 +40,11 @@ const Input = styled(StyledInput)`
 const InfoCard: FunctionComponent = () => {
     const { login } = useContext(AuthContext);
     const [code, setCode] = useState('');
+    const router = useRouter();
 
     const onChange = (e: ChangeEvent) => {
-        const code = (e.target as HTMLInputElement).value;
-        if (code.length === 6) alert('Move to game with input filled-in');
+        const code = (e.target as HTMLInputElement).value.toUpperCase();
+        if (code.length === 6) router.push(`/play?code=${code}`);
 
         setCode(code);
     };

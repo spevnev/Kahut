@@ -1,11 +1,13 @@
 import { FunctionComponent } from 'react';
 import { GamePageProps, ShowAnswerData } from '../../pages/lobby/[code]';
-import { Player } from './Lobby';
+import Player from '../../types/player';
 
 type Props = GamePageProps & ShowAnswerData & { players: Player[] };
 
-const Leaderboard: FunctionComponent<Props> = ({}) => {
+const AnswerPage: FunctionComponent<Props> = ({}) => {
+    // show correct answer for 5s then leaderboard for 5s
+
     return <div></div>;
 };
 
-export default Leaderboard;
+export default AnswerPage;

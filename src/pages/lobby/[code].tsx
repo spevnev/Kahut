@@ -2,12 +2,12 @@ import { gql, useSubscription } from '@apollo/client';
 import { GetServerSideProps, NextPage } from 'next';
 import jwt from 'jsonwebtoken';
 import GameTokenData from '../../types/gameToken';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Lobby from '../../components/game/Lobby';
 import QuestionPage from '../../components/game/QuestionPage';
 import GameStart from '../../components/game/GameStart';
 import GameEnd from '../../components/game/GameEnd';
-import Leaderboard from '../../components/game/Leaderboard';
+import AnswersPage from '../../components/game/AnswerPage';
 import Player from '../../types/player';
 import createApolloClient from '../../graphql/apolloClient';
 
@@ -32,8 +32,6 @@ const GAME_SUBSCRIPTION = gql`
     }
 `;
 
-export type PlayerJoiningData = {};
-
 export type StartGameData = {
     title: string;
     image: string;
@@ -53,12 +51,11 @@ export type ShowAnswerData = {};
 export type EndGameData = {};
 
 type ParseEvent = (res?: { onGameEvent?: { event: string; data: string } }) => {
-    playerJoining?: PlayerJoiningData;
+    playerJoining?: { player: Player };
     startGame?: StartGameData;
     showQuestion?: ShowQuestionData;
     showAnswer?: ShowAnswerData;
     endGame?: EndGameData;
-    idle?: boolean;
 };
 
 const parseEvent: ParseEvent = res => {
@@ -78,9 +75,9 @@ const parseEvent: ParseEvent = res => {
             return { showAnswer: data };
         case 'END_GAME':
             return { endGame: data };
+        default:
+            return {};
     }
-
-    return { idle: true };
 };
 
 export type GamePageProps = {
@@ -90,31 +87,37 @@ export type GamePageProps = {
 
 type Props = {
     gameToken: string;
+    lobbyState: string;
     players: Player[];
 };
 
-const Game: NextPage<Props> = ({ gameToken, players: _players }) => {
+const Game: NextPage<Props> = ({ gameToken, players: _players, lobbyState: _lobbyState }) => {
     const gameData = jwt.decode(gameToken) as GameTokenData;
 
     const { data } = useSubscription(GAME_SUBSCRIPTION, { variables: { game_token: gameToken } });
-    const { idle, playerJoining, startGame, showQuestion, showAnswer, endGame } = parseEvent(data);
+    const { playerJoining, startGame, showQuestion, showAnswer, endGame } = parseEvent(data);
 
-    const playersRef = useRef(_players);
+    const [lobbyState, setLobbyState] = useState(_lobbyState);
+    const [players, setPlayers] = useState(_players);
+    const lastPlayerRef = useRef('');
 
     useEffect(() => {
         if (!playerJoining) return;
+        const player = playerJoining.player;
 
-        // TODO: add to players, e.g.:
-        // players.current.push(playerJoining.player);
+        if (player.username === lastPlayerRef.current) return;
+        lastPlayerRef.current = player.username;
+
+        setPlayers([...players, player]);
     }, [playerJoining]);
 
     return (
         <>
-            {idle && <Lobby players={playersRef.current} gameToken={gameToken} gameData={gameData} />}
+            {lobbyState === 'OPEN' && <Lobby players={players} gameToken={gameToken} gameData={gameData} closeLobby={() => setLobbyState('INGAME')} />}
             {startGame && <GameStart {...startGame} gameToken={gameToken} gameData={gameData} />}
             {showQuestion && <QuestionPage {...showQuestion} gameToken={gameToken} gameData={gameData} />}
-            {showAnswer && <Leaderboard {...showAnswer} players={playersRef.current} gameToken={gameToken} gameData={gameData} />}
-            {endGame && <GameEnd {...endGame} players={playersRef.current} gameToken={gameToken} gameData={gameData} />}
+            {showAnswer && <AnswersPage {...showAnswer} players={players} gameToken={gameToken} gameData={gameData} />}
+            {endGame && <GameEnd {...endGame} players={players} gameToken={gameToken} gameData={gameData} />}
         </>
     );
 };

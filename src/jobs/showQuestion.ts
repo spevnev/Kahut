@@ -3,7 +3,8 @@ import { publish } from '../graphql/gamePubSub';
 import { Question } from '../types/gameData';
 
 const showQuestion = async ({ lobbyId, questions }: { lobbyId: string; questions: Question[] }) => {
-    const question = questions[questions.length - 1];
+    const question = questions[0];
+
     publish(lobbyId, { event: 'SHOW_QUESTION', data: { ...question, answers: undefined } });
 
     const finishTime = Date.now() + question.time * 1000;

@@ -15,7 +15,7 @@ export enum ButtonColor {
 const colorByType = [theme.red, theme.frost2, theme.yellow, theme.green];
 const shapeByType = [shape1.src, shape2.src, shape3.src, shape4.src];
 
-const Button = styled.button<{ background: string }>`
+const Button = styled.button<{ background: string; disabled: boolean }>`
     background: ${props => props.background};
     width: 45vw;
     border-radius: 7px;
@@ -26,10 +26,10 @@ const Button = styled.button<{ background: string }>`
     align-items: center;
     padding: 10px;
     transition: filter 0.2s;
-    cursor: pointer;
+    cursor: ${props => (props.disabled ? 'default' : 'pointer')};
 
     &:hover {
-        filter: brightness(1.1);
+        ${props => (props.disabled ? '' : 'filter: brightness(1.1);')}
     }
 `;
 
@@ -49,10 +49,11 @@ type Props = {
     children: string | ReactNode;
     onClick?: () => void;
     className?: string;
+    disabled?: boolean;
 };
 
-export const QuizButton: FunctionComponent<Props> = ({ color, children, onClick = () => {}, className }) => (
-    <Button onClick={onClick} background={colorByType[color]} className={className}>
+export const QuizButton: FunctionComponent<Props> = ({ color, children, onClick = () => {}, className, disabled = true }) => (
+    <Button onClick={() => !disabled && onClick()} background={colorByType[color]} className={className} disabled={disabled}>
         <Shape src={shapeByType[color]} />
         {typeof children === 'string' ? <Text>{children}</Text> : children}
     </Button>

@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { color } from '../styles/theme';
@@ -31,6 +31,7 @@ const GoBack = styled.h3`
     font-size: 24px;
     font-weight: 100;
     color: ${color('frost1')};
+    cursor: pointer;
 `;
 
 type Props = {
@@ -45,7 +46,9 @@ const ErrorPage: FunctionComponent<Props> = ({ title, subtitle }) => {
         <Container>
             <Title>{title}</Title>
             <SubTitle>{subtitle}</SubTitle>
-            <GoBack onClick={() => router.back()}>Go back</GoBack>
+            <GoBack onClick={() => (document.referrer.startsWith(location.origin) && !document.referrer.includes('/lobby/') ? router.back() : router.push('/'))}>
+                Go back
+            </GoBack>
         </Container>
     );
 };
