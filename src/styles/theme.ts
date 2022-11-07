@@ -13,6 +13,7 @@ const theme: { [key: string]: string } = {
     frost0: '#2589FF',
     frost1: '#317EDE',
     frost2: '#2D72C7',
+    frost3: '#2661AB',
 
     red: '#CD5F68',
     orange: '#CF896D',
