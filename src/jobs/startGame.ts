@@ -27,7 +27,7 @@ const startGame = async ({ lobbyId }: { lobbyId: string }) => {
     const { id, title, image } = getGameRes.rows[0];
 
     const getQuestionsRes = await client.query(GET_QUESTIONS, [id]);
-    const questions = getQuestionsRes.rows;
+    const questions = getQuestionsRes.rows.map((question, index) => ({ ...question, index }));
 
     await client.query(CLOSE_LOBBY, [lobbyId]);
 

@@ -21,7 +21,7 @@ const showAnswer = async ({ lobbyId, questions, finishTime }: { lobbyId: string;
     finishTime = new Date(finishTime);
 
     const client = await getClient();
-    const { answers: correctAnswers, id: questionId, time } = questions.shift()!;
+    const { answers: correctAnswers, id: questionId, time, index } = questions.shift()!;
 
     const getAnswersRes = await client.query(GET_ANSWERS, [lobbyId, questionId]);
 
@@ -44,7 +44,7 @@ const showAnswer = async ({ lobbyId, questions, finishTime }: { lobbyId: string;
     publish(lobbyId, { event: 'SHOW_ANSWER', data: { answers: correctAnswers, points: getScoreRes.rows } });
 
     const nextEventDate = new Date(Date.now() + 10 * 1000);
-    if (questions.length === 0) await getPublishers().endGamePub.pub({ lobbyId }, nextEventDate);
+    if (questions.length === 0) await getPublishers().endGamePub.pub({ lobbyId, questionsNum: index + 1 }, nextEventDate);
     else await getPublishers().showQuestionPub.pub({ lobbyId, questions }, nextEventDate);
 };
 

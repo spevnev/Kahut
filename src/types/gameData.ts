@@ -1,11 +1,10 @@
-type QuestionType = 'single' | 'multiple';
-
 export type Question = {
     id: string;
     title: string;
     image?: string;
-    type: QuestionType;
+    type: 'single' | 'multiple';
     time: number;
+    index: number;
     choices: string[];
     answers: number[];
 };

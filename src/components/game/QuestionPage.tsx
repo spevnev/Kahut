@@ -15,7 +15,7 @@ const SUBMIT_ANSWER = gql`
 
 type Props = GamePageProps & ShowQuestionData;
 
-const QuestionPage: FunctionComponent<Props> = ({ id, title, image, type, choices, time, gameToken }) => {
+const QuestionPage: FunctionComponent<Props> = ({ id, title, image, type, index, choices, time, gameToken }) => {
     const [answers, setAnswers] = useState<number[]>([]);
     const [canAnswer, setCanAnswer] = useState(true);
     const [_submitAnswer] = useMutation(SUBMIT_ANSWER);
