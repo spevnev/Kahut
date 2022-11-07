@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken';
 import GameTokenData from '../../types/gameToken';
-import Player from '../../types/player';
 import { verifyJwt } from '../../utils/jwt';
 import { ResolverContext } from '../apolloServer';
 
@@ -14,7 +13,7 @@ const GET_LOBBY_INFO = `
 `;
 
 type GetLobbyResponse = null | {
-    players: Player[];
+    players: string[];
     state: string;
 };
 
@@ -25,7 +24,7 @@ const getLobby = async (_parent: void, { game_token }: { game_token: string }, {
     const res = await db.query(GET_LOBBY_INFO, [code]);
     const { state, players } = res.rows[0];
 
-    return { state, players: players.map(({ username, picture }: Player) => ({ username, picture })) };
+    return { state, players: players.map(({ username }: { username: string }) => username) };
 };
 
 export default getLobby;

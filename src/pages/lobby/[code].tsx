@@ -3,21 +3,14 @@ import { GetServerSideProps, NextPage } from 'next';
 import jwt from 'jsonwebtoken';
 import GameTokenData from '../../types/gameToken';
 import { useEffect, useRef, useState } from 'react';
-import Lobby from '../../components/game/Lobby';
-import QuestionPage from '../../components/game/QuestionPage';
-import GameStart from '../../components/game/GameStart';
-import GameEnd from '../../components/game/GameEnd';
-import AnswersPage from '../../components/game/AnswerPage';
-import Player from '../../types/player';
 import createApolloClient from '../../graphql/apolloClient';
+import QuestionPage from '../../components/game/QuestionPage';
+import { Question } from '../../types/gameData';
 
 const GET_LOBBY_INFO = gql`
     query getLobbyInfo($game_token: String!) {
         getLobby(game_token: $game_token) {
-            players {
-                username
-                picture
-            }
+            players
             state
         }
     }
@@ -37,21 +30,14 @@ export type StartGameData = {
     image: string;
 };
 
-export type ShowQuestionData = {
-    id: string;
-    title: string;
-    image?: string;
-    choices: string[];
-    type: string;
-    time: number;
-};
+export type ShowQuestionData = Omit<Question, 'answers'>;
 
 export type ShowAnswerData = {};
 
 export type EndGameData = {};
 
 type ParseEvent = (res?: { onGameEvent?: { event: string; data: string } }) => {
-    playerJoining?: { player: Player };
+    playerJoining?: { player: string };
     startGame?: StartGameData;
     showQuestion?: ShowQuestionData;
     showAnswer?: ShowAnswerData;
@@ -88,7 +74,7 @@ export type GamePageProps = {
 type Props = {
     gameToken: string;
     lobbyState: string;
-    players: Player[];
+    players: string[];
 };
 
 const Game: NextPage<Props> = ({ gameToken, players: _players, lobbyState: _lobbyState }) => {
@@ -105,8 +91,8 @@ const Game: NextPage<Props> = ({ gameToken, players: _players, lobbyState: _lobb
         if (!playerJoining) return;
         const player = playerJoining.player;
 
-        if (player.username === lastPlayerRef.current) return;
-        lastPlayerRef.current = player.username;
+        if (player === lastPlayerRef.current) return;
+        lastPlayerRef.current = player;
 
         setPlayers([...players, player]);
     }, [playerJoining]);

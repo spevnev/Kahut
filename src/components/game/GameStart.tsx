@@ -4,7 +4,7 @@ import { GamePageProps, StartGameData } from '../../pages/lobby/[code]';
 type Props = GamePageProps & StartGameData;
 
 const GameStart: FunctionComponent<Props> = ({ title, image }) => {
-    return <div></div>;
+    return <div>start</div>;
 };
 
 export default GameStart;

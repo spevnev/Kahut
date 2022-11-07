@@ -51,8 +51,11 @@ const Button = styled(StyledButton)`
 `;
 
 const JOIN_LOBBY = gql`
-    mutation joinLobby($username: String!, $code: String!, $picture: String) {
-        joinLobby(username: $username, code: $code, picture: $picture)
+    mutation joinLobby($username: String!, $code: String!) {
+        joinLobby(username: $username, code: $code) {
+            token
+            error
+        }
     }
 `;
 
@@ -79,10 +82,10 @@ const Play: NextPage = () => {
         if (username.length < 1) return showError("Username can't be empty!");
         if (username.length > 30) return showError("Username can't be longer than 30!");
 
-        const { data } = await joinLobby({ variables: { username, code, picture: user?.picture } });
+        const { data } = await joinLobby({ variables: { username, code } });
 
-        const { joinLobby: token } = data;
-        if (!token) return showError('Duplicate username!');
+        const { token, error } = data.joinLobby;
+        if (error) return showError(error);
 
         const { exp } = jwt.decode(token) as GameTokenData;
         setCookie('game_token', token, new Date(exp * 1000).toUTCString());

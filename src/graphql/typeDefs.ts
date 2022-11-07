@@ -1,14 +1,18 @@
 import { gql } from '@apollo/client';
 
 const typeDefs = gql`
-    type Player {
-        username: String!
-        picture: String
+    type GetLobbyResponse {
+        state: String!
+        players: [String!]!
     }
 
-    type GameEvent {
-        event: String!
-        data: String!
+    type Query {
+        getLobby(game_token: String!): GetLobbyResponse
+    }
+
+    type JoinLobbyResponse {
+        token: String
+        error: String
     }
 
     type CreateLobbyResponse {
@@ -16,20 +20,16 @@ const typeDefs = gql`
         token: String
     }
 
-    type GetLobbyResponse {
-        state: String!
-        players: [Player!]!
-    }
-
-    type Query {
-        getLobby(game_token: String!): GetLobbyResponse
-    }
-
     type Mutation {
-        joinLobby(username: String!, code: String!, picture: String): String
+        joinLobby(username: String!, code: String!): JoinLobbyResponse
         createLobby(game_id: String!, token: String!): CreateLobbyResponse!
         startLobby(game_token: String!): Boolean!
         submitAnswer(game_token: String!, question_id: String!, answers: [Int!]!): Boolean!
+    }
+
+    type GameEvent {
+        event: String!
+        data: String!
     }
 
     type Subscription {

@@ -56,7 +56,6 @@ const initDB = async () => {
 
         await client.query(
             `CREATE TABLE IF NOT EXISTS players(
-                picture  TEXT DEFAULT(null),
                 username TEXT NOT NULL,
                 score    INT  NOT NULL DEFAULT(0),
                 answers  INT  NOT NULL DEFAULT(0), 

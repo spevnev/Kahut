@@ -2,7 +2,6 @@ import { useMutation } from '@apollo/client';
 import { gql } from 'apollo-server-core';
 import { FunctionComponent, useState } from 'react';
 import { GamePageProps } from '../../pages/lobby/[code]';
-import Player from '../../types/player';
 
 const START_GAME = gql`
     mutation startLobby($game_token: String!) {
@@ -11,7 +10,7 @@ const START_GAME = gql`
 `;
 
 type Props = GamePageProps & {
-    players: Player[];
+    players: string[];
     closeLobby: () => void;
 };
 

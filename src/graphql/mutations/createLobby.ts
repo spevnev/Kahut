@@ -23,15 +23,15 @@ type CreateLobbyResponse = {
 
 const createLobby = async (_parent: void, { token, game_id }: CreateLobbyArgs, { db }: ResolverContext): Promise<CreateLobbyResponse> => {
     if (!(await verifyJwt(token))) return { token: null, code: null };
-    const { name, picture } = jwt.decode(token) as User;
+    const { name } = jwt.decode(token) as User;
 
     const res = await db.query(CREATE_LOBBY, [game_id]);
     const code = res.rowCount === 1 ? res.rows[0].code : null;
     if (!code) return { token: null, code: null };
 
-    await db.query(JOIN_LOBBY, [name, picture, code]);
+    await db.query(JOIN_LOBBY, [name, code]);
 
-    const game_token = await createJwt({ username: name, picture, code, isHost: true }, GAME_TOKEN_DURATION);
+    const game_token = await createJwt({ username: name, code, isHost: true }, GAME_TOKEN_DURATION);
     return { code, token: game_token };
 };
 
