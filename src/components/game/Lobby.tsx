@@ -1,7 +1,76 @@
 import { useMutation } from '@apollo/client';
 import { gql } from 'apollo-server-core';
 import { FunctionComponent, useState } from 'react';
+import styled from 'styled-components';
 import { GamePageProps } from '../../pages/lobby/[code]';
+import { color } from '../../styles/theme';
+import StyledButton from '../Button';
+
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+`;
+
+const LobbyCode = styled.p`
+    margin: 10px;
+    width: fit-content;
+    font-size: 20px;
+    font-weight: 200;
+    color: ${color('white0')};
+    background: ${color('black3')};
+    border-radius: 5px;
+    padding: 4px 10px;
+`;
+
+const Title = styled.h1`
+    font-weight: 100;
+    font-size: 32px;
+    letter-spacing: -0.5px;
+    text-align: center;
+    margin: 20px 0;
+`;
+
+const StartGameButton = styled(StyledButton)`
+    margin: 10px 10px 10px auto;
+    width: fit-content;
+`;
+
+const Players = styled.div`
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    position: relative;
+    width: 75vw;
+    max-height: 40vh;
+    overflow-y: scroll;
+    margin: auto auto 20px auto;
+    background: ${color('black0')};
+    border-radius: 3px;
+    padding: 6px 12px;
+`;
+
+const Player = styled.div`
+    margin: 5px 10px;
+    width: fit-content;
+    height: fit-content;
+    font-size: 16px;
+    font-weight: 300;
+    color: ${color('white1')};
+    background: ${color('black2')};
+    border-radius: 3px;
+    padding: 2px 5px;
+`;
+
+const Counter = styled.p`
+    position: absolute;
+    bottom: 5px;
+    right: 10px;
+    font-size: 14px;
+    font-weight: 300;
+    color: ${color('white1')};
+`;
 
 const START_GAME = gql`
     mutation startLobby($game_token: String!) {
@@ -25,14 +94,20 @@ const Lobby: FunctionComponent<Props> = ({ players, gameToken, gameData, closeLo
     };
 
     return (
-        <div>
-            <div>
-                {players.map(({ username }) => (
-                    <p key={username}>{username}</p>
+        <Container>
+            <LobbyCode>CODE: {gameData.code}</LobbyCode>
+
+            <Title>Waiting for host to start the game...</Title>
+
+            <Players>
+                {players.map(username => (
+                    <Player key={username}>{username}</Player>
                 ))}
-            </div>
-            {canStart && <button onClick={startGame}>START</button>}
-        </div>
+                <Counter>{players.length}</Counter>
+            </Players>
+
+            {canStart && <StartGameButton onClick={startGame}>Start Game</StartGameButton>}
+        </Container>
     );
 };
 
