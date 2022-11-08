@@ -17,7 +17,6 @@ const shapeByType = [shape1.src, shape2.src, shape3.src, shape4.src];
 
 const Button = styled.button<{ background: string; disabled: boolean }>`
     background: ${props => props.background};
-    width: 45vw;
     border-radius: 7px;
     border: none;
     outline: none;
@@ -26,6 +25,16 @@ const Button = styled.button<{ background: string; disabled: boolean }>`
     align-items: center;
     padding: 10px;
     transition: filter 0.2s;
+
+    @media (min-width: 800px) {
+        width: 40vw;
+        max-width: 50%;
+    }
+
+    @media (max-width: 800px) {
+        width: 100%;
+    }
+
     cursor: ${props => (props.disabled ? 'default' : 'pointer')};
 
     &:hover {

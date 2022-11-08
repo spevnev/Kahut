@@ -4,7 +4,11 @@ import jwt from 'jsonwebtoken';
 import GameTokenData from '../../types/gameToken';
 import { useEffect, useRef, useState } from 'react';
 import createApolloClient from '../../graphql/apolloClient';
+import Lobby from '../../components/game/Lobby';
+import GameStart from '../../components/game/GameStart';
 import QuestionPage from '../../components/game/QuestionPage';
+import AnswerPage from '../../components/game/AnswerPage';
+import GameEnd from '../../components/game/GameEnd';
 import { Question } from '../../types/gameData';
 
 const GET_LOBBY_INFO = gql`
@@ -102,7 +106,7 @@ const Game: NextPage<Props> = ({ gameToken, players: _players, lobbyState: _lobb
             {lobbyState === 'OPEN' && <Lobby players={players} gameToken={gameToken} gameData={gameData} closeLobby={() => setLobbyState('INGAME')} />}
             {startGame && <GameStart {...startGame} gameToken={gameToken} gameData={gameData} />}
             {showQuestion && <QuestionPage {...showQuestion} gameToken={gameToken} gameData={gameData} />}
-            {showAnswer && <AnswersPage {...showAnswer} players={players} gameToken={gameToken} gameData={gameData} />}
+            {showAnswer && <AnswerPage {...showAnswer} players={players} gameToken={gameToken} gameData={gameData} />}
             {endGame && <GameEnd {...endGame} players={players} gameToken={gameToken} gameData={gameData} />}
         </>
     );
