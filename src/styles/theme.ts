@@ -19,7 +19,7 @@ const theme: { [key: string]: string } = {
     orange: '#CF896D',
     yellow: '#E6C687',
     green: '#9DC787',
-    purple: '#C88BBF',
+    purple: '#AB5B9F',
 };
 
 export const color = (color: string) => {
