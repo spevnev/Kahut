@@ -27,19 +27,25 @@ const Container = styled.div`
     position: relative;
 `;
 
-const CenteredContainer = styled(Container)`
-    justify-content: center;
-`;
-
 const Row = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    width: 95%;
+    width: 100%;
+    padding: 0 2.5vw;
 `;
 
-const Buttons = styled.div``;
+const Buttons = styled.div`
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    @media (max-width: 800px) {
+        flex-direction: column;
+    }
+`;
 
 const QuestionNumber = styled.p`
     position: absolute;
@@ -75,8 +81,23 @@ const SecondaryTitle = styled.h1`
 `;
 
 const Image = styled.img`
-    max-width: 50vw;
-    max-height: 30vh;
+    max-width: 70vw;
+    max-height: 40vh;
+    margin-left: -50px;
+`;
+
+const StyledQuizButton = styled(QuizButton)`
+    margin: 8px 12px;
+    max-height: 12.5vh;
+
+    & input {
+        margin: 0 5px 0 10px;
+    }
+`;
+
+const Text = styled.p`
+    inline-size: 80%;
+    overflow-wrap: break-word;
 `;
 
 type Props = GamePageProps & ShowQuestionData;
@@ -96,17 +117,16 @@ const QuestionPage: FunctionComponent<Props> = ({ id, title, image, type, index,
 
     if (showPrompt)
         return (
-            <CenteredContainer>
+            <Container style={{ justifyContent: 'center' }}>
                 <Title>{title}</Title>
                 <TimerLine time={3} height={15} onEnd={() => setShowPrompt(false)} />
-            </CenteredContainer>
+            </Container>
         );
     else
         return (
             <Container>
-                <QuestionNumber>#{index + 1}</QuestionNumber>
-
                 <SecondaryTitle>{title}</SecondaryTitle>
+                <QuestionNumber>#{index + 1}</QuestionNumber>
 
                 <Row>
                     <Timer time={time} />
@@ -120,19 +140,21 @@ const QuestionPage: FunctionComponent<Props> = ({ id, title, image, type, index,
                         const radioOnChange = () => canAnswer && setAnswers([idx]);
 
                         return (
-                            <QuizButton key={idx} color={idx} disabled={!canAnswer} onClick={type === 'single' ? radioOnChange : checkboxOnChange}>
+                            <StyledQuizButton key={idx} color={idx} disabled={!canAnswer} onClick={type === 'single' ? radioOnChange : checkboxOnChange}>
                                 {type === 'single' ? (
                                     <Radio name="radio" checked={answers[0] === idx} onChange={radioOnChange} disabled={!canAnswer} />
                                 ) : (
                                     <Checkbox checked={answers.filter(val => val === idx).length > 0} onChange={checkboxOnChange} disabled={!canAnswer} />
                                 )}
-                                <h2>{text}</h2>
-                            </QuizButton>
+                                <Text style={{ fontSize: `${22 - text.length / 23}px` }}>{text}</Text>
+                            </StyledQuizButton>
                         );
                     })}
                 </Buttons>
 
-                <Button onClick={submitAnswer}>Submit answer</Button>
+                <Button style={{ marginBottom: '10px' }} onClick={submitAnswer}>
+                    Submit answer
+                </Button>
             </Container>
         );
 };
