@@ -7,7 +7,7 @@ const initDB = async () => {
         await client.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`, []);
 
         await client.query(
-            `CREATE OR REPLACE FUNCTION generate_code(n bigint) RETURNS text AS $$
+            `CREATE OR REPLACE FUNCTION generate_code(n BIGINT) RETURNS TEXT AS $$
             DECLARE
                 alphabet TEXT := 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
                 base INT := LENGTH(alphabet); 
@@ -21,21 +21,21 @@ const initDB = async () => {
             BEGIN
                 WHILE i < 3 LOOP
                     l2 := r1;
-                    r2 := l1 # ((((1366 * r1 + 150889) % 714025) / 714025.0) * 32767)::int;
+                    r2 := l1 # ((((1366 * r1 + 150889) % 714025) / 714025.0) * 32767)::INT;
                     l1 := l2;
                     r1 := r2;
                     i := i + 1;
                 END LOOP;
 
-                num := abs((r1 << 16) + l1);
+                num := ABS((r1 << 16) + l1);
                 i := 6;
 
                 LOOP
-                    output := output || substr(alphabet, 1 + (num % base)::int, 1);
+                    output := output || SUBSTR(alphabet, 1 + (num % base)::INT, 1);
                     num := num / base; 
                     
                     i := i - 1;
-                    EXIT WHEN i=0;
+                    EXIT WHEN i = 0;
                 END LOOP;
                 RETURN output;
             END; 

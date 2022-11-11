@@ -46,9 +46,7 @@ const ErrorPage: FunctionComponent<Props> = ({ title, subtitle }) => {
         <Container>
             <Title>{title}</Title>
             <SubTitle>{subtitle}</SubTitle>
-            <GoBack onClick={() => (document.referrer.startsWith(location.origin) && !document.referrer.includes('/lobby/') ? router.back() : router.push('/'))}>
-                Go back
-            </GoBack>
+            <GoBack onClick={() => router.back()}>Go back</GoBack>
         </Container>
     );
 };
