@@ -10,6 +10,7 @@ import TimerLine from '../TimerLine';
 import styled from 'styled-components';
 import { color } from '../../styles/theme';
 import Timer from '../Timer';
+import ScalingText from '../ScalingText';
 
 const SUBMIT_ANSWER = gql`
     mutation submitAnswer($game_token: String!, $question_id: String!, $answers: [Int!]!) {
@@ -72,7 +73,7 @@ const SecondaryTitle = styled.h1`
     font-size: 28px;
     font-weight: 200;
     letter-spacing: -0.1px;
-    margin: 5px 0;
+    margin-top: 8px;
     padding: 5px 10px;
     background: ${color('black0')};
     color: ${color('white1')};
@@ -93,11 +94,6 @@ const StyledQuizButton = styled(QuizButton)`
     & input {
         margin: 0 5px 0 10px;
     }
-`;
-
-const Text = styled.p`
-    inline-size: 80%;
-    overflow-wrap: break-word;
 `;
 
 type Props = GamePageProps & ShowQuestionData;
@@ -146,8 +142,10 @@ const QuestionPage: FunctionComponent<Props> = ({ id, title, image, type, index,
                                 ) : (
                                     <Checkbox checked={answers.filter(val => val === idx).length > 0} onChange={checkboxOnChange} disabled={!canAnswer} />
                                 )}
-                                <Text style={{ fontSize: `${22 - text.length / 23}px` }}>{text}</Text>
                             </StyledQuizButton>
+                                <ScalingText max={22} charsPerPx={23}>
+                                    {text}
+                                </ScalingText>
                         );
                     })}
                 </Buttons>
