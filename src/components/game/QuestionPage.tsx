@@ -18,7 +18,7 @@ const SUBMIT_ANSWER = gql`
     }
 `;
 
-const Container = styled.div`
+export const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -37,7 +37,7 @@ const Row = styled.div`
     padding: 0 2.5vw;
 `;
 
-const Buttons = styled.div`
+export const Buttons = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -48,7 +48,7 @@ const Buttons = styled.div`
     }
 `;
 
-const QuestionNumber = styled.p`
+export const QuestionNumber = styled.p`
     position: absolute;
     top: 20px;
     right: 20px;
@@ -57,7 +57,7 @@ const QuestionNumber = styled.p`
     color: ${color('white1')};
 `;
 
-const Title = styled.h1`
+const LoadingTitle = styled.h1`
     font-size: 32px;
     font-weight: 100;
     letter-spacing: -0.3px;
@@ -69,7 +69,7 @@ const Title = styled.h1`
     color: ${color('white1')};
 `;
 
-const SecondaryTitle = styled.h1`
+export const Title = styled.h1`
     font-size: 28px;
     font-weight: 200;
     letter-spacing: -0.1px;
@@ -81,13 +81,13 @@ const SecondaryTitle = styled.h1`
     box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.3);
 `;
 
-const Image = styled.img`
+export const Image = styled.img`
     max-width: 70vw;
     max-height: 40vh;
     margin-left: -50px;
 `;
 
-const StyledQuizButton = styled(QuizButton)`
+export const QuestionQuizButton = styled(QuizButton)`
     margin: 8px 12px;
     max-height: 12.5vh;
 
@@ -114,14 +114,14 @@ const QuestionPage: FunctionComponent<Props> = ({ id, title, image, type, index,
     if (showPrompt)
         return (
             <Container style={{ justifyContent: 'center' }}>
-                <Title>{title}</Title>
+                <LoadingTitle>{title}</LoadingTitle>
                 <TimerLine time={3} height={15} onEnd={() => setShowPrompt(false)} />
             </Container>
         );
     else
         return (
             <Container>
-                <SecondaryTitle>{title}</SecondaryTitle>
+                <Title>{title}</Title>
                 <QuestionNumber>#{index + 1}</QuestionNumber>
 
                 <Row>
@@ -136,16 +136,16 @@ const QuestionPage: FunctionComponent<Props> = ({ id, title, image, type, index,
                         const radioOnChange = () => canAnswer && setAnswers([idx]);
 
                         return (
-                            <StyledQuizButton key={idx} color={idx} disabled={!canAnswer} onClick={type === 'single' ? radioOnChange : checkboxOnChange}>
+                            <QuestionQuizButton key={idx} color={idx} disabled={!canAnswer} onClick={type === 'single' ? radioOnChange : checkboxOnChange}>
                                 {type === 'single' ? (
                                     <Radio name="radio" checked={answers[0] === idx} onChange={radioOnChange} disabled={!canAnswer} />
                                 ) : (
                                     <Checkbox checked={answers.filter(val => val === idx).length > 0} onChange={checkboxOnChange} disabled={!canAnswer} />
                                 )}
-                            </StyledQuizButton>
                                 <ScalingText max={22} charsPerPx={23}>
                                     {text}
                                 </ScalingText>
+                            </QuestionQuizButton>
                         );
                     })}
                 </Buttons>

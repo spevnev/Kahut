@@ -36,7 +36,10 @@ export type StartGameData = {
 
 export type ShowQuestionData = Omit<Question, 'answers'>;
 
-export type ShowAnswerData = {};
+export type ShowAnswerData = {
+    question: Question;
+    points: [{ username: string; score: number }];
+};
 
 export type EndGameData = {};
 
@@ -104,10 +107,10 @@ const Game: NextPage<Props> = ({ gameToken, players: _players, lobbyState: _lobb
     return (
         <>
             {lobbyState === 'OPEN' && <Lobby players={players} gameToken={gameToken} gameData={gameData} closeLobby={() => setLobbyState('INGAME')} />}
-            {showAnswer && <AnswerPage {...showAnswer} players={players} gameToken={gameToken} gameData={gameData} />}
             {endGame && <GameEnd {...endGame} players={players} gameToken={gameToken} gameData={gameData} />}
             {startGame && <GameStart {...startGame!} />}
             {showQuestion && <QuestionPage {...showQuestion!} gameToken={gameToken} gameData={gameData} />}
+            {showAnswer && <AnswerPage {...showAnswer!} />}
         </>
     );
 };
