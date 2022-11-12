@@ -41,7 +41,10 @@ export type ShowAnswerData = {
     points: [{ username: string; score: number }];
 };
 
-export type EndGameData = {};
+export type EndGameData = {
+    results: { username: string; answers: number; score: number }[];
+    questions: number;
+};
 
 type ParseEvent = (res?: { onGameEvent?: { event: string; data: string } }) => {
     playerJoining?: { player: string };
@@ -107,10 +110,10 @@ const Game: NextPage<Props> = ({ gameToken, players: _players, lobbyState: _lobb
     return (
         <>
             {lobbyState === 'OPEN' && <Lobby players={players} gameToken={gameToken} gameData={gameData} closeLobby={() => setLobbyState('INGAME')} />}
-            {endGame && <GameEnd {...endGame} players={players} gameToken={gameToken} gameData={gameData} />}
             {startGame && <GameStart {...startGame!} />}
             {showQuestion && <QuestionPage {...showQuestion!} gameToken={gameToken} gameData={gameData} />}
             {showAnswer && <AnswerPage {...showAnswer!} />}
+            {endGame && <GameEnd {...endGame!} gameToken={gameToken} gameData={gameData} />}
         </>
     );
 };
