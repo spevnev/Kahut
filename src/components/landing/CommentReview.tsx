@@ -42,12 +42,20 @@ const Quote = styled.h3`
     font-weight: 200;
     color: ${color('white1')};
     margin-bottom: 5px;
+
+    @media (max-width: 800px) {
+        font-size: 16px;
+    }
 `;
 
 const Name = styled.p`
     font-size: 14px;
     font-weight: 300;
     color: ${color('white2')};
+
+    @media (max-width: 800px) {
+        font-size: 10px;
+    }
 `;
 
 const Column = styled.div`
@@ -62,6 +70,11 @@ const Image = styled.img`
     border-radius: 50%;
     width: 64px;
     height: 64px;
+
+    @media (max-width: 800px) {
+        width: 48px;
+        height: 48px;
+    }
 `;
 
 type Props = {

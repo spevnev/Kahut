@@ -25,6 +25,8 @@ const Button = styled.button<{ background: string; disabled: boolean }>`
     align-items: center;
     padding: 10px;
     transition: filter 0.2s;
+    margin: 8px 12px;
+    max-height: 12.5vh;
 
     @media (min-width: 800px) {
         width: 40vw;
@@ -44,7 +46,9 @@ const Button = styled.button<{ background: string; disabled: boolean }>`
 
 const Shape = styled.img`
     min-width: 36px;
-    height: 36px;
+    min-height: 36px;
+    max-width: 36px;
+    max-height: 36px;
 `;
 
 const Text = styled.p`

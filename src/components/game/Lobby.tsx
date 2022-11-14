@@ -30,6 +30,11 @@ const Title = styled.h1`
     letter-spacing: -0.5px;
     text-align: center;
     margin: 20px 0;
+
+    @media (max-width: 800px) {
+        margin: 0;
+        font-size: 24px;
+    }
 `;
 
 const StartGameButton = styled(StyledButton)`
@@ -43,12 +48,20 @@ const Players = styled.div`
     flex-wrap: wrap;
     position: relative;
     width: 75vw;
-    max-height: 40vh;
+    max-height: 50vh;
     overflow-y: scroll;
     margin: auto auto 20px auto;
     background: ${color('black0')};
     border-radius: 3px;
     padding: 6px 12px;
+
+    @media (max-width: 800px) {
+        max-height: 60vh;
+    }
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 `;
 
 const Player = styled.div`
@@ -65,7 +78,7 @@ const Player = styled.div`
 
 const Counter = styled.p`
     position: absolute;
-    bottom: 5px;
+    top: 5px;
     right: 10px;
     font-size: 14px;
     font-weight: 300;
@@ -88,9 +101,8 @@ const Lobby: FunctionComponent<Props> = ({ players, gameToken, gameData, closeLo
     const [canStart, setCanStart] = useState(gameData.isHost);
 
     const startGame = () => {
-        _startGame();
+        _startGame().then(() => closeLobby());
         setCanStart(false);
-        closeLobby();
     };
 
     return (

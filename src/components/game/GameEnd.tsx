@@ -21,7 +21,11 @@ const UsersPlace = styled.h1`
     color: ${color('white0')};
     letter-spacing: -0.4px;
     text-align: center;
-    margin: 20px 0;
+    margin-top: 20px;
+
+    @media (max-width: 450px) {
+        margin-top: 50px;
+    }
 `;
 
 const Row = styled.div`
@@ -39,24 +43,41 @@ const Block = styled.div`
     border-radius: 3px 3px 0 0;
     box-shadow: 0 2px 2px 1px rgba(0, 0, 0, 0.5);
     padding: 4px 8px;
+
+    @media (max-width: 450px) {
+        padding: 2px;
+    }
 `;
 
-const Username = styled.h2`
+const Username = styled.h2<{ fontSize: number }>`
     overflow-wrap: anywhere;
     text-align: center;
     margin-bottom: 10px;
+    font-size: ${props => props.fontSize}px;
+
+    @media (max-width: 600px) {
+        font-size: ${props => props.fontSize / 1.5}px;
+    }
 `;
 
 const Score = styled.p`
     font-weight: 300;
     font-size: 16px;
     color: ${color('white2')};
+
+    @media (max-width: 600px) {
+        font-size: 13px;
+    }
 `;
 
 const Answers = styled.p`
     font-weight: 200;
     font-size: 16px;
     color: ${color('white1')};
+
+    @media (max-width: 600px) {
+        font-size: 12px;
+    }
 `;
 
 const LeaveButton = styled(Button)`
@@ -65,45 +86,56 @@ const LeaveButton = styled(Button)`
     right: 10px;
 `;
 
+type PlaceProps = {
+    minWidth: string;
+    width: string;
+    height: string;
+    zIndex: number;
+    fontWeight: number;
+    fontSize: number;
+    result?: {
+        username: string;
+        score: number;
+        answers: number;
+    };
+    questions: number;
+};
+
+const Place: FunctionComponent<PlaceProps> = ({ minWidth, width, height, zIndex, result, fontWeight, fontSize, questions }) => {
+    if (!result) return null;
+
+    return (
+        <Block style={{ minWidth, width, height, zIndex }}>
+            <Username fontSize={fontSize} style={{ fontWeight }}>
+                {limitStringTo(result.username, 30)}
+            </Username>
+            <Score>{result.score}</Score>
+            <Answers>
+                {result.answers} out of {questions}
+            </Answers>
+        </Block>
+    );
+};
+
 type Props = GamePageProps & EndGameData;
 
 const GameEnd: FunctionComponent<Props> = ({ results, questions, gameData }) => {
     const router = useRouter();
-    const sortedResults = results.sort((a, b) => b.score - a.score).map(result => ({ ...result, username: limitStringTo(result.username, 30) }));
+    const sortedResults = results.sort((a, b) => b.score - a.score);
     const currentUserResult = sortedResults.map((result, idx) => ({ ...result, idx })).filter(result => result.username === gameData.username)[0];
 
     return (
         <Container>
             <LeaveButton onClick={() => router.push('/')}>Leave</LeaveButton>
-            <UsersPlace>
-                You are #{currentUserResult.idx + 1} with {currentUserResult.score} points!
-            </UsersPlace>
+            {currentUserResult && (
+                <UsersPlace>
+                    You are #{currentUserResult.idx + 1} with {currentUserResult.score} points!
+                </UsersPlace>
+            )}
             <Row>
-                {sortedResults.length >= 2 && (
-                    <Block style={{ width: '17.5vw', height: '40vh', zIndex: 2 }}>
-                        <Username style={{ fontSize: '20px', fontWeight: 200 }}>{sortedResults[1].username}</Username>
-                        <Score>{sortedResults[1].score}</Score>
-                        <Answers>
-                            {sortedResults[1].answers} out of {questions}
-                        </Answers>
-                    </Block>
-                )}
-                <Block style={{ width: '15vw', height: '50vh', zIndex: 3 }}>
-                    <Username style={{ fontSize: '22px', fontWeight: 100 }}>{sortedResults[0].username}</Username>
-                    <Score>{sortedResults[0].score}</Score>
-                    <Answers>
-                        {sortedResults[0].answers} out of {questions}
-                    </Answers>
-                </Block>
-                {sortedResults.length >= 3 && (
-                    <Block style={{ width: '20vw', height: '33vh', zIndex: 1 }}>
-                        <Username style={{ fontSize: '18px', fontWeight: 300 }}>{sortedResults[2].username}</Username>
-                        <Score>{sortedResults[2].score}</Score>
-                        <Answers>
-                            {sortedResults[2].answers} out of {questions}
-                        </Answers>
-                    </Block>
-                )}
+                <Place result={sortedResults[1]} minWidth="87.5px" width="17.5vw" height="40vh" zIndex={2} fontSize={20} fontWeight={200} questions={questions} />
+                <Place result={sortedResults[0]} minWidth="75px" width="15vw" height="50vh" zIndex={3} fontSize={22} fontWeight={100} questions={questions} />
+                <Place result={sortedResults[2]} minWidth="100px" width="20vw" height="33vh" zIndex={1} fontSize={18} fontWeight={300} questions={questions} />
             </Row>
         </Container>
     );

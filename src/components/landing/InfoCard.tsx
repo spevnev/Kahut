@@ -8,7 +8,8 @@ import Button from '../Button';
 
 const Container = styled.div`
     width: 27.5vw;
-    height: 22.5vh;
+    min-width: 200px;
+    height: 150px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -26,8 +27,8 @@ const Text = styled.h4`
 `;
 
 const Br = styled.div`
-    width: 80%;
-    height: 1px;
+    width: 90%;
+    min-height: 1px;
     margin: 5px 0;
     background: ${color('white0')};
 `;
@@ -38,7 +39,7 @@ const Input = styled(StyledInput)`
 `;
 
 const InfoCard: FunctionComponent = () => {
-    const { login } = useContext(AuthContext);
+    const { user, login } = useContext(AuthContext);
     const [code, setCode] = useState('');
     const router = useRouter();
 
@@ -48,6 +49,8 @@ const InfoCard: FunctionComponent = () => {
 
         setCode(code);
     };
+
+    if (user) return null;
 
     return (
         <Container>

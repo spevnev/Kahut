@@ -16,15 +16,19 @@ const LeaderboardTitle = styled.h1`
 const List = styled.div`
     display: flex;
     flex-direction: column;
-    max-width: 60vw;
-    width: fit-content;
-    min-width: 40vw;
-    height: 80vh;
-    background: ${color('black0')};
-    border-radius: 5px;
-    box-shadow: 2px 3px 4px rgba(0, 0, 0, 0.35);
-    padding: 8px 0px;
     overflow-y: scroll;
+    width: 100vw;
+
+    @media (min-width: 400px) {
+        min-width: 250px;
+        width: fit-content;
+        max-width: 60vw;
+        height: 80vh;
+        background: ${color('black0')};
+        border-radius: 5px;
+        box-shadow: 2px 3px 4px rgba(0, 0, 0, 0.35);
+        padding: 8px 0px;
+    }
 `;
 
 const ListElement = styled.div`
@@ -80,7 +84,9 @@ const AnswerPage: FunctionComponent<ShowAnswerData> = ({ question: { title, inde
     else
         return (
             <Container>
-                <Title>{title}</Title>
+                <Title max={24} charsPerPx={8} min={16}>
+                    {title}
+                </Title>
                 <QuestionNumber>#{index + 1}</QuestionNumber>
                 <Image src={image} />
 
@@ -95,7 +101,7 @@ const AnswerPage: FunctionComponent<ShowAnswerData> = ({ question: { title, inde
                                 ) : (
                                     <Checkbox defaultChecked={isCorrect} disabled={true} />
                                 )}
-                                <ScalingText max={22} charsPerPx={23}>
+                                <ScalingText max={22} charsPerPx={25} min={10}>
                                     {text}
                                 </ScalingText>
                             </QuestionQuizButton>

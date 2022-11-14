@@ -25,6 +25,8 @@ export const Container = styled.div`
     justify-content: space-between;
     width: 100vw;
     height: 100vh;
+    max-height: 150vh;
+    overflow-y: scroll;
     position: relative;
 `;
 
@@ -42,9 +44,15 @@ export const Buttons = styled.div`
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
+    width: 90vw;
 
     @media (max-width: 800px) {
         flex-direction: column;
+
+        button {
+            margin-left: 0;
+            margin-right: 0;
+        }
     }
 `;
 
@@ -55,22 +63,26 @@ export const QuestionNumber = styled.p`
     font-size: 18px;
     font-weight: 300;
     color: ${color('white1')};
+
+    @media (max-width: 800px) {
+        top: 5px;
+        right: 5px;
+        font-size: 14px;
+    }
 `;
 
-const LoadingTitle = styled.h1`
-    font-size: 32px;
+const LoadingTitle = styled(ScalingText)`
     font-weight: 100;
     letter-spacing: -0.3px;
     margin: 8px 0;
-    padding: 10px 0;
+    padding: 10px 20px;
     width: 100%;
     text-align: center;
     background: ${color('black0')};
     color: ${color('white1')};
 `;
 
-export const Title = styled.h1`
-    font-size: 28px;
+export const Title = styled(ScalingText)`
     font-weight: 200;
     letter-spacing: -0.1px;
     margin-top: 8px;
@@ -79,20 +91,22 @@ export const Title = styled.h1`
     color: ${color('white1')};
     border-radius: 5px;
     box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    max-width: 80vw;
 `;
 
 export const Image = styled.img`
     max-width: 70vw;
     max-height: 40vh;
-    margin-left: -50px;
+    margin: 10px 0 10px -50px;
 `;
 
 export const QuestionQuizButton = styled(QuizButton)`
-    margin: 8px 12px;
-    max-height: 12.5vh;
+    max-height: 200px;
+    overflow-x: scroll;
 
     & input {
-        margin: 0 5px 0 10px;
+        margin: 0 10px;
     }
 `;
 
@@ -114,14 +128,18 @@ const QuestionPage: FunctionComponent<Props> = ({ id, title, image, type, index,
     if (showPrompt)
         return (
             <Container style={{ justifyContent: 'center' }}>
-                <LoadingTitle>{title}</LoadingTitle>
+                <LoadingTitle max={32} charsPerPx={8} min={18}>
+                    {title}
+                </LoadingTitle>
                 <TimerLine time={3} height={15} onEnd={() => setShowPrompt(false)} />
             </Container>
         );
     else
         return (
             <Container>
-                <Title>{title}</Title>
+                <Title max={24} charsPerPx={8} min={16}>
+                    {title}
+                </Title>
                 <QuestionNumber>#{index + 1}</QuestionNumber>
 
                 <Row>
@@ -142,7 +160,7 @@ const QuestionPage: FunctionComponent<Props> = ({ id, title, image, type, index,
                                 ) : (
                                     <Checkbox checked={answers.filter(val => val === idx).length > 0} onChange={checkboxOnChange} disabled={!canAnswer} />
                                 )}
-                                <ScalingText max={22} charsPerPx={23}>
+                                <ScalingText max={22} charsPerPx={25} min={10}>
                                     {text}
                                 </ScalingText>
                             </QuestionQuizButton>
