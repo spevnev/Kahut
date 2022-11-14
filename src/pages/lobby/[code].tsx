@@ -10,6 +10,7 @@ import QuestionPage from '../../components/game/QuestionPage';
 import AnswerPage from '../../components/game/AnswerPage';
 import GameEnd from '../../components/game/GameEnd';
 import { Question } from '../../types/gameData';
+import Loading from '../../components/Loading';
 
 const GET_LOBBY_INFO = gql`
     query getLobbyInfo($game_token: String!) {
@@ -106,6 +107,8 @@ const Game: NextPage<Props> = ({ gameToken, players: _players, lobbyState: _lobb
 
         setPlayers([...players, player]);
     }, [playerJoining]);
+
+    if (_lobbyState === 'INGAME' && !startGame && !showQuestion && !showAnswer && !endGame) return <Loading>Waiting for the next question...</Loading>;
 
     return (
         <>
