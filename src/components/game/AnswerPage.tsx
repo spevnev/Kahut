@@ -1,6 +1,6 @@
 import { FunctionComponent, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { ShowAnswerData } from '../../pages/lobby/[code]';
+import { GamePageProps, ShowAnswerData } from '../../pages/lobby/[code]';
 import { color } from '../../styles/theme';
 import Checkbox from '../Checkbox';
 import Radio from '../Radio';
@@ -19,8 +19,8 @@ const List = styled.div`
     overflow-y: scroll;
     width: 100vw;
 
-    @media (min-width: 400px) {
-        min-width: 250px;
+    @media (min-width: 600px) {
+        min-width: 400px;
         width: fit-content;
         max-width: 60vw;
         height: 80vh;
@@ -43,9 +43,9 @@ const ListElement = styled.div`
     }
 `;
 
-const Username = styled.p`
+const Username = styled.p<{ bold: boolean }>`
     font-size: 18px;
-    font-weight: 100;
+    font-weight: ${props => (props.bold ? 300 : 100)};
     color: ${color('white0')};
     letter-spacing: -0.2px;
     white-space: nowrap;
@@ -60,12 +60,14 @@ const Score = styled.p`
     margin-left: 10px;
 `;
 
-const AnswerPage: FunctionComponent<ShowAnswerData> = ({ question: { title, index, image, choices, answers, type }, points }) => {
+const AnswerPage: FunctionComponent<GamePageProps & ShowAnswerData> = ({ question: { title, index, image, choices, answers, type }, points, gameData }) => {
     const [showLeaderboard, setShowLeaderboard] = useState(false);
 
     useEffect(() => void setTimeout(() => setShowLeaderboard(true), 5000), []);
 
-    if (showLeaderboard)
+    if (showLeaderboard) {
+        const curUsername = gameData?.username;
+
         return (
             <Container style={{ justifyContent: 'normal' }}>
                 <LeaderboardTitle>Leaderboard</LeaderboardTitle>
@@ -74,14 +76,14 @@ const AnswerPage: FunctionComponent<ShowAnswerData> = ({ question: { title, inde
                         .sort((a, b) => b.score - a.score)
                         .map(({ username, score }) => (
                             <ListElement key={username}>
-                                <Username>{username}</Username>
+                                <Username bold={curUsername === username}>{username + (curUsername === username ? ' (you)' : '')}</Username>
                                 <Score>{score}</Score>
                             </ListElement>
                         ))}
                 </List>
             </Container>
         );
-    else
+    } else
         return (
             <Container>
                 <Title max={24} charsPerPx={8} min={16}>

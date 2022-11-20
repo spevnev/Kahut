@@ -115,7 +115,7 @@ const Game: NextPage<Props> = ({ gameToken, players: _players, lobbyState: _lobb
             {lobbyState === 'OPEN' && <Lobby players={players} gameToken={gameToken} gameData={gameData} closeLobby={() => setLobbyState('INGAME')} />}
             {startGame && <GameStart {...startGame!} />}
             {showQuestion && <QuestionPage {...showQuestion!} gameToken={gameToken} gameData={gameData} />}
-            {showAnswer && <AnswerPage {...showAnswer!} />}
+            {showAnswer && <AnswerPage {...showAnswer!} gameToken={gameToken} gameData={gameData} />}
             {endGame && <GameEnd {...endGame!} gameToken={gameToken} gameData={gameData} />}
         </>
     );
