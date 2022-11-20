@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 
 const useWarning = (message?: string) => {
     const isSafeToLeave = useRef<boolean>(true);
-    const confirmationMessage = useRef<string>(message || 'You have unsaved changes! Are you sure you want to leave?');
+    const confirmationMessage = useRef<string>(message + 'Are you sure you want to leave?');
 
     const onLeave = (e: BeforeUnloadEvent) => {
         if (isSafeToLeave.current) return undefined;

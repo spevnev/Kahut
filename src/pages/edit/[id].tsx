@@ -10,7 +10,7 @@ import Questions from '../../components/editGame/Questions';
 type Props = { game: GameData };
 
 const EditGame: NextPage<Props> = ({ game: _game }) => {
-    const setIsSafeToLeave = useWarning();
+    const setIsSafeToLeave = useWarning('You have unsaved changes!');
 
     const [game, _setGame] = useState(_game);
     const prevGameRef = useRef<GameData>(_game);
