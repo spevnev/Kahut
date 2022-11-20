@@ -174,13 +174,14 @@ const GameDetails: NextPage<Props> = ({ isCreator, card: { id, image, title, des
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     // TODO: check if exists + get data
-    if (!query.id) return { notFound: true };
+    const { id } = query;
+    if (!id) return { notFound: true };
 
     return {
         props: {
             isCreator: false,
             card: {
-                id: '123e4567-e89b-12d3-a456-426614174000',
+                id,
                 title: 'sth',
                 rating: 4,
                 questions: 7,

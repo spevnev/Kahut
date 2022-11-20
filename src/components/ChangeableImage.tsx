@@ -2,6 +2,7 @@ import { FunctionComponent, useContext, useState } from 'react';
 import styled from 'styled-components';
 import { FileUploadContext } from '../providers/FileUploadProvider';
 import { color } from '../styles/theme';
+import imagePlaceholder from '../../public/images/image-placeholder.png';
 
 const ImageContainer = styled.div`
     display: flex;
@@ -33,7 +34,7 @@ const Image = styled.img`
 `;
 
 type Props = {
-    src: string;
+    src?: string;
     onChange: (data: string) => void | string | Promise<string>;
 };
 
@@ -53,7 +54,7 @@ const ChangeableImage: FunctionComponent<Props> = ({ src: _src, onChange }) => {
 
     return (
         <ImageContainer onClick={uploadImage}>
-            <Image src={src} />
+            <Image src={src || imagePlaceholder.src} />
         </ImageContainer>
     );
 };

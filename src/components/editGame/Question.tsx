@@ -50,7 +50,7 @@ const Title = styled(InlineInput)`
     color: ${color('white0')};
 `;
 
-const Time = styled(InlineInput)`
+const TimeInput = styled(InlineInput)`
     font-size: 16px;
     font-weight: 200;
     width: 40px;
@@ -97,16 +97,14 @@ const Question: FunctionComponent<Props> = ({ question, setQuestion, closeQuesti
     <Container>
         <FoldButton src={chevronIcon.src} onClick={closeQuestion} />
         <div>
-            {question.image && (
-                <ImageContainer>
-                    <ChangeableImage src={question.image} onChange={image => setQuestion({ ...question, image })} />
-                </ImageContainer>
-            )}
+            <ImageContainer>
+                <ChangeableImage src={question.image} onChange={image => setQuestion({ ...question, image })} />
+            </ImageContainer>
             <Title placeholder="Title" value={question.title} onChange={e => setQuestion({ ...question, title: e.target.value })} maxLength={256} />
             <Row>
                 <Row>
                     <Icon src={clockIcon.src} />
-                    <Time
+                    <TimeInput
                         value={question.time}
                         onChange={e => {
                             const value = e.target.value.length === 0 ? 0 : Number(e.target.value);

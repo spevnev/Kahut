@@ -92,6 +92,7 @@ export const Title = styled(ScalingText)`
     border-radius: 5px;
     box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.3);
     text-align: center;
+    width: fit-content;
     max-width: 80vw;
 `;
 
