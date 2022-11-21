@@ -10,7 +10,7 @@ import Header from '../../components/Header';
 import { AuthContext } from '../../providers/GoogleAuthProvider';
 import { numberFormatter } from '../../utils/helper';
 import { getCookie, setCookie } from '../../utils/cookies';
-import GameTokenData from '../../types/gameToken';
+import GameTokenData from '../../types/gameTokenData';
 
 const Container = styled.div`
     display: flex;

@@ -1,15 +1,15 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { useRef, useState } from 'react';
 import Header from '../../components/Header';
-import GameData from '../../types/gameData';
+import Game from '../../types/game';
+import Question from '../../types/question';
 import useDebounce from '../../hooks/useDebounce';
 import useWarning from '../../hooks/useWarning';
 import GeneralInfo from '../../components/editGame/GeneralInfo';
 import Questions from '../../components/editGame/Questions';
 
-type Props = { game: GameData };
 
-const EditGame: NextPage<Props> = ({ game: _game }) => {
+const EditGame: NextPage<{ game: Game }> = ({ game: _game }) => {
     const setIsSafeToLeave = useWarning('You have unsaved changes!');
 
     const [game, _setGame] = useState(_game);

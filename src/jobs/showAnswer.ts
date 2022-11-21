@@ -1,7 +1,7 @@
 import getClient from '../db/client';
 import { getPublishers } from '../db/jobScheduler/schedulers';
 import { publish } from '../graphql/gamePubSub';
-import { Question } from '../types/gameData';
+import Question from '../types/question';
 
 const MAX_SCORE = 1000;
 const MIN_SCORE = 500;

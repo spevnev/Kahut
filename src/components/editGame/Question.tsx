@@ -1,7 +1,7 @@
 import { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import { color } from '../../styles/theme';
-import { Question as QuestionType } from '../../types/gameData';
+import QuestionType from '../../types/question';
 import clockIcon from '../../../public/icons/clock.svg';
 import chevronIcon from '../../../public/icons/chevron.svg';
 import ChangeableImage from '../ChangeableImage';

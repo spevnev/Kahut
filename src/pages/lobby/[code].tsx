@@ -1,7 +1,7 @@
 import { gql, useSubscription } from '@apollo/client';
 import { GetServerSideProps, NextPage } from 'next';
 import jwt from 'jsonwebtoken';
-import GameTokenData from '../../types/gameToken';
+import GameTokenData from '../../types/gameTokenData';
 import { useEffect, useRef, useState } from 'react';
 import createApolloClient from '../../graphql/apolloClient';
 import Lobby from '../../components/game/Lobby';
@@ -9,7 +9,7 @@ import GameStart from '../../components/game/GameStart';
 import QuestionPage from '../../components/game/QuestionPage';
 import AnswerPage from '../../components/game/AnswerPage';
 import GameEnd from '../../components/game/GameEnd';
-import { Question } from '../../types/gameData';
+import Question from '../../types/question';
 import Loading from '../../components/Loading';
 
 const GET_LOBBY_INFO = gql`

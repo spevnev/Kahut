@@ -1,6 +1,6 @@
 import { getPublishers } from '../db/jobScheduler/schedulers';
 import { publish } from '../graphql/gamePubSub';
-import { Question } from '../types/gameData';
+import Question from '../types/question';
 
 const SHOW_QUESTION_PROMPT_MS = 3 * 1000; // 3s
 

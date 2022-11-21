@@ -7,9 +7,7 @@ type FileUploadContextData = {
 
 export const FileUploadContext = createContext<FileUploadContextData>({ upload: () => () => {} });
 
-type Props = { children: ReactElement };
-
-const FileUploadProvider: FunctionComponent<Props> = ({ children }) => {
+const FileUploadProvider: FunctionComponent<{ children: ReactElement }> = ({ children }) => {
     const inputRef = useRef<HTMLInputElement | null>(null);
     const callbackFunction = useRef<(img: string) => void>();
 

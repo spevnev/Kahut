@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import GameToken from '../../types/gameToken';
+import GameToken from '../../types/gameTokenData';
 import { verifyJwt } from '../../utils/jwt';
 import { ResolverContext } from '../apolloServer';
 

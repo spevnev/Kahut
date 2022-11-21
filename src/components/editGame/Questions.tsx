@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import { FunctionComponent, useState } from 'react';
 import styled from 'styled-components';
 import { v4 as generateUUID } from 'uuid';
-import GameData from '../../types/gameData';
+import Game from '../../types/game';
 import FoldedQuestion from './FoldedQuestion';
 import Question, { QuestionContainer } from './Question';
 
@@ -18,8 +18,8 @@ const NewQuestion = styled(QuestionContainer)`
 `;
 
 type Props = {
-    game: GameData;
-    setGame: (game: GameData) => void;
+    game: Game;
+    setGame: (game: Game) => void;
 };
 
 const Questions: FunctionComponent<Props> = ({ game, setGame }) => {

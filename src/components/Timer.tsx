@@ -13,9 +13,7 @@ const Container = styled.div`
     font-size: 18px;
 `;
 
-type Props = { time: number };
-
-const Timer: FunctionComponent<Props> = ({ time: _time }) => {
+const Timer: FunctionComponent<{ time: number }> = ({ time: _time }) => {
     const [time, setTime] = useState(_time);
 
     useEffect(() => {

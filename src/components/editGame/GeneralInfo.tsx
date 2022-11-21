@@ -1,7 +1,7 @@
 import { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import { color } from '../../styles/theme';
-import GameData from '../../types/gameData';
+import Game from '../../types/game';
 import ChangeableImage from '../ChangeableImage';
 import InlineInput from '../InlineInput';
 
@@ -59,8 +59,8 @@ const Description = styled.textarea`
 `;
 
 type Props = {
-    game: GameData;
-    setGame: (game: GameData) => void;
+    game: Game;
+    setGame: (game: Game) => void;
 };
 
 const GeneralInfo: FunctionComponent<Props> = ({ game, setGame }) => (

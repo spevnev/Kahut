@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { FunctionComponent } from 'react';
-import { Question as QuestionType } from '../../types/gameData';
 import clockIcon from '../../../public/icons/clock.svg';
 import { color } from '../../styles/theme';
+import QuestionType from '../../types/question';
 
 const Container = styled.div`
     width: 100%;
@@ -57,9 +57,7 @@ const Icon = styled.img`
     height: 20px;
 `;
 
-type Props = { question: QuestionType };
-
-const FoldedQuestion: FunctionComponent<Props> = ({ question: { image, title, type, time } }) => (
+const FoldedQuestion: FunctionComponent<{ question: QuestionType }> = ({ question: { image, title, type, time } }) => (
     <Container>
         <Row>
             {image && <Image src={image} />}

@@ -10,7 +10,7 @@ import { gql, useMutation } from '@apollo/client';
 import StyledButton from '../components/Button';
 import { setCookie } from '../utils/cookies';
 import jwt from 'jsonwebtoken';
-import GameTokenData from '../types/gameToken';
+import GameTokenData from '../types/gameTokenData';
 
 const Container = styled.div`
     display: flex;
