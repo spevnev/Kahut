@@ -23,9 +23,9 @@ const TextContainer = styled.div`
 `;
 
 const ImageContainer = styled.div`
-    min-width: 640px;
+    min-width: 320px;
     max-width: 640px;
-    min-height: 360px;
+    min-height: 180px;
     max-height: 360px;
     overflow: hidden;
     margin-right: 20px;

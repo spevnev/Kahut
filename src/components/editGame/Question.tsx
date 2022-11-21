@@ -75,6 +75,8 @@ const Choice = styled(FakeQuizButton)`
     flex-direction: row;
     align-items: center;
     margin: 5px 0;
+    max-width: 500px;
+    width: 40vw;
 
     & img {
         display: none;
@@ -85,6 +87,7 @@ const ChoiceInput = styled(InlineInput)`
     font-size: 16px;
     font-weight: 200;
     color: ${color('white1')};
+    margin-left: 5px;
 `;
 
 type Props = {

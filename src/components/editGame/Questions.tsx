@@ -26,6 +26,8 @@ const Questions: FunctionComponent<Props> = ({ game, setGame }) => {
     const [openedQuestions, _setOpenedQuestions] = useState(new Array(game.questions.length).fill(false));
 
     const newQuestion = () => {
+        const maxIndex = game.questions.reduce((max, cur) => Math.max(max, cur.index), -1);
+
         setGame({
             ...game,
             questions: [
@@ -38,6 +40,7 @@ const Questions: FunctionComponent<Props> = ({ game, setGame }) => {
                     choices: ['', '', '', ''],
                     answers: [0],
                     image: undefined,
+                    index: maxIndex + 1,
                 },
             ],
         });

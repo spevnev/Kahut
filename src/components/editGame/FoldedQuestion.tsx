@@ -36,6 +36,11 @@ const Title = styled.p`
     font-weight: 100;
     color: ${color('white0')};
     letter-spacing: -0.3px;
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    max-width: 80vw;
+    text-overflow: ellipsis;
 `;
 
 const Type = styled.p`
