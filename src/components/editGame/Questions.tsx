@@ -23,7 +23,7 @@ type Props = {
 };
 
 const Questions: FunctionComponent<Props> = ({ game, setGame }) => {
-    const [openedQuestions, _setOpenedQuestions] = useState(new Array(game.questions.length).fill(false));
+    const [openedQuestions, setOpenedQuestions] = useState(new Array(game.questions.length).fill(false));
 
     const newQuestion = () => {
         const maxIndex = game.questions.reduce((max, cur) => Math.max(max, cur.index), -1);
@@ -45,23 +45,28 @@ const Questions: FunctionComponent<Props> = ({ game, setGame }) => {
             ],
         });
 
-        _setOpenedQuestions([...openedQuestions, true]);
+        setOpenedQuestions([...openedQuestions, true]);
     };
 
-    const setOpenedQuestions = (el_idx: number, new_value: boolean) => _setOpenedQuestions(openedQuestions.map((cur, idx) => (idx === el_idx ? new_value : cur)));
+    const setOpenedQuestion = (elIdx: number, newValue: boolean) => setOpenedQuestions(openedQuestions.map((cur, idx) => (idx === elIdx ? newValue : cur)));
+
+    const deleteQuestion = (index: number) => setGame({ ...game, questions: game.questions.filter(question => question.index !== index) });
 
     return (
         <Container>
-            {game.questions.map((question, idx) => (
+            {game.questions.map(question => (
                 <Fragment key={question.id}>
-                    {openedQuestions[idx] ? (
+                    {openedQuestions[question.index] ? (
                         <Question
                             question={question}
-                            setQuestion={new_question => setGame({ ...game, questions: game.questions.map((value, j) => (j === idx ? new_question : value)) })}
-                            closeQuestion={() => setOpenedQuestions(idx, false)}
+                            setQuestion={new_question =>
+                                setGame({ ...game, questions: game.questions.map((value, j) => (j === question.index ? new_question : value)) })
+                            }
+                            closeQuestion={() => setOpenedQuestion(question.index, false)}
+                            deleteQuestion={() => deleteQuestion(question.index)}
                         />
                     ) : (
-                        <div onClick={() => setOpenedQuestions(idx, true)}>
+                        <div onClick={() => setOpenedQuestion(question.index, true)}>
                             <FoldedQuestion question={question} />
                         </div>
                     )}

@@ -7,17 +7,100 @@ import useDebounce from '../../hooks/useDebounce';
 import useWarning from '../../hooks/useWarning';
 import GeneralInfo from '../../components/editGame/GeneralInfo';
 import Questions from '../../components/editGame/Questions';
+import { gql, useMutation } from '@apollo/client';
+import createApolloClient from '../../graphql/apolloClient';
+import { getCookie } from '../../utils/cookies';
+import { areGamesEqual, areQuestionsEqual } from '../../utils/compareTypes';
 
+const GET_GAME = gql`
+    query getGame($id: String!) {
+        getGame(id: $id) {
+            image
+            title
+            description
+            id
+            questions {
+                id
+                index
+                title
+                image
+                type
+                time
+                choices
+                answers
+            }
+        }
+    }
+`;
 
-const EditGame: NextPage<{ game: Game }> = ({ game: _game }) => {
+const CAN_EDIT_GAME = gql`
+    query canEditGame($id: String!, $token: String!) {
+        canEditGame(id: $id, token: $token)
+    }
+`;
+
+const EDIT_GAME = gql`
+    mutation editGame($game: GameInfo!, $token: String!) {
+        editGame(game: $game, token: $token)
+    }
+`;
+
+const EDIT_QUESTION = gql`
+    mutation editQuestion($question: IQuestion!, $token: String!, $id: String!) {
+        editQuestion(token: $token, question: $question, id: $id)
+    }
+`;
+
+const DELETE_QUESTION = gql`
+    mutation deleteQuestion($question_id: String!, $game_id: String!, $token: String!) {
+        deleteQuestion(token: $token, question_id: $question_id, game_id: $game_id)
+    }
+`;
+
+type Props = {
+    game: Game;
+    isNew: boolean;
+};
+
+const EditGame: NextPage<Props> = ({ game: _game, isNew }) => {
     const setIsSafeToLeave = useWarning('You have unsaved changes!');
 
-    const [game, _setGame] = useState(_game);
-    const prevGameRef = useRef<GameData>(_game);
+    const [editGame] = useMutation(EDIT_GAME);
+    const [editQuestion] = useMutation(EDIT_QUESTION);
+    const [deleteQuestion] = useMutation(DELETE_QUESTION);
 
+    const prevGameRef = useRef<Game | undefined>(isNew ? undefined : _game);
+    const [game, _setGame] = useState(_game);
     const setGame = useDebounce(
-        async game => {
-            // TODO: update data on the server
+        async (game: Game) => {
+            const prevGame = prevGameRef.current;
+            const token = getCookie('token');
+
+            if (game.image && prevGame?.image !== game.image) {
+                const res = await fetch(`${location.origin}/api/uploadImage`, { method: 'POST', body: game.image });
+                const { url } = await res.json();
+                game.image = url;
+            }
+
+            if (!areGamesEqual(prevGame, game)) await editGame({ variables: { token, game: { ...game, questions: undefined, __typename: undefined } } });
+
+            const idToQuestion: { [key: string]: Question } = {};
+            if (prevGame?.questions) prevGame.questions.forEach(question => (idToQuestion[question.id] = question));
+
+            await Promise.all(
+                game.questions
+                    .filter(question => {
+                        const areEqual = areQuestionsEqual(idToQuestion[question.id], question);
+                        delete idToQuestion[question.id];
+
+                        return !areEqual;
+                    })
+                    .map(question => editQuestion({ variables: { token, question: { ...question, __typename: undefined }, id: game.id } }))
+            );
+
+            const deletedQuestions = Object.values(idToQuestion);
+            await Promise.all(deletedQuestions.map(({ id }) => deleteQuestion({ variables: { token, question_id: id, game_id: game.id } })));
+
             prevGameRef.current = game;
             setIsSafeToLeave(true);
         },
@@ -40,33 +123,22 @@ const EditGame: NextPage<{ game: Game }> = ({ game: _game }) => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+export const getServerSideProps: GetServerSideProps = async ({ query, req }) => {
     const { id } = query;
+    const token: string | undefined = req.cookies.token;
+    if (typeof id !== 'string' || !token) return { notFound: true };
 
-    // if game with id=id !exists || cur.user !== game.creator => return {notFound: true}!
+    const apollo = createApolloClient();
 
-    return {
-        props: {
-            game: {
-                id,
-                title: 'Long title for the stupid game',
-                description:
-                    'Some description. Et quia ut qui consectetur porro labore dolores dolor. Officiis itaque ipsum autem consectetur. Perspiciatis labore deserunt debitis nulla possimus similique quibusdam possimus. Corrupti molestiae cumque amet aut doloremque. Et quia ut qui consectetur porro labore dolores dolor. Officiis itaque ipsum autem consectetur. Perspiciatis labore deserunt debitis nulla possimus similique quibusdam possimus. Corrupti molestiae cumque amet aut doloremque.Some description. Et quia ut qui consectetur porro labore dolores dolor. Officiis itaque ipsum autem consectetur. Perspiciatis labore deserunt debitis nulla possimus similique quibusdam possimus. Corrupti molestiae cumque amet aut doloremque. Et quia ut qui consectetur porro labore dolores dolor. Officiis itaque ipsum autem consectetur. Perspiciatis labore deserunt debitis nulla possimus similique quibusdam possimus. Corrupti molestiae cumque amet aut doloremque.Some description. Et quia ut qui consectetur porro labore dolores dolor. Officiis itaque ipsum autem consectetur. Perspiciatis labore deserunt debitis nulla possimus similique quibusdam possimus. Corrupti molestiae cumque amet aut doloremque. Et quia ut qui consectetur porro labore dolores dolor. Officiis itaque ipsum autem consectetur. Perspiciatis labore deserunt debitis nulla possimus similique quibusdam possimus. Corrupti molestiae cumque amet aut doloremque.',
-                image: 'https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fthewowstyle.com%2Fwp-content%2Fuploads%2F2015%2F01%2Fnature-images.jpg&f=1&nofb=1&ipt=8033037c9770219270aa68c8647707ac1dd1051f20f7d6595eea52ab33e55b06&ipo=images',
-                questions: [
-                    {
-                        title: "I'm not really sure how long the title can be to still fit in this one-liner title?",
-                        image: 'https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fthewowstyle.com%2Fwp-content%2Fuploads%2F2015%2F01%2Fnature-images.jpg&f=1&nofb=1&ipt=8033037c9770219270aa68c8647707ac1dd1051f20f7d6595eea52ab33e55b06&ipo=images',
-                        time: 30,
-                        type: 'single',
-                        id: 'sth',
-                        choices: ['123', '456', '789', '011'],
-                        answers: [0],
-                    },
-                ],
-            },
-        },
-    };
+    const canEditGameRes = await apollo.query({ query: CAN_EDIT_GAME, variables: { id, token } });
+    if (!canEditGameRes.data.canEditGame) return { notFound: true };
+
+    const getGameRes = await apollo.query({ query: GET_GAME, variables: { id } });
+    const game: Game = getGameRes.data.getGame;
+    if (game) return { props: { game, isNew: false } };
+
+    const DEFAULT_GAME: Game = { title: 'New game', description: '', id, questions: [] };
+    return { props: { game: DEFAULT_GAME, isNew: true } };
 };
 
 export default EditGame;

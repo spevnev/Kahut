@@ -4,6 +4,7 @@ import { color } from '../../styles/theme';
 import Game from '../../types/game';
 import ChangeableImage from '../ChangeableImage';
 import InlineInput from '../InlineInput';
+import imagePlaceholder from '../../../public/images/image-placeholder.png';
 
 const Container = styled.div`
     display: flex;
@@ -29,6 +30,10 @@ const ImageContainer = styled.div`
     max-height: 360px;
     overflow: hidden;
     margin-right: 20px;
+
+    div {
+        width: 100% !important;
+    }
 `;
 
 const Title = styled(InlineInput)`
@@ -66,7 +71,7 @@ type Props = {
 const GeneralInfo: FunctionComponent<Props> = ({ game, setGame }) => (
     <Container>
         <ImageContainer>
-            <ChangeableImage src={game.image} onChange={image => setGame({ ...game, image })} />
+            <ChangeableImage src={game.image || imagePlaceholder.src} onChange={image => setGame({ ...game, image })} />
         </ImageContainer>
         <TextContainer>
             <Title value={game.title} onChange={e => setGame({ ...game, title: e.target.value })} maxLength={60} />

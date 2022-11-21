@@ -1,15 +1,20 @@
 import jwt from 'jsonwebtoken';
-import joinLobby from './mutations/joinLobby';
-import createLobby from './mutations/createLobby';
-import startLobby from './mutations/startGame';
-import GameTokenData from '../types/gameToken';
 import pubsub from './gamePubSub';
-import submitAnswer from './mutations/submitAnswer';
+import GameTokenData from '../types/gameTokenData';
 import getLobby from './queries/getLobby';
+import getGame from './queries/getGame';
+import canEditGame from './queries/canEditGame';
+import createLobby from './mutations/createLobby';
+import joinLobby from './mutations/joinLobby';
+import startLobby from './mutations/startGame';
+import submitAnswer from './mutations/submitAnswer';
+import editGame from './mutations/editGame';
+import editQuestion from './mutations/editQuestion';
+import deleteQuestion from './mutations/deleteQuestion';
 
 const resolvers = {
-    Query: { getLobby },
-    Mutation: { joinLobby, createLobby, startLobby, submitAnswer },
+    Query: { getLobby, getGame, canEditGame },
+    Mutation: { joinLobby, createLobby, startLobby, submitAnswer, editGame, editQuestion, deleteQuestion },
     Subscription: {
         onGameEvent: {
             subscribe: async (_parent: void, { game_token }: { game_token: string }) => {

@@ -36,7 +36,7 @@ const Image = styled.img`
 
 const GameStart: FunctionComponent<StartGameData> = ({ title, image }) => (
     <Container>
-        <Image src={image} />
+        {image && <Image src={image} />}
         <Title max={36} charsPerPx={7} min={14}>
             {title}
         </Title>

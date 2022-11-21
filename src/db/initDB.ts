@@ -70,7 +70,8 @@ const initDB = async () => {
                 id          UUID NOT NULL,
                 title       TEXT NOT NULL,
                 description TEXT NOT NULL,
-                image       TEXT NOT NULL
+                image       TEXT,
+                creator     TEXT NOT NULL
             );`,
             []
         );
@@ -79,8 +80,8 @@ const initDB = async () => {
         await client.query(
             `CREATE TABLE IF NOT EXISTS questions(
                 id       UUID   NOT NULL,
-                order_id BIGSERIAL,
                 game_id  UUID   NOT NULL,
+                index    INT    NOT NULL,
                 title    TEXT   NOT NULL,
                 image    TEXT,
                 type     TEXT   NOT NULL,
@@ -91,6 +92,7 @@ const initDB = async () => {
             []
         );
         await client.query(`CREATE UNIQUE INDEX IF NOT EXISTS questions_idx ON questions (id);`, []);
+        await client.query(`CREATE INDEX IF NOT EXISTS questions_index_idx ON questions (index);`, []); // TODO: check if it is useful
 
         await client.query(
             `CREATE TABLE IF NOT EXISTS answers(

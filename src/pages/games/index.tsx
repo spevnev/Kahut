@@ -56,11 +56,8 @@ const GameBrowser: NextPage<Props> = ({ cards, showMyGames }) => {
     const [showFilters, setShowFilters] = useState(false);
 
     const createGame = async () => {
-        const uuid = generateUUID();
-
-        // create new game
-
-        router.push(`/edit/${uuid}`);
+        // TODO: is it sufficient to just generate uuid here and only register game when user makes any changes?
+        router.push(`/edit/${generateUUID()}`);
     };
 
     return (

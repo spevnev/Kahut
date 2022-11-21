@@ -4,6 +4,7 @@ import { color } from '../../styles/theme';
 import QuestionType from '../../types/question';
 import clockIcon from '../../../public/icons/clock.svg';
 import chevronIcon from '../../../public/icons/chevron.svg';
+import trashIcon from '../../../public/icons/bin.svg';
 import ChangeableImage from '../ChangeableImage';
 import InlineInput from '../InlineInput';
 import Radio from '../Radio';
@@ -23,13 +24,17 @@ const Container = styled.div`
     margin: 10px 0;
 `;
 
-const FoldButton = styled.img`
-    width: 20px;
-    height: 20px;
+const Buttons = styled.div`
     position: absolute;
     top: 8px;
-    right: 8px;
+    right: 4px;
     cursor: pointer;
+
+    & img {
+        width: 20px;
+        height: 20px;
+        margin: 0 4px;
+    }
 `;
 
 const ImageContainer = styled.div`
@@ -94,11 +99,15 @@ type Props = {
     question: QuestionType;
     setQuestion: (value: QuestionType) => void;
     closeQuestion: () => void;
+    deleteQuestion: () => void;
 };
 
-const Question: FunctionComponent<Props> = ({ question, setQuestion, closeQuestion }) => (
+const Question: FunctionComponent<Props> = ({ question, setQuestion, closeQuestion, deleteQuestion }) => (
     <Container>
-        <FoldButton src={chevronIcon.src} onClick={closeQuestion} />
+        <Buttons>
+            <img src={trashIcon.src} onClick={deleteQuestion} />
+            <img src={chevronIcon.src} onClick={closeQuestion} />
+        </Buttons>
         <div>
             <ImageContainer>
                 <ChangeableImage src={question.image} onChange={image => setQuestion({ ...question, image })} />
