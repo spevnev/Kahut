@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import styled from 'styled-components';
 import { v4 as generateUUID } from 'uuid';
-import GameCardType from '../../types/gameCard';
+import GameInfo from '../../types/gameInfo';
 import GameCard from '../../components/gameBrowser/GameCard';
 import Header from '../../components/Header';
 import SearchBar from '../../components/gameBrowser/SearchBar';
@@ -47,7 +47,7 @@ const CreateButton = styled.button`
 `;
 
 type Props = {
-    cards: GameCardType[];
+    cards: GameInfo[];
     showMyGames?: boolean;
 };
 

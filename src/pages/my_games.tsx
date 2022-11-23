@@ -1,8 +1,8 @@
 import { GetServerSideProps, NextPage } from 'next';
-import GameCard from '../types/gameCard';
+import GameInfo from '../types/gameInfo';
 import GameBrowser from './games';
 
-const UsersGames: NextPage<{ cards: GameCard[] }> = ({ cards }) => <GameBrowser cards={cards} showMyGames={true} />;
+const UsersGames: NextPage<{ cards: GameInfo[] }> = ({ cards }) => <GameBrowser cards={cards} showMyGames={true} />;
 
 export const getServerSideProps: GetServerSideProps = async ({}) => {
     // TODO: fetch user's games

@@ -1,10 +1,11 @@
 import { FunctionComponent } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import GameCardProps from '../../types/gameCard';
+import GameCardProps from '../../types/gameInfo';
 import { color } from '../../styles/theme';
 import starIcon from '../../../public/icons/star.svg';
 import { limitStringTo, numberFormatter } from '../../utils/helper';
+import imagePlaceholder from '../../../public/images/image-placeholder.png';
 
 const Container = styled.div`
     display: flex;
@@ -85,13 +86,13 @@ const UserIcon = styled.img`
     margin-right: 5px;
 `;
 
-const GameCard: FunctionComponent<GameCardProps> = ({ image, title, description, id, questions, players, rating, user }) => {
+const GameCard: FunctionComponent<GameCardProps> = ({ image, title, description, id, questions, players, rating, creator }) => {
     const router = useRouter();
 
     return (
         <Container onClick={() => router.push(`/games/${id}`)}>
             <ImageContainer>
-                <img style={{ height: '100%' }} src={image} alt="Game card's image" />
+                <img style={{ height: '100%' }} src={image || imagePlaceholder.src} alt="Game card's image" />
             </ImageContainer>
 
             <TextContainer>
@@ -107,10 +108,7 @@ const GameCard: FunctionComponent<GameCardProps> = ({ image, title, description,
                     <Description>{limitStringTo(description, 150)}</Description>
                 </div>
 
-                <Row>
-                    <UserIcon src={user.avatar} />
-                    <SecondaryText>{user.username}</SecondaryText>
-                </Row>
+                <SecondaryText>{creator}</SecondaryText>
             </TextContainer>
         </Container>
     );

@@ -5,7 +5,7 @@ import { useContext } from 'react';
 import { gql, useMutation } from '@apollo/client';
 import jwt from 'jsonwebtoken';
 import { color } from '../../styles/theme';
-import GameCard from '../../types/gameCard';
+import GameInfo from '../../types/gameInfo';
 import Header from '../../components/Header';
 import { AuthContext } from '../../providers/GoogleAuthProvider';
 import { numberFormatter } from '../../utils/helper';
@@ -112,7 +112,7 @@ const UserIcon = styled.img`
 `;
 
 type Props = {
-    card: GameCard;
+    card: GameInfo;
     isCreator: boolean;
 };
 
