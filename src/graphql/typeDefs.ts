@@ -67,6 +67,7 @@ const typeDefs = gql`
         submitAnswer(game_token: String!, question_id: String!, answers: [Int!]!): Boolean!
 
         editGame(token: String!, game: GameInfo!): Boolean!
+        deleteGame(token: String!, id: String!): Boolean!
 
         editQuestion(token: String!, question: IQuestion!, id: String!): Boolean!
         deleteQuestion(token: String!, game_id: String!, question_id: String!): Boolean!

@@ -11,6 +11,7 @@ import { gql, useMutation } from '@apollo/client';
 import createApolloClient from '../../graphql/apolloClient';
 import { getCookie } from '../../utils/cookies';
 import { areGamesEqual, areQuestionsEqual } from '../../utils/compareTypes';
+import DeleteGameButton from '../../components/editGame/DeleteGameButton';
 
 const GET_GAME = gql`
     query getGame($id: String!) {
@@ -118,6 +119,7 @@ const EditGame: NextPage<Props> = ({ game: _game, isNew }) => {
             <div style={{ padding: '0 20px' }}>
                 <GeneralInfo game={game} setGame={setGame} />
                 <Questions game={game} setGame={setGame} />
+                {prevGameRef.current && <DeleteGameButton gameId={game.id} />}
             </div>
         </>
     );

@@ -9,12 +9,13 @@ import joinLobby from './mutations/joinLobby';
 import startLobby from './mutations/startGame';
 import submitAnswer from './mutations/submitAnswer';
 import editGame from './mutations/editGame';
+import deleteGame from './mutations/deleteGame';
 import editQuestion from './mutations/editQuestion';
 import deleteQuestion from './mutations/deleteQuestion';
 
 const resolvers = {
     Query: { getLobby, getGame, canEditGame },
-    Mutation: { joinLobby, createLobby, startLobby, submitAnswer, editGame, editQuestion, deleteQuestion },
+    Mutation: { joinLobby, createLobby, startLobby, submitAnswer, editGame, deleteGame, editQuestion, deleteQuestion },
     Subscription: {
         onGameEvent: {
             subscribe: async (_parent: void, { game_token }: { game_token: string }) => {
