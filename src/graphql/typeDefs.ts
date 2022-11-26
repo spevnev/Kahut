@@ -29,6 +29,7 @@ const typeDefs = gql`
     }
 
     type Query {
+        getGame(id: String!): OGame
         getGames(limit: Int!, after: String): [OGame!]!
 
         canEditGame(token: String!, id: String!): Boolean!

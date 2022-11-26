@@ -3,6 +3,7 @@ import pubsub from './gamePubSub';
 import GameTokenData from '../types/gameTokenData';
 import getLobby from './queries/getLobby';
 import getGame from './queries/getGame';
+import getGames from './queries/getGames';
 import canEditGame from './queries/canEditGame';
 import createLobby from './mutations/createLobby';
 import joinLobby from './mutations/joinLobby';
@@ -14,7 +15,7 @@ import editQuestion from './mutations/editQuestion';
 import deleteQuestion from './mutations/deleteQuestion';
 
 const resolvers = {
-    Query: { getLobby, getGame, canEditGame },
+    Query: { getLobby, getGame, getGames, canEditGame },
     Mutation: { joinLobby, createLobby, startLobby, submitAnswer, editGame, deleteGame, editQuestion, deleteQuestion },
     Subscription: {
         onGameEvent: {

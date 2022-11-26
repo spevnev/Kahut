@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'react';
+import { forwardRef, FunctionComponent } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import GameCardProps from '../../types/gameInfo';
@@ -71,11 +71,11 @@ const Row = styled.div`
     margin: 2px 0;
 `;
 
-const GameCard: FunctionComponent<GameCardProps> = ({ image, title, description, id, questions, players }) => {
+const GameCard: FunctionComponent<GameCardProps> = ({ image, title, description, id, questions, players }, ref) => {
     const router = useRouter();
 
     return (
-        <Container onClick={() => router.push(`/games/${id}`)}>
+        <Container onClick={() => router.push(`/games/${id}`)} ref={ref}>
             <ImageContainer>
                 <img style={{ height: '100%' }} src={image || imagePlaceholder.src} alt="Game card's image" />
             </ImageContainer>
@@ -96,4 +96,4 @@ const GameCard: FunctionComponent<GameCardProps> = ({ image, title, description,
     );
 };
 
-export default GameCard;
+export default forwardRef(GameCard as any);
