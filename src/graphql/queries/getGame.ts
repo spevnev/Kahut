@@ -2,7 +2,7 @@ import Game from '../../types/game';
 import { ResolverContext } from '../apolloServer';
 
 const GET_GAME = `
-    SELECT id, title, description, image, questions
+    SELECT g.*, questions
     FROM (
         SELECT
             game_id,
@@ -11,7 +11,7 @@ const GET_GAME = `
         WHERE game_id = $1
         GROUP BY game_id
     ) AS questions
-    RIGHT JOIN games ON game_id = id
+    RIGHT JOIN games g ON game_id = id
     WHERE id = $1;
 `;
 const getGame = async (_parent: void, { id }: { id: string }, { db }: ResolverContext): Promise<null | Game> => {

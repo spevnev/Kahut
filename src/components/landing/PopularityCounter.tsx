@@ -1,4 +1,4 @@
-import { FunctionComponent, RefObject, useState } from 'react';
+import { FunctionComponent, useState } from 'react';
 import styled from 'styled-components';
 import useOnVisible from '../../hooks/useOnVisible';
 
@@ -24,13 +24,13 @@ const PopularityCounter: FunctionComponent = () => {
         if (_counter > 0) setTimeout(decrease, 17);
     };
 
-    const ref = useOnVisible({
+    const [containerRef] = useOnVisible({
         positionCoefficient: 3 / 4,
         callback: decrease,
     });
 
     return (
-        <Container ref={ref}>
+        <Container ref={containerRef}>
             <Text>More than</Text>
             <Text big>{counter}</Text>
             <Text>users each year</Text>

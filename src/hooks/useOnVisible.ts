@@ -14,10 +14,7 @@ const useOnVisible = ({ positionCoefficient, callback }: Props) => {
 
     const _callback = () => {
         if (wasSeen.current || !isVisible(ref.current, positionCoefficient)) return;
-
         wasSeen.current = true;
-        window.removeEventListener('scroll', _callback);
-        window.removeEventListener('resize', _callback);
 
         callback();
     };
@@ -32,7 +29,7 @@ const useOnVisible = ({ positionCoefficient, callback }: Props) => {
         };
     }, []);
 
-    return ref;
+    return [ref, wasSeen];
 };
 
 export default useOnVisible;

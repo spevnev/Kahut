@@ -66,17 +66,17 @@ const SearchBar: FunctionComponent<Props> = ({ showFilters, hideFilters }) => {
     const [filters, setFilters] = useState<{ [key: string]: any }>({});
     const [prompt, setPrompt] = useState('');
 
-    const inputDebounce = useDebounce(
-        (prompt: string) => {},
-        (_, cur: string) => {
+    const inputDebounce = useDebounce<string>(
+        prompt => {},
+        (_, cur) => {
             setPrompt(cur);
             return cur;
         },
         500
     );
 
-    const filterDebounce = useDebounce(
-        (obj: { [key: string]: any }) => setFilters(obj),
+    const filterDebounce = useDebounce<{ [key: string]: any }>(
+        obj => setFilters(obj),
         (prev, cur) => ({ ...prev, ...cur }),
         100
     );
@@ -88,7 +88,6 @@ const SearchBar: FunctionComponent<Props> = ({ showFilters, hideFilters }) => {
 
             {showFilters && (
                 <PopupContainer>
-                    <InputColumn title="search by" options={['title', 'creator']} onChange={value => filterDebounce({ search_by: value })} />
                     <InputColumn
                         title="rating"
                         options={['any', { isInput: true, defaultValue: 4, label: '+' }]}

@@ -71,8 +71,8 @@ const EditGame: NextPage<Props> = ({ game: _game, isNew }) => {
 
     const prevGameRef = useRef<Game | undefined>(isNew ? undefined : _game);
     const [game, _setGame] = useState(_game);
-    const setGame = useDebounce(
-        async (game: Game) => {
+    const setGame = useDebounce<Game>(
+        async game => {
             const prevGame = prevGameRef.current;
             const token = getCookie('token');
 

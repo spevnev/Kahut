@@ -45,7 +45,7 @@ const showAnswer = async ({ lobbyId, questions, finishTime }: { lobbyId: string;
     publish(lobbyId, { event: 'SHOW_ANSWER', data: { question, points: getScoreRes.rows } });
 
     const nextEventDate = new Date(Date.now() + 10 * 1000);
-    if (questions.length === 0) await getPublishers().endGamePub.pub({ lobbyId, questionsNum: question.index + 1 }, nextEventDate);
+    if (questions.length === 0) await getPublishers().endGamePub.pub({ lobbyId, questionNum: question.index + 1 }, nextEventDate);
     else await getPublishers().showQuestionPub.pub({ lobbyId, questions }, nextEventDate);
 };
 

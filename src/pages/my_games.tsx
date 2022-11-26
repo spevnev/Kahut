@@ -4,7 +4,7 @@ import GameBrowser from './games';
 
 const UsersGames: NextPage<{ cards: GameInfo[] }> = ({ cards }) => <GameBrowser cards={cards} showMyGames={true} />;
 
-export const getServerSideProps: GetServerSideProps = async ({}) => {
+export const getServerSideProps: GetServerSideProps = async () => {
     // TODO: fetch user's games
     return { props: { cards: [] } };
 };

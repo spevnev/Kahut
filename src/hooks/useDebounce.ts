@@ -1,13 +1,14 @@
 import { useRef } from 'react';
 
-type DebounceFunction = (data: any) => void;
-type MergeFunction = (data: any, dataEl: any) => any;
+type CallbackFunction<T> = (data: T) => void;
+type DebounceFunction<T> = (data: T) => void;
+type MergeFunction<T> = (data: T, dataEl: T) => T;
 
-const useDebounce = (callback: DebounceFunction, merge: MergeFunction, delay: number): DebounceFunction => {
+const useDebounce = <T>(callback: CallbackFunction<T>, merge: MergeFunction<T>, delay: number) => {
     const timeout = useRef<NodeJS.Timeout>();
     const data = useRef<any>();
 
-    const debounce: DebounceFunction = (dataEl: any) => {
+    const debounce: DebounceFunction<T> = dataEl => {
         data.current = merge(data.current, dataEl);
 
         if (timeout.current) clearTimeout(timeout.current);

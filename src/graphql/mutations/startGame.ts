@@ -5,7 +5,7 @@ import { ResolverContext } from '../apolloServer';
 
 type StartLobbyArgs = { game_token: string };
 
-const startLobby = async (_parent: void, { game_token }: StartLobbyArgs, { db, pubs: { startGamePub } }: ResolverContext): Promise<boolean> => {
+const startLobby = async (_parent: void, { game_token }: StartLobbyArgs, { pubs: { startGamePub } }: ResolverContext): Promise<boolean> => {
     if (!(await verifyJwt(game_token))) return false;
 
     const { isHost, code } = jwt.decode(game_token) as GameTokenData;

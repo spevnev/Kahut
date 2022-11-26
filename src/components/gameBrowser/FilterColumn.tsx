@@ -3,8 +3,6 @@ import styled from 'styled-components';
 import { color } from '../../styles/theme';
 import Radio from '../Radio';
 
-const Container = styled.div``;
-
 const Title = styled.p`
     font-size: 16px;
     font-weight: 200;
@@ -55,7 +53,7 @@ const InputColumn: FunctionComponent<Props> = ({ title, options, onChange }) => 
     useEffect(() => onChange(typeof options[0] === 'string' ? options[0] : options[0].defaultValue || options[0].label), []);
 
     return (
-        <Container>
+        <div>
             <Title>{title}</Title>
 
             {options.map((option, idx) => {
@@ -84,7 +82,7 @@ const InputColumn: FunctionComponent<Props> = ({ title, options, onChange }) => 
                     );
                 }
             })}
-        </Container>
+        </div>
     );
 };
 

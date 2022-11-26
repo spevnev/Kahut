@@ -7,7 +7,7 @@ const CLOSE_LOBBY_AND_GET_GAME = `
     WITH close_lobby AS (
         UPDATE lobbies
         SET state = 'INGAME'
-        WHERE code = $1 AND state = 'OPEN';
+        WHERE code = $1 AND state = 'OPEN'
     )
     SELECT title, image, questions
     FROM (
