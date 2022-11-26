@@ -1,10 +1,45 @@
 import { gql } from '@apollo/client';
 
 const typeDefs = gql`
-    input IQuestion {
+    type OQuestion {
+        id: String!
+        index: Int!
+        title: String!
+        image: String
+        type: String!
+        time: Int!
+        choices: [String!]!
+        answers: [Int!]!
+    }
+
+    type OGame {
         id: String!
         title: String!
+        description: String!
+        image: String
+        questions: [OQuestion!]!
+        questionNum: Int!
+        creator: String!
+        players: Int!
+    }
+
+    type GetLobbyResponse {
+        state: String!
+        players: [String!]!
+    }
+
+    type Query {
+        getGames(limit: Int!, after: String): [OGame!]!
+
+        canEditGame(token: String!, id: String!): Boolean!
+
+        getLobby(game_token: String!): GetLobbyResponse
+    }
+
+    input IQuestion {
+        id: String!
         index: Int!
+        title: String!
         image: String
         type: String!
         time: Int!
@@ -14,39 +49,9 @@ const typeDefs = gql`
 
     input GameInfo {
         id: String!
-        image: String
         title: String!
         description: String!
-    }
-
-    type OQuestion {
-        id: String!
-        title: String!
         image: String
-        index: Int!
-        type: String!
-        time: Int!
-        choices: [String!]!
-        answers: [Int!]!
-    }
-
-    type OGame {
-        id: String!
-        questions: [OQuestion!]!
-        image: String
-        title: String!
-        description: String!
-    }
-
-    type GetLobbyResponse {
-        state: String!
-        players: [String!]!
-    }
-
-    type Query {
-        getLobby(game_token: String!): GetLobbyResponse
-        getGame(id: String!): OGame
-        canEditGame(token: String!, id: String!): Boolean!
     }
 
     type JoinLobbyResponse {

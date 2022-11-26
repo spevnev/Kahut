@@ -24,6 +24,9 @@ const resolvers = {
             },
         },
     },
+    OGame: {
+        questionNum: ({ question_num }: { question_num: number }) => question_num,
+    },
 };
 
 export default resolvers;
