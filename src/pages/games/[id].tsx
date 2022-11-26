@@ -11,6 +11,8 @@ import { AuthContext } from '../../providers/GoogleAuthProvider';
 import { numberFormatter } from '../../utils/helper';
 import { getCookie, setCookie } from '../../utils/cookies';
 import GameTokenData from '../../types/gameTokenData';
+import createApolloClient from '../../graphql/apolloClient';
+import User from '../../types/user';
 
 const Container = styled.div`
     display: flex;
@@ -100,6 +102,19 @@ const CREATE_LOBBY_MUTATION = gql`
     }
 `;
 
+const GET_GAME = gql`
+    query getGame($id: String!) {
+        getGame(id: $id) {
+            id
+            title
+            description
+            image
+            players
+            creator
+            questionNum
+        }
+    }
+`;
 
 type Props = {
     card: GameInfo & { creator: string };
@@ -148,28 +163,17 @@ const GameDetails: NextPage<Props> = ({ isCreator, card: { id, image, title, des
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-    // TODO: check if exists + get data
+export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {
     const { id } = query;
-    if (!id) return { notFound: true };
+    const token = req?.cookies?.token;
+    const email = token ? (jwt.decode(token) as User | undefined)?.email : null;
+    const apollo = createApolloClient();
 
-    return {
-        props: {
-            isCreator: false,
-            card: {
-                id,
-                title: 'sth',
-                rating: 4,
-                questions: 7,
-                players: 1,
-                description: '',
-                user: {
-                    avatar: '',
-                    username: 'sth',
-                },
-            },
-        },
-    };
+    const getGameRes = await apollo.query({ query: GET_GAME, variables: { id } });
+    const game = getGameRes.data.getGame;
+    if (!game) return { notFound: true };
+
+    return { props: { isCreator: game.creator === email, card: game } };
 };
 
 export default GameDetails;
