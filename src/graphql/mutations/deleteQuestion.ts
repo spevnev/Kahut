@@ -4,11 +4,17 @@ import { verifyJwt } from '../../utils/jwt';
 import { ResolverContext } from '../apolloServer';
 
 const DELETE_QUESTION_IF_CREATOR = `
+    WITH game AS (
+        SELECT (COUNT(1) = 0) AS can_edit
+        FROM games WHERE id = $2 AND creator != $3
+    ), update_game AS (
+        UPDATE games
+        SET question_num = question_num - 1
+        FROM game
+        WHERE game.can_edit
+    )
     DELETE FROM questions
-    WHERE id = $1 AND game_id = $2 AND (
-        SELECT (count(1) = 0) FROM games
-        WHERE id = $2 AND creator != $3
-    );
+    WHERE id = $1 AND game_id = $2 AND (SELECT game.can_edit FROM game);
 `;
 
 type DeleteQuestionArgs = {
