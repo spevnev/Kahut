@@ -1,5 +1,6 @@
 import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
+import theme from '../styles/theme';
 
 const FAVICONS = ['red.ico', 'blue.ico', 'yellow.ico', 'green.ico'];
 export default class MyDocument extends Document {
@@ -36,7 +37,7 @@ export default class MyDocument extends Document {
                     <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
                     <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100;0,200;0,300;0,400;1,500&display=swap" rel="stylesheet" />
                 </Head>
-                <body>
+                <body style={{ background: '#3e4658', color: theme['white0'] }}>
                     <Main />
                     <NextScript />
                 </body>

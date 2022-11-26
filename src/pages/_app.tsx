@@ -4,12 +4,12 @@ import Head from 'next/head';
 import jwt from 'jsonwebtoken';
 import { ApolloProvider } from '@apollo/client';
 import { useApollo } from '../hooks/useApollo';
-import GlobalStyles from '../styles/globalStyles';
 import { isBrowser } from '../utils/helper';
 import { getCookie } from '../utils/cookies';
 import GoogleAuthProvider from '../providers/GoogleAuthProvider';
 import FileUploadProvider from '../providers/FileUploadProvider';
 import User from '../types/user';
+import GlobalStyles from '../styles/globalStyles';
 
 type Props = AppProps & { props: { user?: User }; pageProps: any };
 
