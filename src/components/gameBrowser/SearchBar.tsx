@@ -89,11 +89,6 @@ const SearchBar: FunctionComponent<Props> = ({ showFilters, hideFilters }) => {
             {showFilters && (
                 <PopupContainer>
                     <InputColumn
-                        title="rating"
-                        options={['any', { isInput: true, defaultValue: 4, label: '+' }]}
-                        onChange={value => filterDebounce({ rating: value })}
-                    />
-                    <InputColumn
                         title="questions"
                         options={['any', { isInput: true, defaultValue: 10, label: '+' }]}
                         onChange={value => filterDebounce({ questions: value })}

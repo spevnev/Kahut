@@ -91,31 +91,6 @@ const SecondaryButton = styled(Button)`
     }
 `;
 
-const User = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin: 5px 0;
-`;
-
-const Username = styled.p`
-    font-size: 16px;
-    font-weight: 200;
-    color: ${color('white1')};
-`;
-
-const UserIcon = styled.img`
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    margin-right: 5px;
-`;
-
-type Props = {
-    card: GameInfo;
-    isCreator: boolean;
-};
-
 const CREATE_LOBBY_MUTATION = gql`
     mutation createLobby($game_id: String!, $token: String!) {
         createLobby(game_id: $game_id, token: $token) {
@@ -125,7 +100,13 @@ const CREATE_LOBBY_MUTATION = gql`
     }
 `;
 
-const GameDetails: NextPage<Props> = ({ isCreator, card: { id, image, title, description, questions, players, rating, user: creator } }) => {
+
+type Props = {
+    card: GameInfo & { creator: string };
+    isCreator: boolean;
+};
+
+const GameDetails: NextPage<Props> = ({ isCreator, card: { id, image, title, description, questions, players, creator } }) => {
     const { user } = useContext(AuthContext);
     const router = useRouter();
     const [createLobby] = useMutation(CREATE_LOBBY_MUTATION);
@@ -134,7 +115,6 @@ const GameDetails: NextPage<Props> = ({ isCreator, card: { id, image, title, des
         if (!user) return;
 
         const { data } = await createLobby({ variables: { game_id: id, token: getCookie('token') } });
-
         const { code, token } = data.createLobby;
         if (!code || !token) return;
 
@@ -153,13 +133,9 @@ const GameDetails: NextPage<Props> = ({ isCreator, card: { id, image, title, des
             <Details>
                 <Title>{title}</Title>
                 <Info>
-                    {rating} / 5 • {questions} questions • {numberFormatter.format(players)} players
+                    {questions} questions • {numberFormatter.format(players)} players
                 </Info>
                 <Description>{description}</Description>
-                <User>
-                    <UserIcon src={creator.avatar} />
-                    <Username>{creator.username}</Username>
-                </User>
             </Details>
 
             <Buttons>

@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import GameCardProps from '../../types/gameInfo';
 import { color } from '../../styles/theme';
-import starIcon from '../../../public/icons/star.svg';
 import { limitStringTo, numberFormatter } from '../../utils/helper';
 import imagePlaceholder from '../../../public/images/image-placeholder.png';
 
@@ -33,13 +32,6 @@ const ImageContainer = styled.div`
     display: flex;
     justify-content: center;
     background: ${color('black2')};
-`;
-
-const Icon = styled.img`
-    width: 10px;
-    height: 10px;
-    margin-left: 2px;
-    margin-bottom: 2px;
 `;
 
 const TextContainer = styled.div`
@@ -79,14 +71,7 @@ const Row = styled.div`
     margin: 2px 0;
 `;
 
-const UserIcon = styled.img`
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    margin-right: 5px;
-`;
-
-const GameCard: FunctionComponent<GameCardProps> = ({ image, title, description, id, questions, players, rating, creator }) => {
+const GameCard: FunctionComponent<GameCardProps> = ({ image, title, description, id, questions, players }) => {
     const router = useRouter();
 
     return (
@@ -99,16 +84,13 @@ const GameCard: FunctionComponent<GameCardProps> = ({ image, title, description,
                 <div>
                     <Row>
                         <SecondaryText>
-                            {questions} questions • {numberFormatter.format(players)} players • {rating} / 5
+                            {questions} questions • {numberFormatter.format(players)} players
                         </SecondaryText>
-                        <Icon src={starIcon.src} />
                     </Row>
 
                     <Title>{limitStringTo(title, 60)}</Title>
                     <Description>{limitStringTo(description, 150)}</Description>
                 </div>
-
-                <SecondaryText>{creator}</SecondaryText>
             </TextContainer>
         </Container>
     );
