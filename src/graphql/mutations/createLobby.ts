@@ -5,9 +5,9 @@ import { ResolverContext } from '../apolloServer';
 import { GAME_TOKEN_DURATION, JOIN_LOBBY } from './joinLobby';
 
 const CREATE_LOBBY = `
-    INSERT INTO lobbies(game_id) 
-    VALUES ($1) 
-    ON CONFLICT DO NOTHING 
+    INSERT INTO lobbies(game_id)
+    VALUES ($1)
+    ON CONFLICT DO NOTHING
     RETURNING code;
 `;
 

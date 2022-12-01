@@ -10,7 +10,7 @@ export const JOIN_LOBBY = `
     ), players_count AS (
         SELECT COUNT(1) as players_count FROM players WHERE lobby_id = $2 AND username = $1
     ), insert_player AS (
-        INSERT INTO players(username, lobby_id) 
+        INSERT INTO players(username, lobby_id)
         SELECT $1, $2
         FROM lobby_state, players_count
         WHERE state = 'OPEN' AND players_count = 0

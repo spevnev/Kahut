@@ -4,8 +4,8 @@ import { verifyJwt } from '../../utils/jwt';
 import { ResolverContext } from '../apolloServer';
 
 const SUBMIT_ANSWER = `
-    INSERT INTO answers(username, lobby_id, question_id, answers) 
-    VALUES ($1, $2, $3, $4) 
+    INSERT INTO answers(username, lobby_id, question_id, answers)
+    VALUES ($1, $2, $3, $4)
     ON CONFLICT DO NOTHING;
 `;
 

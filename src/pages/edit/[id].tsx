@@ -114,14 +114,12 @@ const EditGame: NextPage<Props> = ({ game: _game, isNew }) => {
     );
 
     return (
-        <>
+        <div style={{ padding: '0 20px' }}>
             <Header />
-            <div style={{ padding: '0 20px' }}>
-                <GeneralInfo game={game} setGame={setGame} />
-                <Questions game={game} setGame={setGame} />
-                {prevGameRef.current && <DeleteGameButton gameId={game.id} />}
-            </div>
-        </>
+            <GeneralInfo game={game} setGame={setGame} />
+            <Questions game={game} setGame={setGame} />
+            {prevGameRef.current && <DeleteGameButton gameId={game.id} />}
+        </div>
     );
 };
 
