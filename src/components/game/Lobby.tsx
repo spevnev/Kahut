@@ -1,5 +1,4 @@
-import { useMutation } from '@apollo/client';
-import { gql } from 'apollo-server-core';
+import { gql, useMutation } from '@apollo/client';
 import { FunctionComponent, useState } from 'react';
 import styled from 'styled-components';
 import { GamePageProps } from '../../pages/lobby/[code]';

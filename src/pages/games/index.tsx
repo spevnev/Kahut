@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import styled from 'styled-components';
 import { v4 as generateUUID } from 'uuid';
+import { gql, useApolloClient } from '@apollo/client';
 import GameInfo from '../../types/gameInfo';
 import GameCard from '../../components/gameBrowser/GameCard';
 import Header from '../../components/Header';
@@ -9,8 +10,6 @@ import SearchBar from '../../components/gameBrowser/SearchBar';
 import { color } from '../../styles/theme';
 import { useRouter } from 'next/router';
 import createApolloClient from '../../graphql/apolloClient';
-import { gql } from 'apollo-server-core';
-import { useApolloClient } from '@apollo/client';
 import useOnVisible from '../../hooks/useOnVisible';
 import useDebounce from '../../hooks/useDebounce';
 

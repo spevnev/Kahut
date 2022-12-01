@@ -1,13 +1,12 @@
-import { gql } from 'apollo-server-core';
 import { FunctionComponent, useState } from 'react';
+import styled from 'styled-components';
+import {gql, useMutation } from '@apollo/client';
 import { GamePageProps, ShowQuestionData } from '../../pages/lobby/[code]';
-import { useMutation } from '@apollo/client';
 import Radio from '../Radio';
 import Button from '../Button';
 import Checkbox from '../Checkbox';
 import QuizButton from '../QuizButton';
 import TimerLine from '../TimerLine';
-import styled from 'styled-components';
 import { color } from '../../styles/theme';
 import Timer from '../Timer';
 import ScalingText from '../ScalingText';
