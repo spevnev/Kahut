@@ -26,55 +26,55 @@ const DEFAULT_CONFIG: SubscriberConfig = {
 };
 
 const POLL_JOBS_QUERY = (table: string) => `
-WITH ready_jobs AS (
-    SELECT *, (attempts < $1) as is_valid FROM ${table}
-    WHERE taken_until < NOW()
-    ORDER BY order_id
-    LIMIT $2
-    FOR UPDATE SKIP LOCKED
-), updating_jobs AS (
-    UPDATE ${table} t
-	SET attempts = (
-        CASE jobs.taken_until != '-infinity' AND jobs.taken_until < NOW()
-        WHEN true THEN jobs.attempts + 1
-        ELSE jobs.attempts
-        END
-    ), 
-    taken_until = (
-        CASE jobs.is_valid
-        WHEN true THEN NOW() + $3::INT * INTERVAL '1 millisecond'
-        ELSE 'infinity'
-        END
-    ),
-    order_id = (
-        CASE jobs.is_valid
-        WHEN true THEN jobs.order_id
-        ELSE ${MAX_BIGINT}::BIGINT
-        END
-    ),
-    taken_by = $4
-	FROM ready_jobs AS jobs
-	WHERE t.job_id = jobs.job_id
-) 
-SELECT job_id, data FROM ready_jobs 
-WHERE is_valid = true;
+    WITH ready_jobs AS (
+        SELECT *, (attempts < $1) as is_valid FROM ${table}
+        WHERE taken_until < NOW()
+        ORDER BY order_id
+        LIMIT $2
+        FOR UPDATE SKIP LOCKED
+    ), updating_jobs AS (
+        UPDATE ${table} t
+        SET attempts = (
+            CASE jobs.taken_until != '-infinity' AND jobs.taken_until < NOW()
+            WHEN true THEN jobs.attempts + 1
+            ELSE jobs.attempts
+            END
+        ), 
+        taken_until = (
+            CASE jobs.is_valid
+            WHEN true THEN NOW() + $3::INT * INTERVAL '1 millisecond'
+            ELSE 'infinity'
+            END
+        ),
+        order_id = (
+            CASE jobs.is_valid
+            WHEN true THEN jobs.order_id
+            ELSE ${MAX_BIGINT}::BIGINT
+            END
+        ),
+        taken_by = $4
+        FROM ready_jobs AS jobs
+        WHERE t.job_id = jobs.job_id
+    ) 
+    SELECT job_id, data FROM ready_jobs 
+    WHERE is_valid = true;
 `;
 
 const UPDATE_JOBS_QUERY = (table: string, values: string) => `
-UPDATE ${table} t
-SET order_id = (
-    CASE v.finished OR t.attempts = $1
-    WHEN true THEN ${MAX_BIGINT}::BIGINT
-    ELSE t.order_id
-    END
-), taken_until = (
-    CASE v.finished OR t.attempts = $1
-    WHEN true THEN 'infinity'
-    ELSE t.taken_until
-    END
-)
-FROM (VALUES ${values}) AS v(job_id, finished) 
-WHERE t.job_id = v.job_id AND t.taken_by = $2;
+    UPDATE ${table} t
+    SET order_id = (
+        CASE v.finished OR t.attempts = $1
+        WHEN true THEN ${MAX_BIGINT}::BIGINT
+        ELSE t.order_id
+        END
+    ), taken_until = (
+        CASE v.finished OR t.attempts = $1
+        WHEN true THEN 'infinity'
+        ELSE t.taken_until
+        END
+    )
+    FROM (VALUES ${values}) AS v(job_id, finished) 
+    WHERE t.job_id = v.job_id AND t.taken_by = $2;
 `;
 
 const MAX_BIGINT = '9223372036854775807';

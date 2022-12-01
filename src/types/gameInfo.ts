@@ -4,6 +4,8 @@ type GameInfo = {
     description: string;
     image?: string;
     questions: number;
+    questionNum: number;
+    createdAt: Date;
     players: number;
 };
 

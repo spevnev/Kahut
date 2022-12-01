@@ -21,6 +21,7 @@ const typeDefs = gql`
         questionNum: Int!
         creator: String!
         players: Int!
+        createdAt: String!
     }
 
     type GetLobbyResponse {
@@ -30,7 +31,16 @@ const typeDefs = gql`
 
     type Query {
         getGame(id: String!): OGame
-        getGames(limit: Int!, after: String): [OGame!]!
+        getGames(
+            limit: Int!
+            questionNum: Int!
+            orderBy: String!
+            sortingOrder: String!
+            lastId: String
+            lastValue: String
+            creator: String
+            prompt: String
+        ): [OGame!]!
 
         canEditGame(token: String!, id: String!): Boolean!
 

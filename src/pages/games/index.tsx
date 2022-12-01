@@ -1,22 +1,25 @@
-import { useRef, useState } from 'react';
-import { GetServerSideProps, NextPage } from 'next';
+import { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { GetServerSideProps, NextPage } from 'next';
+import { useRouter } from 'next/router';
 import { v4 as generateUUID } from 'uuid';
 import { gql, useApolloClient } from '@apollo/client';
 import GameInfo from '../../types/gameInfo';
 import GameCard from '../../components/gameBrowser/GameCard';
 import Header from '../../components/Header';
-import SearchBar from '../../components/gameBrowser/SearchBar';
+import SearchBar, { SearchOptions } from '../../components/gameBrowser/SearchBar';
 import { color } from '../../styles/theme';
-import { useRouter } from 'next/router';
 import createApolloClient from '../../graphql/apolloClient';
 import useOnVisible from '../../hooks/useOnVisible';
 import useDebounce from '../../hooks/useDebounce';
+import { ParsedUrlQuery } from 'querystring';
 
 const Container = styled.div`
     display: flex;
     flex-direction: column;
     padding: 1vw;
+    min-height: 100vw;
+    overflow: hidden;
 `;
 
 const Cards = styled.div`
@@ -51,14 +54,15 @@ const CreateButton = styled.button`
 `;
 
 const GET_GAMES = gql`
-    query getGames($after: String) {
-        getGames(limit: 30, after: $after) {
+    query getGames($prompt: String, $questionNum: Int!, $orderBy: String!, $sortingOrder: String!, $lastId: String, $lastValue: String) {
+        getGames(limit: 30, prompt: $prompt, lastId: $lastId, lastValue: $lastValue, questionNum: $questionNum, orderBy: $orderBy, sortingOrder: $sortingOrder) {
             id
             title
             description
             image
             players
             questionNum
+            createdAt
         }
     }
 `;
@@ -68,60 +72,91 @@ type Props = {
     showMyGames?: boolean;
 };
 
+const getDefaultSearchOptions = (query: ParsedUrlQuery): SearchOptions => {
+    const prompt = (query.prompt as string) || '';
+    const filters = { questionNum: 'any', orderBy: 'players', sortingOrder: 'DESC', ...query, prompt: undefined };
+
+    return { prompt, filters };
+};
+
 const GameBrowser: NextPage<Props> = ({ cards: _cards, showMyGames }) => {
     const router = useRouter();
     const apollo = useApolloClient();
 
-    const [showFilters, setShowFilters] = useState(false);
     const [cards, setCards] = useState(_cards);
+    const cardsRef = useRef(cards);
 
-    const cardsRef = useRef<GameInfo[] | null>(cards);
+    const [areFiltersOpened, setAreFiltersOpened] = useState(false);
+    const [searchOptions, setSearchOptions] = useState(getDefaultSearchOptions(router.query));
+    const searchOptionsRef = useRef(searchOptions);
+
     const loadMore = useDebounce<void>(
         async () => {
             const cards = cardsRef.current;
-            if (cards === null) return;
+            const lastCard = cards.length === 0 ? undefined : cards[cards.length - 1];
 
-            const { data } = await apollo.query({ query: GET_GAMES, variables: { after: cards[cards.length - 1].id } });
+            const searchOptions = searchOptionsRef.current;
+            const prompt = searchOptions.prompt;
+            let { questionNum, orderBy, sortingOrder } = searchOptions.filters;
+
+            questionNum = showMyGames ? -1 : questionNum === 'any' ? 0 : Number(questionNum);
+
+            const lastValue = lastCard && orderBy && String((lastCard as any)[orderBy.replace('_', '')]);
+            const lastId = lastCard?.id;
+
+            const { data } = await apollo.query({
+                query: GET_GAMES,
+                variables: { lastValue, lastId, questionNum, orderBy, sortingOrder, prompt },
+                fetchPolicy: 'network-only',
+            });
             const newCards = data.getGames;
             const allCards = [...cards, ...newCards];
 
-            if (newCards.length === 0) {
-                cardsRef.current = null;
-                return;
-            }
-
             setCards(allCards);
-            cardsRef.current = allCards;
-            wasSeen.current = false;
+
+            if (newCards.length > 0) {
+                cardsRef.current = allCards;
+                wasSeen.current = false;
+            }
         },
         _ => _,
         333
     );
     const [lastCardRef, wasSeen] = useOnVisible({ callback: loadMore });
 
+    useEffect(() => {
+        if (showMyGames) return;
+
+        searchOptionsRef.current = searchOptions;
+        cardsRef.current = [];
+        wasSeen.current = false;
+
+        loadMore();
+
+        router.replace({ pathname: router.pathname, query: { ...searchOptions.filters, prompt: searchOptions.prompt } });
+    }, [searchOptions]);
+
     const createGame = () => router.push(`/edit/${generateUUID()}`);
 
     return (
-        <>
+        <Container onClick={e => setAreFiltersOpened((e.nativeEvent.composedPath() as HTMLElement[]).filter(el => el.id === 'searchbar').length > 0)}>
             <Header />
-            <Container onClick={e => setShowFilters((e.nativeEvent.composedPath() as HTMLElement[]).filter(el => el.id === 'searchbar').length > 0)}>
-                {!showMyGames && <SearchBar showFilters={showFilters} hideFilters={() => setShowFilters(false)} />}
-
-                <Cards>
-                    {cards.map((card, idx) => (
-                        <GameCard {...card} key={card.id} ref={idx === Math.max(cards.length - 10, 0) ? lastCardRef : undefined} />
-                    ))}
-                </Cards>
-
-                {showMyGames && <CreateButton onClick={createGame}>Create Game +</CreateButton>}
-            </Container>
-        </>
+            {!showMyGames && <SearchBar areFiltersOpened={areFiltersOpened} searchOptions={searchOptions} setSearchOptions={setSearchOptions} />}
+            <Cards>
+                {cards.map((card, idx) => (
+                    <GameCard {...card} key={card.id} ref={idx === Math.max(cards.length - 10, 0) ? lastCardRef : undefined} />
+                ))}
+            </Cards>
+            {showMyGames && <CreateButton onClick={createGame}>Create Game +</CreateButton>}
+        </Container>
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+    if (Object.keys(query).length > 0) return { props: { cards: [] } };
+
     const apollo = createApolloClient();
-    const { data } = await apollo.query({ query: GET_GAMES });
+    const { data } = await apollo.query({ query: GET_GAMES, variables: { questionNum: 0, sortingOrder: 'DESC', orderBy: 'players' } });
 
     return { props: { cards: data.getGames } };
 };

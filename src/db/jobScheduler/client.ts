@@ -34,11 +34,11 @@ class GenericClient<T> {
             await this.client.query(
                 `CREATE TABLE IF NOT EXISTS ${this.table} (
                     order_id      BIGSERIAL,
-                    job_id        TEXT      NOT NULL UNIQUE,
-                    data          JSONB     NOT NULL,
-                    taken_by      TEXT      NOT NULL DEFAULT '',
-                    taken_until   TIMESTAMP NOT NULL DEFAULT '-infinity',
-                    attempts      INT       NOT NULL DEFAULT 0
+                    job_id        TEXT        NOT NULL UNIQUE,
+                    data          JSONB       NOT NULL,
+                    taken_by      TEXT        NOT NULL DEFAULT '',
+                    taken_until   TIMESTAMPTZ NOT NULL DEFAULT '-infinity',
+                    attempts      INT         NOT NULL DEFAULT 0
                 );`,
                 []
             );
