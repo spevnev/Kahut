@@ -121,7 +121,7 @@ type Props = {
     isCreator: boolean;
 };
 
-const GameDetails: NextPage<Props> = ({ isCreator, card: { id, image, title, description, questions, players, creator } }) => {
+const GameDetails: NextPage<Props> = ({ isCreator, card: { id, image, title, description, questionNum, players } }) => {
     const { user } = useContext(AuthContext);
     const router = useRouter();
     const [createLobby] = useMutation(CREATE_LOBBY_MUTATION);
@@ -148,7 +148,7 @@ const GameDetails: NextPage<Props> = ({ isCreator, card: { id, image, title, des
             <Details>
                 <Title>{title}</Title>
                 <Info>
-                    {questions} questions • {numberFormatter.format(players)} players
+                    {questionNum} questions • {numberFormatter.format(players)} players
                 </Info>
                 <Description>{description}</Description>
             </Details>

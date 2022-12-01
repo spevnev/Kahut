@@ -71,7 +71,7 @@ const Row = styled.div`
     margin: 2px 0;
 `;
 
-const GameCard: FunctionComponent<GameCardProps> = ({ image, title, description, id, questions, players }, ref) => {
+const GameCard: FunctionComponent<GameCardProps> = ({ image, title, description, id, questionNum, players }, ref) => {
     const router = useRouter();
 
     return (
@@ -84,7 +84,7 @@ const GameCard: FunctionComponent<GameCardProps> = ({ image, title, description,
                 <div>
                     <Row>
                         <SecondaryText>
-                            {questions} questions • {numberFormatter.format(players)} players
+                            {questionNum} questions • {numberFormatter.format(players)} players
                         </SecondaryText>
                     </Row>
 
