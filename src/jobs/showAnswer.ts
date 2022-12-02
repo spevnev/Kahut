@@ -12,7 +12,7 @@ const UPDATE_SCORE = (values: string) => `
     UPDATE players p 
     SET score = score + add_score, answers = answers + 1
     FROM (VALUES ${values}) AS v(username, add_score) 
-    WHERE p.username = v.username AND lobby_id = $1
+    WHERE p.username = v.username AND lobby_id = $1;
 `;
 
 const GET_SCORE = `SELECT username, score FROM players WHERE lobby_id = $1;`;

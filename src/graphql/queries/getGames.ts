@@ -4,12 +4,11 @@ import { ResolverContext } from '../apolloServer';
 const GET_GAMES = (orderBy: string, sortingOrder: string, lastId?: string, lastValue?: any, creator?: string) => `
     SELECT * 
     FROM games 
-    WHERE
-        ${lastId ? `id > '${lastId}' AND` : ''}
-        ${lastValue ? `${orderBy} ${sortingOrder === 'ASC' ? '>=' : '<='} ${orderBy === 'created_at' ? `TO_TIMESTAMP(${lastValue.slice(0, -3)})` : `${lastValue}::INT`} AND` : ''}
-        ${creator ? `creator = '${creator}' AND` : ''}
-        question_num > $1 AND
+    WHERE question_num > $1 AND
         ($2 = '' OR title LIKE $2)
+        ${lastId ? `AND id > '${lastId}'` : ''}
+        ${lastValue ? `AND ${orderBy} ${sortingOrder === 'ASC' ? '>=' : '<='} ${orderBy === 'created_at' ? `TO_TIMESTAMP(${lastValue.slice(0, -3)})` : `${lastValue}::INT`}` : ''}
+        ${creator ? `AND creator = '${creator}'` : ''}
     ORDER BY ${orderBy} ${sortingOrder}, id ASC
     LIMIT $3;
 `;
@@ -35,6 +34,11 @@ const getGames = async (
 
     if (orderBy !== 'players' && orderBy !== 'created_at' && orderBy !== 'question_num') return [];
     if (sortingOrder !== 'ASC' && sortingOrder !== 'DESC') return [];
+
+    if (lastValue && orderBy === 'question_num') {
+        questionNum = Number(lastValue);
+        lastValue = '';
+    }
 
     const res = await db.query(GET_GAMES(orderBy, sortingOrder, lastId, lastValue, creator), [questionNum, prompt, limit]);
     return res.rows;

@@ -11,7 +11,7 @@ const DELETE_QUESTION_IF_CREATOR = `
         UPDATE games
         SET question_num = question_num - 1
         FROM game
-        WHERE game.can_edit
+        WHERE id = $2 AND game.can_edit
     )
     DELETE FROM questions
     WHERE id = $1 AND game_id = $2 AND (SELECT game.can_edit FROM game);

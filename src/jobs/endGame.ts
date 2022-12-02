@@ -2,18 +2,15 @@ import getClient from '../db/client';
 import { publish } from '../graphql/gamePubSub';
 
 const UPDATE_AND_GET_FINAL_RESULTS = `
-    WITH close_lobby AS (
+    WITH closed_lobby AS (
         UPDATE lobbies
         SET state = 'CLOSED'
         WHERE code = $1
-    ), game AS (
-        SELECT game_id
-        FROM lobbies
-        WHERE code = $1
+        RETURNING game_id
     ), update_game AS (
         UPDATE games
         SET players = players + 1
-        FROM game
+        FROM closed_lobby
         WHERE id = game_id
     )
     SELECT username, answers, score

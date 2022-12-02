@@ -1,6 +1,6 @@
 import { FunctionComponent, useState } from 'react';
 import styled from 'styled-components';
-import {gql, useMutation } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
 import { GamePageProps, ShowQuestionData } from '../../pages/lobby/[code]';
 import Radio from '../Radio';
 import Button from '../Button';
@@ -121,7 +121,7 @@ const QuestionPage: FunctionComponent<Props> = ({ id, title, image, type, index,
     const submitAnswer = async () => {
         if (answers.length === 0) return;
 
-        const { data } = await _submitAnswer({ variables: { game_token: gameToken, question_id: id, answers: answers } });
+        const { data } = await _submitAnswer({ variables: { game_token: gameToken, question_id: id, answers } });
         if (data.submitAnswer) setCanAnswer(false);
     };
 
@@ -168,7 +168,7 @@ const QuestionPage: FunctionComponent<Props> = ({ id, title, image, type, index,
                     })}
                 </Buttons>
 
-                <Button style={{ marginBottom: '10px' }} onClick={submitAnswer}>
+                <Button style={{ marginBottom: '10px' }} onClick={submitAnswer} disable={!canAnswer}>
                     Submit answer
                 </Button>
             </Container>

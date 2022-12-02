@@ -16,8 +16,8 @@ const EDIT_QUESTION_IF_CREATOR = `
     ), update_game AS (
         UPDATE games
         SET question_num = question_num + 1
-        FROM question
-        WHERE NOT question.exists
+        FROM question, game
+        WHERE id = $2 AND game.can_edit AND NOT question.exists
     ), update_question AS (
         UPDATE questions
         SET title = $4, type = $5, image = $6, time = $7, choices = $8, answers = $9
