@@ -1,17 +1,18 @@
-import Subscriber from './subscriber';
-import startGame from '../../jobs/startGame';
-import Publisher from './publisher';
 import { ClientConfig } from 'pg';
+import Subscriber from './subscriber';
+import Publisher from './publisher';
+import startGame from '../../jobs/startGame';
 import showQuestion from '../../jobs/showQuestion';
 import showAnswer from '../../jobs/showAnswer';
 import endGame from '../../jobs/endGame';
 
-const SCHEMA = 'job_schedulers';
+export const JOB_SCHEDULER_SCHEMA = 'job_schedulers';
 
 const START_GAME = 'jobs_start-game';
 const SHOW_QUESTION = 'jobs_show-question';
 const SHOW_ANSWER = 'jobs_show-answer';
 const END_GAME = 'jobs_end-game';
+export const jobSchedulerTables = [START_GAME, SHOW_QUESTION, SHOW_ANSWER, END_GAME];
 
 const CONNECTION_CONFIG: ClientConfig = {};
 
@@ -28,10 +29,10 @@ export const getPublishers = (): Publishers => {
         if (!CONNECTION_CONFIG.connectionString) CONNECTION_CONFIG.connectionString = process.env.DB_CONNECTION_STRING;
 
         publishers = {
-            startGamePub: new Publisher(START_GAME, CONNECTION_CONFIG, {}, SCHEMA),
-            showQuestionPub: new Publisher(SHOW_QUESTION, CONNECTION_CONFIG, {}, SCHEMA),
-            showAnswerPub: new Publisher(SHOW_ANSWER, CONNECTION_CONFIG, {}, SCHEMA),
-            endGamePub: new Publisher(END_GAME, CONNECTION_CONFIG, {}, SCHEMA),
+            startGamePub: new Publisher(START_GAME, CONNECTION_CONFIG, {}, JOB_SCHEDULER_SCHEMA),
+            showQuestionPub: new Publisher(SHOW_QUESTION, CONNECTION_CONFIG, {}, JOB_SCHEDULER_SCHEMA),
+            showAnswerPub: new Publisher(SHOW_ANSWER, CONNECTION_CONFIG, {}, JOB_SCHEDULER_SCHEMA),
+            endGamePub: new Publisher(END_GAME, CONNECTION_CONFIG, {}, JOB_SCHEDULER_SCHEMA),
         };
     }
 
@@ -41,8 +42,8 @@ export const getPublishers = (): Publishers => {
 export const initSubscribers = (): void => {
     if (!CONNECTION_CONFIG.connectionString) CONNECTION_CONFIG.connectionString = process.env.DB_CONNECTION_STRING;
 
-    new Subscriber(startGame, START_GAME, CONNECTION_CONFIG, {}, SCHEMA).sub();
-    new Subscriber(showQuestion, SHOW_QUESTION, CONNECTION_CONFIG, {}, SCHEMA).sub();
-    new Subscriber(showAnswer, SHOW_ANSWER, CONNECTION_CONFIG, {}, SCHEMA).sub();
-    new Subscriber(endGame, END_GAME, CONNECTION_CONFIG, {}, SCHEMA).sub();
+    new Subscriber(startGame, START_GAME, CONNECTION_CONFIG, {}, JOB_SCHEDULER_SCHEMA).sub();
+    new Subscriber(showQuestion, SHOW_QUESTION, CONNECTION_CONFIG, {}, JOB_SCHEDULER_SCHEMA).sub();
+    new Subscriber(showAnswer, SHOW_ANSWER, CONNECTION_CONFIG, {}, JOB_SCHEDULER_SCHEMA).sub();
+    new Subscriber(endGame, END_GAME, CONNECTION_CONFIG, {}, JOB_SCHEDULER_SCHEMA).sub();
 };

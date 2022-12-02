@@ -1,10 +1,11 @@
 import { useRouter } from 'next/router';
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useEffect } from 'react';
 import styled from 'styled-components';
 import { EndGameData, GamePageProps } from '../../pages/lobby/[code]';
 import { color } from '../../styles/theme';
 import { limitStringTo } from '../../utils/helper';
 import Button from '../Button';
+import { deleteCookie } from '../../utils/cookies';
 
 const Container = styled.div`
     position: relative;
@@ -123,6 +124,8 @@ const GameEnd: FunctionComponent<Props> = ({ results, questions, gameData }) => 
     const router = useRouter();
     const sortedResults = results.sort((a, b) => b.score - a.score);
     const currentUserResult = sortedResults.map((result, idx) => ({ ...result, idx })).filter(result => result.username === gameData.username)[0];
+
+    useEffect(() => void deleteCookie('game_token'), []);
 
     return (
         <Container>

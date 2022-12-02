@@ -79,6 +79,7 @@ const initDB = async () => {
             []
         );
         await client.query(`CREATE UNIQUE INDEX IF NOT EXISTS games_idx ON games (id);`, []);
+        await client.query(`CREATE INDEX IF NOT EXISTS games_question-num_idx ON games (question_num);`, []);
 
         await client.query(
             `CREATE TABLE IF NOT EXISTS questions(
@@ -95,7 +96,7 @@ const initDB = async () => {
             []
         );
         await client.query(`CREATE UNIQUE INDEX IF NOT EXISTS questions_idx ON questions (id);`, []);
-        await client.query(`CREATE INDEX IF NOT EXISTS questions_index_idx ON questions (index);`, []); // TODO: check if it is useful
+        await client.query(`CREATE INDEX IF NOT EXISTS questions_game-id_idx ON questions (game_id);`, []);
 
         await client.query(
             `CREATE TABLE IF NOT EXISTS answers(
