@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
+import { ResolverContext } from '../../pages/api/graphql';
 import User from '../../types/user';
 import { createJwt, verifyJwt } from '../../utils/jwt';
-import { ResolverContext } from '../apolloServer';
 import { GAME_TOKEN_DURATION, JOIN_LOBBY } from './joinLobby';
 
 const CREATE_LOBBY = `

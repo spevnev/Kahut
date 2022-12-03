@@ -1,5 +1,5 @@
 import Game from '../../types/game';
-import { ResolverContext } from '../apolloServer';
+import { ResolverContext } from '../../pages/api/graphql';
 
 const GET_GAME = `
     SELECT g.*, questions

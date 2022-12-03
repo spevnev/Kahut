@@ -1,8 +1,8 @@
 import Game from '../../types/game';
-import { ResolverContext } from '../apolloServer';
 import canEditGame from '../queries/canEditGame';
 import jwt from 'jsonwebtoken';
 import User from '../../types/user';
+import { ResolverContext } from '../../pages/api/graphql';
 
 const EDIT_GAME = `
     INSERT INTO games(id, title, description, image, creator)

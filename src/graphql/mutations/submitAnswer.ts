@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
+import { ResolverContext } from '../../pages/api/graphql';
 import GameToken from '../../types/gameTokenData';
 import { verifyJwt } from '../../utils/jwt';
-import { ResolverContext } from '../apolloServer';
 
 const SUBMIT_ANSWER = `
     INSERT INTO answers(username, lobby_id, question_id, answers)

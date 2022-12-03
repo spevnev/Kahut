@@ -1,5 +1,5 @@
+import { ResolverContext } from '../../pages/api/graphql';
 import { createJwt } from '../../utils/jwt';
-import { ResolverContext } from '../apolloServer';
 import { publish } from '../gamePubSub';
 
 export const GAME_TOKEN_DURATION = 60 * 45; // 45m

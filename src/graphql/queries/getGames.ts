@@ -1,5 +1,5 @@
 import GameInfo from '../../types/gameInfo';
-import { ResolverContext } from '../apolloServer';
+import { ResolverContext } from '../../pages/api/graphql';
 
 const GET_GAMES = (orderBy: string, sortingOrder: string, lastId?: string, lastValue?: any, creator?: string) => `
     SELECT * 

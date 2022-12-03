@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import GameTokenData from '../../types/gameTokenData';
 import { verifyJwt } from '../../utils/jwt';
-import { ResolverContext } from '../apolloServer';
+import { ResolverContext } from '../../pages/api/graphql';
 
 const GET_LOBBY_INFO = `
     SELECT state, TO_JSON(ARRAY_AGG(p)) AS players

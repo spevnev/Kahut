@@ -1,9 +1,8 @@
-import next from 'next';
-import { parse } from 'url';
 import { createServer, IncomingMessage, ServerResponse } from 'http';
 import WebSocket, { ServerOptions, WebSocketServer } from 'ws';
+import { parse } from 'url';
+import next from 'next';
 import { useServer } from 'graphql-ws/lib/use/ws';
-import createApolloHandler from './graphql/apolloServer';
 import schema from './graphql/schema';
 import { verifyJwt } from './utils/jwt';
 import initDB from './db/initDB';
@@ -19,15 +18,9 @@ nextApp.prepare().then(async () => {
     initSubscribers();
     initDB();
 
-    const apolloApp = await createApolloHandler();
-    const apolloHandler = apolloApp.createHandler({ path: GRAPHQL_ENDPOINT });
-
     const httpServer = createServer(async (req: IncomingMessage, res: ServerResponse) => {
         try {
-            const parsedUrl = parse(req.url!, true);
-
-            if (parsedUrl.pathname === GRAPHQL_ENDPOINT) await apolloHandler(req, res);
-            else await nextHandler(req, res, parsedUrl);
+            await nextHandler(req, res, parse(req.url!, true));
         } catch (e) {
             console.error(e);
             res.statusCode = 500;

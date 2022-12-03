@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
+import { ResolverContext } from '../../pages/api/graphql';
 import User from '../../types/user';
 import { verifyJwt } from '../../utils/jwt';
-import { ResolverContext } from '../apolloServer';
 
 const GET_GAME_CREATOR = `SELECT creator FROM games WHERE id = $1;`;
 

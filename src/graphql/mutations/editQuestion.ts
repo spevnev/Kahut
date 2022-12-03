@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
+import { ResolverContext } from '../../pages/api/graphql';
 import Question from '../../types/question';
 import User from '../../types/user';
 import { verifyJwt } from '../../utils/jwt';
-import { ResolverContext } from '../apolloServer';
 
 const EDIT_QUESTION_IF_CREATOR = `
     WITH game AS (

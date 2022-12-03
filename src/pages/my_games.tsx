@@ -1,5 +1,5 @@
 import { GetServerSideProps, NextPage } from 'next';
-import { gql } from 'apollo-server-core';
+import { gql } from '@apollo/client';
 import jwt from 'jsonwebtoken';
 import GameInfo from '../types/gameInfo';
 import GameBrowser from './games';
