@@ -102,21 +102,17 @@ type PlaceProps = {
     questions: number;
 };
 
-const Place: FunctionComponent<PlaceProps> = ({ minWidth, width, height, zIndex, result, fontWeight, fontSize, questions }) => {
-    if (!result) return null;
-
-    return (
-        <Block style={{ minWidth, width, height, zIndex }}>
-            <Username fontSize={fontSize} style={{ fontWeight }}>
-                {limitStringTo(result.username, 30)}
-            </Username>
-            <Score>{result.score}</Score>
-            <Answers>
-                {result.answers} out of {questions}
-            </Answers>
-        </Block>
-    );
-};
+const Place: FunctionComponent<PlaceProps> = ({ minWidth, width, height, zIndex, result, fontWeight, fontSize, questions }) => (
+    <Block style={{ minWidth, width, height, zIndex, opacity: result ? 1 : 0 }}>
+        <Username fontSize={fontSize} style={{ fontWeight }}>
+            {limitStringTo(result?.username || '', 30)}
+        </Username>
+        <Score>{result?.score}</Score>
+        <Answers>
+            {result?.answers} out of {questions}
+        </Answers>
+    </Block>
+);
 
 type Props = GamePageProps & EndGameData;
 

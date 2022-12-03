@@ -108,17 +108,19 @@ const Game: NextPage<Props> = ({ gameToken, players: _players, lobbyState: _lobb
         setPlayers([...players, player]);
     }, [playerJoining]);
 
-    if (_lobbyState === 'INGAME' && !startGame && !showQuestion && !showAnswer && !endGame) return <Loading>Waiting for the next question...</Loading>;
+    useEffect(() => {
+        if (startGame) setLobbyState('INGAME');
+        if (endGame) setLobbyState('CLOSED');
+    }, [endGame, startGame]);
 
-    return (
-        <>
-            {lobbyState === 'OPEN' && <Lobby players={players} gameToken={gameToken} gameData={gameData} closeLobby={() => setLobbyState('INGAME')} />}
-            {startGame && <GameStart {...startGame!} />}
-            {showQuestion && <QuestionPage {...showQuestion!} gameToken={gameToken} gameData={gameData} />}
-            {showAnswer && <AnswerPage {...showAnswer!} gameToken={gameToken} gameData={gameData} />}
-            {endGame && <GameEnd {...endGame!} gameToken={gameToken} gameData={gameData} />}
-        </>
-    );
+    if (_lobbyState === 'INGAME' && !startGame && !showQuestion && !showAnswer && !endGame) return <Loading>Waiting for the next question...</Loading>;
+    if (lobbyState === 'OPEN') return <Lobby players={players} gameToken={gameToken} gameData={gameData} closeLobby={() => setLobbyState('INGAME')} />;
+    if (startGame) return <GameStart {...startGame!} />;
+    if (showQuestion) return <QuestionPage {...showQuestion!} gameToken={gameToken} gameData={gameData} />;
+    if (showAnswer) return <AnswerPage {...showAnswer!} gameToken={gameToken} gameData={gameData} />;
+    if (lobbyState === 'CLOSED' || endGame) return <GameEnd {...endGame!} gameToken={gameToken} gameData={gameData} />;
+
+    return null;
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {

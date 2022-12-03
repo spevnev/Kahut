@@ -54,7 +54,7 @@ const PopupContainer = styled.div`
 `;
 
 const PopupInner = styled.div`
-    min-width: 50%;
+    min-width: 320px;
     width: fit-content;
     max-width: 100%;
     display: flex;
@@ -152,51 +152,26 @@ const SearchBar: FunctionComponent<Props> = ({ areFiltersOpened, searchOptions, 
                         <div>
                             <Title>order by</Title>
                             <Option>
-                                <Radio
-                                    name="orderBy"
-                                    id="o_popularity"
-                                    defaultChecked={filters.orderBy === 'players'}
-                                    onChange={() => setFilter('orderBy', 'players')}
-                                />
+                                <Radio name="orderBy" id="o_popularity" defaultChecked={filters.orderBy === 'players'} onChange={() => setFilter('orderBy', 'players')} />
                                 <Label htmlFor="o_popularity">popularity</Label>
                             </Option>
                             <Option>
-                                <Radio
-                                    name="orderBy"
-                                    id="o_creation-date"
-                                    defaultChecked={filters.orderBy === 'created_at'}
-                                    onChange={() => setFilter('orderBy', 'created_at')}
-                                />
+                                <Radio name="orderBy" id="o_creation-date" defaultChecked={filters.orderBy === 'created_at'} onChange={() => setFilter('orderBy', 'created_at')} />
                                 <Label htmlFor="o_creation-date">creation date</Label>
                             </Option>
                             <Option>
-                                <Radio
-                                    name="orderBy"
-                                    id="o_questions"
-                                    defaultChecked={filters.orderBy === 'question_num'}
-                                    onChange={() => setFilter('orderBy', 'question_num')}
-                                />
+                                <Radio name="orderBy" id="o_questions" defaultChecked={filters.orderBy === 'question_num'} onChange={() => setFilter('orderBy', 'question_num')} />
                                 <Label htmlFor="o_questions">questions</Label>
                             </Option>
                         </div>
                         <div>
                             <Title>sorting order</Title>
                             <Option>
-                                <Radio
-                                    name="sortingOrder"
-                                    id="s_descending"
-                                    defaultChecked={filters.sortingOrder === 'DESC'}
-                                    onChange={() => setFilter('sortingOrder', 'DESC')}
-                                />
+                                <Radio name="sortingOrder" id="s_descending" defaultChecked={filters.sortingOrder === 'DESC'} onChange={() => setFilter('sortingOrder', 'DESC')} />
                                 <Label htmlFor="s_descending">descending</Label>
                             </Option>
                             <Option>
-                                <Radio
-                                    name="sortingOrder"
-                                    id="s_ascending"
-                                    defaultChecked={filters.sortingOrder === 'ASC'}
-                                    onChange={() => setFilter('sortingOrder', 'ASC')}
-                                />
+                                <Radio name="sortingOrder" id="s_ascending" defaultChecked={filters.sortingOrder === 'ASC'} onChange={() => setFilter('sortingOrder', 'ASC')} />
                                 <Label htmlFor="s_ascending">ascending</Label>
                             </Option>
                         </div>

@@ -26,7 +26,7 @@ const Cards = styled.div`
     display: grid;
     grid-template-columns: repeat(auto-fill, max(min(15vw, 300px), 200px));
     grid-gap: max(min(2vw, 50px), 5px);
-    justify-content: space-between;
+    justify-content: space-around;
     width: 100%;
     height: 100%;
     margin-top: 1vw;
