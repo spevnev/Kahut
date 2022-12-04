@@ -1,7 +1,18 @@
 {
-    "extends": "next/core-web-vitals",
+    "plugins": ["@typescript-eslint", "eslint-plugin-sonarjs", "eslint-plugin-unicorn", "no-warn"],
+    "extends": [
+        "next/core-web-vitals",
+        "eslint:recommended",
+        "plugin:sonarjs/recommended",
+        "plugin:react/recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:unicorn/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
     "rules": {
+        "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_+" }],
         "react/no-unescaped-entities": "off",
-        "no-unused-vars": "warn"
+        "no-unused-vars": "off",
+        "unicorn/no-null": "off"
     }
 }
