@@ -1,5 +1,5 @@
 import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
-import { NextPage } from 'next';
+import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import StyledInput from '../components/BoxInput';
 import styled from 'styled-components';
@@ -103,5 +103,7 @@ const Play: NextPage = () => {
         </Container>
     );
 };
+
+export const getStaticProps: GetStaticProps = () => ({ props: {} });
 
 export default Play;

@@ -1,4 +1,4 @@
-import { NextPage } from 'next';
+import { GetStaticProps, NextPage } from 'next';
 import styled from 'styled-components';
 import Header from '../components/Header';
 import { ButtonColor } from '../components/QuizButton';
@@ -174,16 +174,16 @@ const Landing: NextPage = () => (
                 <FakeQuizButton color={ButtonColor.GREEN}>Largest learning platform in the room</FakeQuizButton>
             </Buttons>
             <Comments>
-                <CommentReview user={{ name: 'A random dude', image: personImage1 }}>
-                    Kahut is a fantastic way to engage every single student - even remotely.
-                </CommentReview>
+                <CommentReview user={{ name: 'A random dude', image: personImage1 }}>Kahut is a fantastic way to engage every single student - even remotely.</CommentReview>
                 <CommentReview user={{ name: 'Just a stranger', image: personImage2 }}>
-                    Kahut has become one of our "flagship training tools". I believe Kahut is irreplaceable, as it involves learners throughout sessions and also
-                    helps employees retain important information more effectively.
+                    Kahut has become one of our "flagship training tools". I believe Kahut is irreplaceable, as it involves learners throughout sessions and also helps employees
+                    retain important information more effectively.
                 </CommentReview>
             </Comments>
         </Column>
     </Page>
 );
+
+export const getStaticProps: GetStaticProps = () => ({ props: {} });
 
 export default Landing;
