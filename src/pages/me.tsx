@@ -1,9 +1,8 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { color } from '../styles/theme';
-import { isBrowser } from '../utils/helper';
 import Header from '../components/Header';
 import StyledInput from '../components/BoxInput';
 import { AuthContext } from '../providers/GoogleAuthProvider';
@@ -52,9 +51,12 @@ const Profile: NextPage = () => {
     const router = useRouter();
     const { user } = useContext(AuthContext);
 
-    if (isBrowser() && !user) router.push('/');
+    if (!user) {
+        router.push('/');
+        return null;
+    }
 
-    const { name, email, picture } = user!;
+    const { name, email, picture } = user;
     return (
         <Container>
             <Header />

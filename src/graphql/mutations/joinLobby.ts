@@ -2,13 +2,15 @@ import { ResolverContext } from '../../pages/api/graphql';
 import { createJwt } from '../../utils/jwt';
 import { publish } from '../gamePubSub';
 
-export const GAME_TOKEN_DURATION = 60 * 45; // 45m
+export const GAME_TOKEN_DURATION = 60 * 45;
 
 export const JOIN_LOBBY = `
     WITH lobby_state AS (
         SELECT state FROM lobbies WHERE code = $2
     ), players_count AS (
-        SELECT COUNT(1) AS players_count FROM players WHERE lobby_id = $2 AND username = $1
+        SELECT COUNT(1) AS players_count
+        FROM players
+        WHERE lobby_id = $2 AND username = $1
     ), insert_player AS (
         INSERT INTO players(username, lobby_id)
         SELECT $1, $2
