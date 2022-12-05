@@ -1,4 +1,4 @@
-import { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import styled from 'styled-components';
 import { gql, useMutation } from '@apollo/client';
 import { GamePageProps, ShowQuestionData } from '../../pages/lobby/[code]';
@@ -149,16 +149,23 @@ const QuestionPage: FunctionComponent<Props> = ({ id, title, image, type, index,
                 </Row>
 
                 <Buttons>
-                    {choices.map((text, idx) => {
-                        const checkboxOnChange = () => canAnswer && setAnswers(answers.includes(idx) ? answers.filter(val => val !== idx) : [...answers, idx]);
-                        const radioOnChange = () => canAnswer && setAnswers([idx]);
+                    {choices.map((text, index) => {
+                        const checkboxOnChange = () => {
+                            if (!canAnswer) return;
+                            setAnswers(answers.includes(index) ? answers.filter(answerIndex => answerIndex !== index) : [...answers, index]);
+                        };
+
+                        const radioOnChange = () => {
+                            if (!canAnswer) return;
+                            setAnswers([index]);
+                        };
 
                         return (
-                            <QuestionQuizButton key={idx} color={idx} disabled={!canAnswer} onClick={type === 'single' ? radioOnChange : checkboxOnChange}>
+                            <QuestionQuizButton key={index} color={index} disabled={!canAnswer} onClick={type === 'single' ? radioOnChange : checkboxOnChange}>
                                 {type === 'single' ? (
-                                    <Radio name="radio" checked={answers[0] === idx} onChange={radioOnChange} disabled={!canAnswer} />
+                                    <Radio name="radio" checked={answers[0] === index} onChange={radioOnChange} disabled={!canAnswer} />
                                 ) : (
-                                    <Checkbox checked={answers.filter(val => val === idx).length > 0} onChange={checkboxOnChange} disabled={!canAnswer} />
+                                    <Checkbox checked={answers.includes(index)} onChange={checkboxOnChange} disabled={!canAnswer} />
                                 )}
                                 <ScalingText max={22} charsPerPx={25} min={10}>
                                     {text}

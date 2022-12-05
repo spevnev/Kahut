@@ -1,5 +1,5 @@
+import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
-import { FunctionComponent } from 'react';
 import clockIcon from '../../../public/icons/clock.svg';
 import { color } from '../../styles/theme';
 import QuestionType from '../../types/question';

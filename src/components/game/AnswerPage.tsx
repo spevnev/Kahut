@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect, useState } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { GamePageProps, ShowAnswerData } from '../../pages/lobby/[code]';
 import { color } from '../../styles/theme';
@@ -66,7 +66,7 @@ const AnswerPage: FunctionComponent<GamePageProps & ShowAnswerData> = ({ questio
     useEffect(() => void setTimeout(() => setShowLeaderboard(true), 5000), []);
 
     if (showLeaderboard) {
-        const curUsername = gameData?.username;
+        const myUsername = gameData?.username;
 
         return (
             <Container style={{ justifyContent: 'normal' }}>
@@ -76,7 +76,7 @@ const AnswerPage: FunctionComponent<GamePageProps & ShowAnswerData> = ({ questio
                         .sort((a, b) => b.score - a.score)
                         .map(({ username, score }) => (
                             <ListElement key={username}>
-                                <Username bold={curUsername === username}>{username + (curUsername === username ? ' (you)' : '')}</Username>
+                                <Username bold={myUsername === username}>{username + (myUsername === username ? ' (you)' : '')}</Username>
                                 <Score>{score}</Score>
                             </ListElement>
                         ))}
@@ -93,16 +93,12 @@ const AnswerPage: FunctionComponent<GamePageProps & ShowAnswerData> = ({ questio
                 <Image src={image} />
 
                 <Buttons style={{ marginBottom: '20px' }}>
-                    {choices.map((text, idx) => {
-                        const isCorrect = answers.filter(val => val === idx).length > 0;
+                    {choices.map((text, index) => {
+                        const isCorrect = answers.includes(index);
 
                         return (
-                            <QuestionQuizButton key={idx} color={idx} disabled={!isCorrect}>
-                                {type === 'single' ? (
-                                    <Radio name="radio" defaultChecked={isCorrect} disabled={true} />
-                                ) : (
-                                    <Checkbox defaultChecked={isCorrect} disabled={true} />
-                                )}
+                            <QuestionQuizButton key={index} color={index} disabled={!isCorrect}>
+                                {type === 'single' ? <Radio name="radio" defaultChecked={isCorrect} disabled={true} /> : <Checkbox defaultChecked={isCorrect} disabled={true} />}
                                 <ScalingText max={22} charsPerPx={25} min={10}>
                                     {text}
                                 </ScalingText>

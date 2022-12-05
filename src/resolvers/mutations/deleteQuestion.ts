@@ -27,9 +27,9 @@ const deleteQuestion = async (_parent: void, { token, game_id, question_id }: De
     if (!(await verifyJwt(token))) return false;
     const { email } = jwt.decode(token) as User;
 
-    const res = await db.query(DELETE_QUESTION_IF_CREATOR, [question_id, game_id, email]);
+    const response = await db.query(DELETE_QUESTION_IF_CREATOR, [question_id, game_id, email]);
 
-    return res.rowCount === 1;
+    return response.rowCount === 1;
 };
 
 export default deleteQuestion;

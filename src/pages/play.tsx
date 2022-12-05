@@ -1,15 +1,15 @@
-import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
-import StyledInput from '../components/BoxInput';
 import styled from 'styled-components';
+import { gql, useMutation } from '@apollo/client';
+import jwt from 'jsonwebtoken';
+import StyledInput from '../components/BoxInput';
 import Header from '../components/Header';
+import StyledButton from '../components/Button';
 import { color } from '../styles/theme';
 import { AuthContext } from '../providers/GoogleAuthProvider';
-import { gql, useMutation } from '@apollo/client';
-import StyledButton from '../components/Button';
 import { setCookie } from '../utils/cookies';
-import jwt from 'jsonwebtoken';
 import GameTokenData from '../types/gameTokenData';
 
 const Container = styled.div`
@@ -68,8 +68,8 @@ const Play: NextPage = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const timeout = useRef<NodeJS.Timeout>();
 
-    const showError = (msg: string) => {
-        setErrorMessage(msg);
+    const showError = (message: string) => {
+        setErrorMessage(message);
 
         if (timeout.current) clearTimeout(timeout.current);
         timeout.current = setTimeout(() => setErrorMessage(''), 3000);
@@ -79,7 +79,7 @@ const Play: NextPage = () => {
 
     const joinGame = async () => {
         if (code.length !== 6) return;
-        if (username.length < 1) return showError("Username can't be empty!");
+        if (username.length === 0) return showError("Username can't be empty!");
         if (username.length > 30) return showError("Username can't be longer than 30!");
 
         const { data } = await joinLobby({ variables: { username, code } });
@@ -96,8 +96,8 @@ const Play: NextPage = () => {
         <Container>
             <Header />
             <Title>Kahut!</Title>
-            <Input placeholder="Username" value={username} onChange={(e: ChangeEvent) => setUsername((e.target as HTMLInputElement).value)} maxLength={30} />
-            <Input placeholder="Code" value={code} onChange={(e: ChangeEvent) => setCode((e.target as HTMLInputElement).value.toUpperCase())} maxLength={6} />
+            <Input placeholder="Username" value={username} onChange={event => setUsername(event.target.value)} maxLength={30} />
+            <Input placeholder="Code" value={code} onChange={event => setCode(event.target.value.toUpperCase())} maxLength={6} />
             <ErrorMessage>{errorMessage}</ErrorMessage>
             <Button onClick={joinGame}>Join</Button>
         </Container>

@@ -22,15 +22,21 @@ const CLOSE_LOBBY_AND_GET_GAME = `
 `;
 
 const startGame = async ({ lobbyId }: { lobbyId: string }) => {
-    const client = await getClient();
+    try {
+        const client = await getClient();
 
-    const res = await client.query(CLOSE_LOBBY_AND_GET_GAME, [lobbyId]);
-    const { title, image, questions } = res.rows[0] as { title: string; image: string; questions: Question[] };
-    questions.sort((a, b) => a.index - b.index);
+        const response = await client.query(CLOSE_LOBBY_AND_GET_GAME, [lobbyId]);
+        if (response.rowCount === 0) return;
 
-    publish(lobbyId, { event: 'START_GAME', data: { title, image } });
+        const { title, image, questions } = response.rows[0];
+        questions.sort((a: Question, b: Question) => a.index - b.index);
 
-    await getPublishers().showQuestionPub.pub({ lobbyId, questions }, new Date(Date.now() + 5 * 1000));
+        publish(lobbyId, { event: 'START_GAME', data: { title, image } });
+
+        await getPublishers().showQuestionPub.pub({ lobbyId, questions }, new Date(Date.now() + 5 * 1000));
+    } catch (error) {
+        console.error('startGame', error);
+    }
 };
 
 export default startGame;

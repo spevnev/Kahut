@@ -1,4 +1,4 @@
-import { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import styled from 'styled-components';
 import useOnVisible from '../../hooks/useOnVisible';
 
@@ -13,21 +13,21 @@ const Text = styled.p<{ big?: boolean }>`
     font-weight: 200;
 `;
 
-const SPEED = 1758;
-let _counter = 100000;
+const CHANGE_PER_INTERVAL = 1758; // magic number
+const UPDATE_INTERVAL = 1000 / 30; // ~30 updates per second
+const INITIAL_COUNTER = 100 * 1000;
+
 const PopularityCounter: FunctionComponent = () => {
-    const [counter, setCounter] = useState(_counter);
+    const [counter, setCounter] = useState(INITIAL_COUNTER);
 
     const decrease = () => {
-        _counter -= SPEED;
-        setCounter(Math.max(_counter, 0));
-        if (_counter > 0) setTimeout(decrease, 17);
+        const newCounter = counter - CHANGE_PER_INTERVAL;
+
+        setCounter(Math.max(newCounter, 0));
+        if (newCounter > 0) setTimeout(decrease, UPDATE_INTERVAL);
     };
 
-    const [containerRef] = useOnVisible({
-        positionCoefficient: 3 / 4,
-        callback: decrease,
-    });
+    const [containerRef] = useOnVisible({ screenPositionCoefficient: 3 / 4, callback: decrease });
 
     return (
         <Container ref={containerRef}>

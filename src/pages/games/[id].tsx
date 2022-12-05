@@ -1,18 +1,18 @@
+import React, { useContext } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
-import styled from 'styled-components';
 import { useRouter } from 'next/router';
-import { useContext } from 'react';
 import { gql, useMutation } from '@apollo/client';
+import styled from 'styled-components';
 import jwt from 'jsonwebtoken';
-import { color } from '../../styles/theme';
-import GameInfo from '../../types/gameInfo';
 import Header from '../../components/Header';
+import User from '../../types/user';
+import GameInfo from '../../types/gameInfo';
+import GameTokenData from '../../types/gameTokenData';
+import { color } from '../../styles/theme';
 import { AuthContext } from '../../providers/GoogleAuthProvider';
 import { numberFormatter } from '../../utils/helper';
 import { getCookie, setCookie } from '../../utils/cookies';
-import GameTokenData from '../../types/gameTokenData';
 import createApolloClient from '../../graphql/apolloClient';
-import User from '../../types/user';
 
 const Container = styled.div`
     display: flex;
@@ -135,6 +135,7 @@ const GameDetails: NextPage<Props> = ({ isCreator, card: { id, image, title, des
 
         const { exp } = jwt.decode(token) as GameTokenData;
         setCookie('game_token', token, new Date(exp * 1000).toUTCString());
+
         router.push(`/lobby/${code}`);
     };
 
@@ -169,10 +170,10 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query }) => 
     const email = token ? (jwt.decode(token) as User | undefined)?.email : null;
     const apollo = createApolloClient();
 
-    const getGameRes = await apollo.query({ query: GET_GAME, variables: { id } });
-    const game = getGameRes.data.getGame;
-    if (!game) return { notFound: true };
+    const getGameResponse = await apollo.query({ query: GET_GAME, variables: { id } });
+    const game = getGameResponse.data.getGame;
 
+    if (!game) return { notFound: true };
     return { props: { isCreator: game.creator === email, card: game } };
 };
 

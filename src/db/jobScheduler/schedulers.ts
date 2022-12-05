@@ -46,11 +46,11 @@ export const getPublishers = (): Publishers => {
 export const initSubscribers = (): void => {
     if (!CONNECTION_CONFIG.connectionString) CONNECTION_CONFIG.connectionString = process.env.DB_CONNECTION_STRING;
 
-    new Subscriber(startGame, START_GAME, CONNECTION_CONFIG, { poll_delay: 60 * 1000 }, JOB_SCHEDULER_SCHEMA).sub();
+    new Subscriber(startGame, START_GAME, CONNECTION_CONFIG, {}, JOB_SCHEDULER_SCHEMA).sub();
     new Subscriber(showQuestion, SHOW_QUESTION, CONNECTION_CONFIG, {}, JOB_SCHEDULER_SCHEMA).sub();
     new Subscriber(showAnswer, SHOW_ANSWER, CONNECTION_CONFIG, {}, JOB_SCHEDULER_SCHEMA).sub();
     new Subscriber(endGame, END_GAME, CONNECTION_CONFIG, {}, JOB_SCHEDULER_SCHEMA).sub();
-    new Subscriber(cleanTables, DELETE_TABLES, CONNECTION_CONFIG, {}, JOB_SCHEDULER_SCHEMA).sub();
+    new Subscriber(cleanTables, DELETE_TABLES, CONNECTION_CONFIG, { poll_delay: 60 * 1000 }, JOB_SCHEDULER_SCHEMA).sub();
 
     scheduleCleanTablesJob();
 };

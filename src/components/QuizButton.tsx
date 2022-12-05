@@ -1,10 +1,11 @@
-import { FunctionComponent, ReactNode } from 'react';
+import React, { FunctionComponent, ReactNode } from 'react';
 import styled from 'styled-components';
 import theme, { color } from '../styles/theme';
 import shape1 from '../../public/icons/shape1.svg';
 import shape2 from '../../public/icons/shape2.svg';
 import shape3 from '../../public/icons/shape3.svg';
 import shape4 from '../../public/icons/shape4.svg';
+import { voidFunction } from '../utils/helper';
 
 export enum ButtonColor {
     'RED',
@@ -65,7 +66,7 @@ type Props = {
     disabled?: boolean;
 };
 
-export const QuizButton: FunctionComponent<Props> = ({ color, children, onClick = () => {}, className, disabled = true }) => (
+export const QuizButton: FunctionComponent<Props> = ({ color, children, onClick = voidFunction, className, disabled = true }) => (
     <Button onClick={() => !disabled && onClick()} background={colorByType[color]} className={className} disabled={disabled}>
         <Shape src={shapeByType[color]} />
         {typeof children === 'string' ? <Text>{children}</Text> : children}

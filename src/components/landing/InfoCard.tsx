@@ -1,6 +1,6 @@
-import { useRouter } from 'next/router';
-import { ChangeEvent, FunctionComponent, useContext, useState } from 'react';
+import React, { ChangeEvent, FunctionComponent, useContext, useState } from 'react';
 import styled from 'styled-components';
+import { useRouter } from 'next/router';
 import { AuthContext } from '../../providers/GoogleAuthProvider';
 import { color } from '../../styles/theme';
 import StyledInput from '../BoxInput';
@@ -43,8 +43,8 @@ const InfoCard: FunctionComponent = () => {
     const [code, setCode] = useState('');
     const router = useRouter();
 
-    const onChange = (e: ChangeEvent) => {
-        const code = (e.target as HTMLInputElement).value.toUpperCase();
+    const onChange = (event: ChangeEvent) => {
+        const code = (event.target as HTMLInputElement).value.toUpperCase();
         if (code.length === 6) router.push(`/play?code=${code}`);
 
         setCode(code);

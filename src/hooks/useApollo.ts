@@ -1,16 +1,16 @@
-import { useMemo } from 'react';
 import { ApolloClient, HttpLink, InMemoryCache, split } from '@apollo/client';
-import { createClient } from 'graphql-ws';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
-import { GRAPHQL_URL, SUBSCRIPTION_URL } from '../utils/urls';
+import { useMemo } from 'react';
+import { createClient } from 'graphql-ws';
+import { API_URL, WEBSOCKET_URL } from '../utils/urls';
 import { isBrowser } from '../utils/helper';
 
 const getLink = () => {
-    const httpLink = new HttpLink({ uri: GRAPHQL_URL, credentials: 'same-origin' });
+    const httpLink = new HttpLink({ uri: API_URL, credentials: 'same-origin' });
     if (!isBrowser()) return httpLink;
 
-    const wsLink = new GraphQLWsLink(createClient({ url: SUBSCRIPTION_URL }));
+    const wsLink = new GraphQLWsLink(createClient({ url: WEBSOCKET_URL }));
 
     return split(
         ({ query }: any) => {
@@ -25,7 +25,7 @@ const getLink = () => {
 const createApolloClient = () => new ApolloClient({ ssrMode: !isBrowser(), link: getLink(), cache: new InMemoryCache() });
 
 let apolloClient: ApolloClient<any>;
-export const initializeApollo = (): ApolloClient<any> => {
+export const initializeApollo = () => {
     if (!isBrowser()) return createApolloClient();
 
     if (!apolloClient) apolloClient = createApolloClient();

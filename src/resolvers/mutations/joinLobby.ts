@@ -1,6 +1,6 @@
 import { ResolverContext } from '../../pages/api/graphql';
 import { createJwt } from '../../utils/jwt';
-import { publish } from '../gamePubSub';
+import { publish } from '../../graphql/gamePubSub';
 
 export const GAME_TOKEN_DURATION = 60 * 45;
 
@@ -30,7 +30,7 @@ type JoinLobbyResponse = {
 };
 
 const joinLobby = async (_parent: void, { username, code }: JoinLobbyArgs, { db }: ResolverContext): Promise<JoinLobbyResponse> => {
-    if (code.length !== 6 || username.length < 1 || username.length > 256) return { token: null, error: 'There is no game with this code!' };
+    if (code.length !== 6 || username.length === 0 || username.length > 256) return { token: null, error: 'There is no game with this code!' };
 
     const { rows } = await db.query(JOIN_LOBBY, [username, code]);
 

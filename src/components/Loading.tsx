@@ -1,4 +1,6 @@
-import { FunctionComponent } from 'react';
+// taken from https://loading.io/
+
+import React, { FunctionComponent } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { color } from '../styles/theme';
 

@@ -1,17 +1,17 @@
+import React, { useRef, useState } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
-import { useRef, useState } from 'react';
-import Header from '../../components/Header';
+import { gql, useMutation } from '@apollo/client';
 import Game from '../../types/game';
 import Question from '../../types/question';
 import useDebounce from '../../hooks/useDebounce';
 import useWarning from '../../hooks/useWarning';
+import Header from '../../components/Header';
 import GeneralInfo from '../../components/editGame/GeneralInfo';
 import Questions from '../../components/editGame/Questions';
-import { gql, useMutation } from '@apollo/client';
+import DeleteGameButton from '../../components/editGame/DeleteGameButton';
 import createApolloClient from '../../graphql/apolloClient';
 import { getCookie } from '../../utils/cookies';
 import { areGamesEqual, areQuestionsEqual } from '../../utils/compareTypes';
-import DeleteGameButton from '../../components/editGame/DeleteGameButton';
 
 const GET_GAME = gql`
     query getGame($id: String!) {
@@ -70,23 +70,23 @@ const EditGame: NextPage<Props> = ({ game: _game, isNew }) => {
     const [editQuestion] = useMutation(EDIT_QUESTION);
     const [deleteQuestion] = useMutation(DELETE_QUESTION);
 
-    const prevGameRef = useRef<Game | undefined>(isNew ? undefined : _game);
+    const previousGameRef = useRef<Game | undefined>(isNew ? undefined : _game);
     const [game, _setGame] = useState(_game);
     const setGame = useDebounce<Game>(
         async game => {
-            const prevGame = prevGameRef.current;
+            const previousGame = previousGameRef.current;
             const token = getCookie('token');
 
-            if (game.image && prevGame?.image !== game.image) {
-                const res = await fetch(`${location.origin}/api/uploadImage`, { method: 'POST', body: game.image });
-                const { url } = await res.json();
+            if (game.image && previousGame?.image !== game.image) {
+                const response = await fetch(`${location.origin}/api/uploadImage`, { method: 'POST', body: game.image });
+                const { url } = await response.json();
                 game.image = url;
             }
 
-            if (!areGamesEqual(prevGame, game)) await editGame({ variables: { token, game: { ...game, questions: undefined, __typename: undefined } } });
+            if (!areGamesEqual(previousGame, game)) await editGame({ variables: { token, game: { ...game, questions: undefined, __typename: undefined } } });
 
             const idToQuestion: { [key: string]: Question } = {};
-            if (prevGame?.questions) prevGame.questions.forEach(question => (idToQuestion[question.id] = question));
+            if (previousGame?.questions) previousGame.questions.forEach(question => (idToQuestion[question.id] = question));
 
             await Promise.all(
                 game.questions
@@ -102,13 +102,13 @@ const EditGame: NextPage<Props> = ({ game: _game, isNew }) => {
             const deletedQuestions = Object.values(idToQuestion);
             await Promise.all(deletedQuestions.map(({ id }) => deleteQuestion({ variables: { token, question_id: id, game_id: game.id } })));
 
-            prevGameRef.current = game;
+            previousGameRef.current = game;
             setIsSafeToLeave(true);
         },
-        (_, cur) => {
+        (_, current) => {
             setIsSafeToLeave(false);
-            _setGame(cur);
-            return cur;
+            _setGame(current);
+            return current;
         },
         500
     );
@@ -118,7 +118,7 @@ const EditGame: NextPage<Props> = ({ game: _game, isNew }) => {
             <Header />
             <GeneralInfo game={game} setGame={setGame} />
             <Questions game={game} setGame={setGame} />
-            {prevGameRef.current && <DeleteGameButton gameId={game.id} />}
+            {previousGameRef.current && <DeleteGameButton gameId={game.id} />}
         </div>
     );
 };
@@ -130,11 +130,11 @@ export const getServerSideProps: GetServerSideProps = async ({ query, req }) => 
 
     const apollo = createApolloClient();
 
-    const canEditGameRes = await apollo.query({ query: CAN_EDIT_GAME, variables: { id, token } });
-    if (!canEditGameRes.data.canEditGame) return { notFound: true };
+    const canEditGameResponse = await apollo.query({ query: CAN_EDIT_GAME, variables: { id, token } });
+    if (!canEditGameResponse.data.canEditGame) return { notFound: true };
 
-    const getGameRes = await apollo.query({ query: GET_GAME, variables: { id } });
-    const game: Game = getGameRes.data.getGame;
+    const getGameResponse = await apollo.query({ query: GET_GAME, variables: { id } });
+    const game: Game = getGameResponse.data.getGame;
     if (game) return { props: { game, isNew: false } };
 
     const DEFAULT_GAME: Game = { title: 'New game', description: '', id, questions: [] };

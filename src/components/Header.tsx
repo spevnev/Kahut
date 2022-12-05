@@ -1,14 +1,14 @@
-import { FunctionComponent, useContext, useEffect, useState } from 'react';
+import React, { FunctionComponent, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { color } from '../styles/theme';
 import DropDown from './DropDown';
-import exitIcon from '../../public/icons/exit.svg';
-import profileIcon from '../../public/icons/profile.svg';
-import { AuthContext } from '../providers/GoogleAuthProvider';
-import menuIcon from '../../public/icons/menu.svg';
 import ScalingText from './ScalingText';
 import Button from './Button';
+import { AuthContext } from '../providers/GoogleAuthProvider';
+import exitIcon from '../../public/icons/exit.svg';
+import profileIcon from '../../public/icons/profile.svg';
+import menuIcon from '../../public/icons/menu.svg';
 import crossIcon from '../../public/icons/cross.svg';
 
 const Container = styled.div`

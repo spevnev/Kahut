@@ -1,5 +1,5 @@
 {
-    "plugins": ["@typescript-eslint", "eslint-plugin-sonarjs", "eslint-plugin-unicorn", "no-warn"],
+    "plugins": ["@typescript-eslint", "eslint-plugin-sonarjs", "eslint-plugin-unicorn"],
     "extends": [
         "next/core-web-vitals",
         "eslint:recommended",
@@ -10,9 +10,22 @@
     ],
     "parser": "@typescript-eslint/parser",
     "rules": {
+        "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_+" }],
         "react/no-unescaped-entities": "off",
-        "no-unused-vars": "off",
-        "unicorn/no-null": "off"
+        "react/prop-types": "off",
+        "unicorn/filename-case": "off",
+        "unicorn/prefer-node-protocol": "off",
+        "unicorn/no-null": "off",
+        "unicorn/no-document-cookie": "off",
+        "unicorn/numeric-separators-style": "off",
+        "unicorn/no-useless-undefined": "off",
+        "unicorn/switch-case-braces": "off",
+        "unicorn/no-array-for-each": "off",
+        "unicorn/prefer-ternary": "off",
+        "unicorn/prevent-abbreviations": ["error", { "replacements": { "ref": false, "props": false, "num": false, "args": false, "i": false } }],
+        "unicorn/template-indent": ["error", { "indent": 4 }],
+        "sonarjs/prefer-single-boolean-return": "off",
+        "@next/next/no-img-element": "off"
     }
 }

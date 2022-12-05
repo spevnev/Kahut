@@ -1,6 +1,6 @@
+import React, { FunctionComponent, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { color } from '../styles/theme';
-import { FunctionComponent, useEffect } from 'react';
 
 const SlidingAnimation = keyframes`
     0% {

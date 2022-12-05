@@ -19,7 +19,7 @@ class GenericClient<T> {
         try {
             this.client = new Client(this.connectionConfig);
             await this.client.connect();
-        } catch (e) {
+        } catch {
             throw new Error('Error connecting to DB!');
         }
 
@@ -44,8 +44,8 @@ class GenericClient<T> {
             );
 
             await this.client.query(`CREATE INDEX IF NOT EXISTS ${indexName} ON ${this.table} (order_id ASC, taken_until ASC);`, []);
-        } catch (e) {
-            console.error(e);
+        } catch (error) {
+            console.error(error);
             throw new Error('Error initializing table!');
         }
     }

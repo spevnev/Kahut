@@ -1,22 +1,21 @@
 import getClient from '../db/client';
 import { JOB_SCHEDULER_SCHEMA, jobSchedulerTables, getPublishers } from '../db/jobScheduler/schedulers';
 
+const CLEAN_TABLES_INTERVAL_MS = 10 * 60 * 1000;
+
 const DELETE_FINISHED_JOBS = () => {
     let query = 'WITH ';
-    let name = '';
+    let name = '_';
 
-    jobSchedulerTables.forEach((table, i, arr) => {
-        const isLast = i === arr.length - 1;
-
-        if (!isLast) {
-            if (i > 0) query += ', ';
-            name += '_';
-            query += name + ' AS (';
-        }
+    const lastIndex = jobSchedulerTables.length - 1;
+    jobSchedulerTables.forEach((table, index) => {
+        if (index < lastIndex) query += name + ' AS (';
 
         query += `DELETE FROM "${JOB_SCHEDULER_SCHEMA}"."${table}" WHERE taken_until = 'infinity'`;
+        name += '_';
 
-        if (!isLast) query += ')';
+        if (index < lastIndex) query += ')';
+        if (index + 1 < lastIndex) query += ', ';
     });
 
     return query;
@@ -40,18 +39,18 @@ const DELETE_FINISHED_LOBBIES = `
 `;
 
 const cleanTables = async () => {
-    const db = await getClient();
+    const client = await getClient();
 
     try {
-        await db.query(DELETE_FINISHED_JOBS());
-        await db.query(DELETE_FINISHED_LOBBIES);
-    } catch (e) {
-        console.error(e);
+        await client.query(DELETE_FINISHED_JOBS());
+        await client.query(DELETE_FINISHED_LOBBIES);
+    } catch (error) {
+        console.error(error);
     }
 
     scheduleCleanTablesJob();
 };
 
-export const scheduleCleanTablesJob = () => getPublishers().cleanTablesPub.pub(null, new Date(Date.now() + 10 * 60 * 1000));
+export const scheduleCleanTablesJob = () => getPublishers().cleanTablesPub.pub(null, new Date(Date.now() + CLEAN_TABLES_INTERVAL_MS));
 
 export default cleanTables;

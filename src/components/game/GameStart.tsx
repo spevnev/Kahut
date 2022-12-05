@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'react';
+import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import { StartGameData } from '../../pages/lobby/[code]';
 import { color } from '../../styles/theme';

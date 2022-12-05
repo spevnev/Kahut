@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'react';
+import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { color } from '../styles/theme';

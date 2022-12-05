@@ -21,9 +21,10 @@ const getLobby = async (_parent: void, { game_token }: { game_token: string }, {
     if (!(await verifyJwt(game_token))) return null;
     const { code } = jwt.decode(game_token) as GameTokenData;
 
-    const res = await db.query(GET_LOBBY_INFO, [code]);
-    if (res.rowCount === 0) return null;
-    const { state, players } = res.rows[0];
+    const response = await db.query(GET_LOBBY_INFO, [code]);
+
+    if (response.rowCount === 0) return null;
+    const { state, players } = response.rows[0];
 
     return { state, players: players.map(({ username }: { username: string }) => username) };
 };

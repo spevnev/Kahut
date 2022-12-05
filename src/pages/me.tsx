@@ -6,6 +6,7 @@ import { color } from '../styles/theme';
 import Header from '../components/Header';
 import StyledInput from '../components/BoxInput';
 import { AuthContext } from '../providers/GoogleAuthProvider';
+import { voidFunction } from '../utils/helper';
 
 const Container = styled.div`
     display: flex;
@@ -63,12 +64,11 @@ const Profile: NextPage = () => {
 
             <UserData>
                 <Icon src={picture} />
-
                 <Inputs>
                     <Label>Username</Label>
-                    <Input disabled={true} value={name} onChange={() => {}} />
+                    <Input disabled={true} value={name} onChange={voidFunction} />
                     <Label>Email</Label>
-                    <Input disabled={true} value={email} onChange={() => {}} />
+                    <Input disabled={true} value={email} onChange={voidFunction} />
                 </Inputs>
             </UserData>
         </Container>

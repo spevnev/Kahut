@@ -88,11 +88,7 @@ class Subscriber extends GenericClient<SubscriberConfig> {
         this.callback = callback;
         this.id = generateUUID();
 
-        if (
-            this.schedulerConfig.execution_batch_size &&
-            this.schedulerConfig.poll_batch_size &&
-            this.schedulerConfig.execution_batch_size > this.schedulerConfig.poll_batch_size
-        )
+        if (this.schedulerConfig.execution_batch_size && this.schedulerConfig.poll_batch_size && this.schedulerConfig.execution_batch_size > this.schedulerConfig.poll_batch_size)
             throw new Error("Execution batch size can't be less than poll batch size!");
     }
 
@@ -100,7 +96,8 @@ class Subscriber extends GenericClient<SubscriberConfig> {
         const { execution_batch_size, poll_batch_size, poll_delay, max_attempts, job_length } = this.schedulerConfig;
         if (!execution_batch_size || !poll_batch_size) throw new Error('Error: no execution/poll batch size!');
 
-        const jobs: Job[] = (await this.client.query(POLL_JOBS_QUERY(this.table), [max_attempts, poll_batch_size, job_length, this.id])).rows;
+        const getJobs = await this.client.query(POLL_JOBS_QUERY(this.table), [max_attempts, poll_batch_size, job_length, this.id]);
+        const jobs: Job[] = getJobs.rows;
 
         for (let i = 0; i < Math.ceil(jobs.length / execution_batch_size); i++) {
             const finishedJobs = new Set<string>();
@@ -111,8 +108,8 @@ class Subscriber extends GenericClient<SubscriberConfig> {
                     try {
                         await this.callback(data);
                         finishedJobs.add(job_id);
-                    } catch (e) {
-                        console.error(e);
+                    } catch (error) {
+                        console.error(error);
                         return;
                     }
                 })

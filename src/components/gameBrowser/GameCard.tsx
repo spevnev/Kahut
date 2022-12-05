@@ -1,6 +1,6 @@
-import { forwardRef, FunctionComponent } from 'react';
-import { useRouter } from 'next/router';
+import React, { forwardRef, FunctionComponent } from 'react';
 import styled from 'styled-components';
+import { useRouter } from 'next/router';
 import GameCardProps from '../../types/gameInfo';
 import { color } from '../../styles/theme';
 import { limitStringTo, numberFormatter } from '../../utils/helper';

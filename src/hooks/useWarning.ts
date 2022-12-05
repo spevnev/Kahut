@@ -1,19 +1,21 @@
 import { useEffect, useRef } from 'react';
 
+const DEFAULT_CONFIRMATION_MESSAGE = 'Are you sure you want to leave?';
+
 const useWarning = (message?: string) => {
     const isSafeToLeave = useRef<boolean>(true);
-    const confirmationMessage = useRef<string>(message + 'Are you sure you want to leave?');
+    const confirmationMessage = useRef<string>(message + DEFAULT_CONFIRMATION_MESSAGE);
 
-    const onLeave = (e: BeforeUnloadEvent) => {
+    const onUnload = (event: BeforeUnloadEvent) => {
         if (isSafeToLeave.current) return undefined;
 
-        e.returnValue = confirmationMessage.current; // firefox, IE
+        event.returnValue = confirmationMessage.current; // firefox, IE
         return confirmationMessage.current; // chrome, safari
     };
 
     useEffect(() => {
-        window.addEventListener('beforeunload', onLeave);
-        return () => window.removeEventListener('beforeunload', onLeave);
+        window.addEventListener('beforeunload', onUnload);
+        return () => window.removeEventListener('beforeunload', onUnload);
     }, []);
 
     return (value: boolean) => (isSafeToLeave.current = value);

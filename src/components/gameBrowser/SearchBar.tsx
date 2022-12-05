@@ -1,4 +1,4 @@
-import { ChangeEvent, FunctionComponent, useRef, useState, useEffect } from 'react';
+import React, { FunctionComponent, useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import searchIcon from '../../../public/icons/search.svg';
 import { color } from '../../styles/theme';
@@ -109,13 +109,13 @@ const DEFAULT_QUESTION_NUM = 10;
 
 const SearchBar: FunctionComponent<Props> = ({ areFiltersOpened, searchOptions, setSearchOptions }) => {
     const [prompt, setPrompt] = useState(searchOptions.prompt || '');
-    const prevQuestionNumRef = useRef(DEFAULT_QUESTION_NUM);
+    const previousQuestionNumRef = useRef(DEFAULT_QUESTION_NUM);
 
     const promptDebounce = useDebounce<string>(
         prompt => setSearchOptions({ ...searchOptions, prompt }),
-        (_, cur) => {
-            setPrompt(cur);
-            return cur;
+        (_, newPrompt) => {
+            setPrompt(newPrompt);
+            return newPrompt;
         },
         500
     );
@@ -124,15 +124,15 @@ const SearchBar: FunctionComponent<Props> = ({ areFiltersOpened, searchOptions, 
 
     useEffect(() => {
         const questionNum = searchOptions.filters.questionNum;
-        if (questionNum !== 'any' && questionNum !== prevQuestionNumRef.current) prevQuestionNumRef.current = Number(questionNum);
+        if (questionNum !== 'any' && questionNum !== previousQuestionNumRef.current) previousQuestionNumRef.current = Number(questionNum);
     }, [searchOptions]);
 
-    const questionNum = Number(searchOptions.filters.questionNum) || prevQuestionNumRef.current;
+    const questionNum = Number(searchOptions.filters.questionNum) || previousQuestionNumRef.current;
     const filters = searchOptions.filters;
     return (
         <Container id="searchbar" popupOpened={areFiltersOpened}>
             <Icon src={searchIcon.src} />
-            <Input placeholder="Search..." value={prompt} onChange={(e: ChangeEvent) => promptDebounce((e.target as HTMLInputElement).value)} />
+            <Input placeholder="Search..." value={prompt} onChange={event => promptDebounce((event.target as HTMLInputElement).value)} />
 
             {areFiltersOpened && (
                 <PopupContainer>
@@ -145,7 +145,7 @@ const SearchBar: FunctionComponent<Props> = ({ areFiltersOpened, searchOptions, 
                             </Option>
                             <Option>
                                 <Radio name="questions" defaultChecked={filters.questionNum !== 'any'} onChange={() => setFilter('questionNum', questionNum)} />
-                                <OptionInput value={questionNum} onChange={e => setFilter('questionNum', Number(e.target.value))} />
+                                <OptionInput value={questionNum} onChange={event => setFilter('questionNum', Number(event.target.value))} />
                                 <Label>+</Label>
                             </Option>
                         </div>

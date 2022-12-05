@@ -1,11 +1,11 @@
-import { createContext, useRef } from 'react';
-import { FunctionComponent, ReactElement } from 'react';
+import React, { createContext, useRef, FunctionComponent, ReactElement } from 'react';
+import { voidFunction } from '../utils/helper';
 
 type FileUploadContextData = {
     upload: (callback: (img: string) => void) => void;
 };
 
-export const FileUploadContext = createContext<FileUploadContextData>({ upload: () => () => {} });
+export const FileUploadContext = createContext<FileUploadContextData>({ upload: () => voidFunction });
 
 const FileUploadProvider: FunctionComponent<{ children: ReactElement }> = ({ children }) => {
     const inputRef = useRef<HTMLInputElement | null>(null);

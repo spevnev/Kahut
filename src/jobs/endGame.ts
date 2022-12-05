@@ -18,12 +18,22 @@ const UPDATE_AND_GET_FINAL_RESULTS = `
     WHERE lobby_id = $1;
 `;
 
-const endGame = async ({ lobbyId, questionNum }: { lobbyId: string; questionNum: number }) => {
-    const client = await getClient();
+type EndGameData = {
+    lobbyId: string;
+    questionNum: number;
+};
 
-    const getFinalResultsRes = await client.query(UPDATE_AND_GET_FINAL_RESULTS, [lobbyId]);
+const endGame = async ({ lobbyId, questionNum }: EndGameData) => {
+    try {
+        const client = await getClient();
 
-    publish(lobbyId, { event: 'END_GAME', data: { results: getFinalResultsRes.rows, questions: questionNum } });
+        const getFinalResultsResponse = await client.query(UPDATE_AND_GET_FINAL_RESULTS, [lobbyId]);
+        const results = getFinalResultsResponse.rows;
+
+        publish(lobbyId, { event: 'END_GAME', data: { results, questions: questionNum } });
+    } catch (error) {
+        console.error('endGame', error);
+    }
 };
 
 export default endGame;

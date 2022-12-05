@@ -1,16 +1,16 @@
+import React, { useEffect, useRef, useState } from 'react';
 import { gql, useSubscription } from '@apollo/client';
 import { GetServerSideProps, NextPage } from 'next';
 import jwt from 'jsonwebtoken';
-import GameTokenData from '../../types/gameTokenData';
-import { useEffect, useRef, useState } from 'react';
-import createApolloClient from '../../graphql/apolloClient';
+import Loading from '../../components/Loading';
 import Lobby from '../../components/game/Lobby';
 import GameStart from '../../components/game/GameStart';
 import QuestionPage from '../../components/game/QuestionPage';
 import AnswerPage from '../../components/game/AnswerPage';
 import GameEnd from '../../components/game/GameEnd';
+import GameTokenData from '../../types/gameTokenData';
 import Question from '../../types/question';
-import Loading from '../../components/Loading';
+import createApolloClient from '../../graphql/apolloClient';
 
 const GET_LOBBY_INFO = gql`
     query getLobbyInfo($game_token: String!) {
@@ -47,21 +47,13 @@ export type EndGameData = {
     questions: number;
 };
 
-type ParseEvent = (res?: { onGameEvent?: { event: string; data: string } }) => {
-    playerJoining?: { player: string };
-    startGame?: StartGameData;
-    showQuestion?: ShowQuestionData;
-    showAnswer?: ShowAnswerData;
-    endGame?: EndGameData;
-};
+const parseEvent = (subscriptionData: { onGameEvent: { event: string; data: string } }) => {
+    if (!subscriptionData || !subscriptionData.onGameEvent) return { idle: true };
 
-const parseEvent: ParseEvent = res => {
-    if (!res || !res.onGameEvent) return { idle: true };
+    const gameEvent = subscriptionData.onGameEvent;
+    const data = JSON.parse(gameEvent.data);
 
-    const { event, data: _data } = res.onGameEvent;
-    const data = JSON.parse(_data);
-
-    switch (event) {
+    switch (gameEvent.event) {
         case 'PLAYER_JOINING':
             return { playerJoining: data };
         case 'START_GAME':
@@ -113,14 +105,13 @@ const Game: NextPage<Props> = ({ gameToken, players: _players, lobbyState: _lobb
         if (endGame) setLobbyState('CLOSED');
     }, [endGame, startGame]);
 
-    if (_lobbyState === 'INGAME' && !startGame && !showQuestion && !showAnswer && !endGame) return <Loading>Waiting for the next question...</Loading>;
-    if (lobbyState === 'OPEN') return <Lobby players={players} gameToken={gameToken} gameData={gameData} closeLobby={() => setLobbyState('INGAME')} />;
-    if (startGame) return <GameStart {...startGame!} />;
-    if (showQuestion) return <QuestionPage {...showQuestion!} gameToken={gameToken} gameData={gameData} />;
-    if (showAnswer) return <AnswerPage {...showAnswer!} gameToken={gameToken} gameData={gameData} />;
-    if (lobbyState === 'CLOSED' || endGame) return <GameEnd {...endGame!} gameToken={gameToken} gameData={gameData} />;
+    if (lobbyState === 'OPEN') return <Lobby players={players} gameToken={gameToken} gameData={gameData} />;
+    if (startGame) return <GameStart {...startGame} />;
+    if (showQuestion) return <QuestionPage {...showQuestion} gameToken={gameToken} gameData={gameData} />;
+    if (showAnswer) return <AnswerPage {...showAnswer} gameToken={gameToken} gameData={gameData} />;
+    if (endGame || lobbyState === 'CLOSED') return <GameEnd {...endGame} gameToken={gameToken} gameData={gameData} />;
 
-    return null;
+    return <Loading>Waiting for the next question...</Loading>;
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {

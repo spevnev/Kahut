@@ -12,7 +12,7 @@ const dateToString = (date: Date): string => {
     const isBCYear = year < 1;
     if (isBCYear) year = Math.abs(year) + 1;
 
-    let ret =
+    let result =
         pad(year, 4) +
         '-' +
         pad(date.getMonth() + 1, 2) +
@@ -28,15 +28,15 @@ const dateToString = (date: Date): string => {
         pad(date.getMilliseconds(), 3);
 
     if (offset < 0) {
-        ret += '-';
+        result += '-';
         offset *= -1;
     } else {
-        ret += '+';
+        result += '+';
     }
 
-    ret += pad(Math.floor(offset / 60), 2) + ':' + pad(offset % 60, 2);
-    if (isBCYear) ret += ' BC';
-    return ret;
+    result += pad(Math.floor(offset / 60), 2) + ':' + pad(offset % 60, 2);
+    if (isBCYear) result += ' BC';
+    return result;
 };
 
 export default dateToString;

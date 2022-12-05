@@ -1,6 +1,6 @@
-import { FunctionComponent } from 'react';
-import { StaticImageData } from 'next/image';
+import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
+import { StaticImageData } from 'next/image';
 import { color } from '../../styles/theme';
 
 const Container = styled.div`

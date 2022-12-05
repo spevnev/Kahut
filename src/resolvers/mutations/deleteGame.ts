@@ -24,9 +24,9 @@ const deleteGame = async (_parent: void, { token, id }: DeleteGameArgs, { db }: 
     if (!(await verifyJwt(token))) return false;
     const { email } = jwt.decode(token) as User;
 
-    const res = await db.query(DELETE_GAME_IF_CREATOR, [id, email]);
+    const response = await db.query(DELETE_GAME_IF_CREATOR, [id, email]);
 
-    return res.rowCount === 1;
+    return response.rowCount === 1;
 };
 
 export default deleteGame;

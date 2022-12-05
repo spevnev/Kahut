@@ -1,35 +1,39 @@
 import { useEffect, useRef } from 'react';
 
-const isVisible = (el: HTMLElement | undefined, positionCoefficient: number = 1): boolean =>
-    el ? el.offsetTop < window.innerHeight * positionCoefficient + window.scrollY : false;
+const isVisible = (element?: HTMLElement, screenPositionCoefficient = 1): boolean => {
+    if (!element) return false;
+
+    const minHeight = window.innerHeight * screenPositionCoefficient + window.scrollY;
+    return minHeight > element.offsetTop;
+};
 
 type Props = {
-    positionCoefficient?: number;
+    screenPositionCoefficient?: number;
     callback: () => any;
 };
 
-const useOnVisible = ({ positionCoefficient, callback }: Props) => {
-    const ref = useRef();
+const useOnVisible = ({ screenPositionCoefficient, callback }: Props) => {
+    const elementRef = useRef();
     const wasSeen = useRef(false);
 
-    const _callback = () => {
-        if (wasSeen.current || !isVisible(ref.current, positionCoefficient)) return;
+    const onWindowChange = () => {
+        if (wasSeen.current || !isVisible(elementRef.current, screenPositionCoefficient)) return;
         wasSeen.current = true;
 
         callback();
     };
 
     useEffect(() => {
-        window.addEventListener('scroll', _callback);
-        window.addEventListener('resize', _callback);
+        window.addEventListener('scroll', onWindowChange);
+        window.addEventListener('resize', onWindowChange);
 
         return () => {
-            window.removeEventListener('scroll', _callback);
-            window.removeEventListener('resize', _callback);
+            window.removeEventListener('scroll', onWindowChange);
+            window.removeEventListener('resize', onWindowChange);
         };
     }, []);
 
-    return [ref, wasSeen];
+    return [elementRef, wasSeen];
 };
 
 export default useOnVisible;

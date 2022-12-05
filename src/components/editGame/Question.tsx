@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'react';
+import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import { color } from '../../styles/theme';
 import QuestionType from '../../types/question';
@@ -102,6 +102,8 @@ type Props = {
     deleteQuestion: () => void;
 };
 
+const MAX_TIME_SECONDS = 300;
+
 const Question: FunctionComponent<Props> = ({ question, setQuestion, closeQuestion, deleteQuestion }) => (
     <Container>
         <Buttons>
@@ -112,16 +114,15 @@ const Question: FunctionComponent<Props> = ({ question, setQuestion, closeQuesti
             <ImageContainer>
                 <ChangeableImage src={question.image} onChange={image => setQuestion({ ...question, image })} />
             </ImageContainer>
-            <Title placeholder="Title" value={question.title} onChange={e => setQuestion({ ...question, title: e.target.value })} maxLength={256} />
+            <Title placeholder="Title" value={question.title} onChange={event => setQuestion({ ...question, title: event.target.value })} maxLength={256} />
             <Row>
                 <Row>
                     <Icon src={clockIcon.src} />
                     <TimeInput
                         value={question.time}
-                        onChange={e => {
-                            const value = e.target.value.length === 0 ? 0 : Number(e.target.value);
-                            if (Number.isNaN(value) || value > 300) return;
-                            setQuestion({ ...question, time: value });
+                        onChange={event => {
+                            const time = Number(event.target.value || 0);
+                            if (!Number.isNaN(time) && time <= MAX_TIME_SECONDS) setQuestion({ ...question, time });
                         }}
                     />
                     <p>s</p>
@@ -133,42 +134,36 @@ const Question: FunctionComponent<Props> = ({ question, setQuestion, closeQuesti
                     <Checkbox
                         id={`type-checkbox${question.id}`}
                         checked={question.type === 'single'}
-                        onChange={() =>
-                            setQuestion({
-                                ...question,
-                                type: question.type === 'single' ? 'multiple' : 'single',
-                                answers: question.type !== 'single' ? [0] : [],
-                            })
-                        }
+                        onChange={() => setQuestion({ ...question, type: question.type === 'single' ? 'multiple' : 'single', answers: [0] })}
                     />
                 </Row>
             </Row>
         </div>
         <Choices>
-            {question.choices.map((choice, idx) => (
-                <Choice key={idx} color={idx}>
+            {question.choices.map((choice, index) => (
+                <Choice key={index} color={index}>
                     {question.type === 'single' ? (
                         <Radio
                             style={{ margin: '0 2px 0 4px' }}
                             name={question.id}
-                            checked={question.answers[0] === idx}
-                            onChange={() => setQuestion({ ...question, answers: [idx] })}
+                            checked={question.answers[0] === index}
+                            onChange={() => setQuestion({ ...question, answers: [index] })}
                         />
                     ) : (
                         <Checkbox
                             style={{ margin: '0 4px' }}
-                            checked={question.answers.filter(val => val === idx).length > 0}
-                            onChange={e =>
+                            checked={question.answers.includes(index)}
+                            onChange={event =>
                                 setQuestion({
                                     ...question,
-                                    answers: e.target.checked ? [...question.answers, idx] : question.answers.filter(val => val !== idx),
+                                    answers: event.target.checked ? [...question.answers, index] : question.answers.filter(value => value !== index),
                                 })
                             }
                         />
                     )}
                     <ChoiceInput
                         value={choice}
-                        onChange={e => setQuestion({ ...question, choices: question.choices.map((value, j) => (j === idx ? e.target.value : value)) })}
+                        onChange={event => setQuestion({ ...question, choices: question.choices.map((value, index2) => (index2 === index ? event.target.value : value)) })}
                     />
                 </Choice>
             ))}

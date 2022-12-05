@@ -25,9 +25,10 @@ const createLobby = async (_parent: void, { token, game_id }: CreateLobbyArgs, {
     if (!(await verifyJwt(token))) return { token: null, code: null };
     const { name } = jwt.decode(token) as User;
 
-    const res = await db.query(CREATE_LOBBY, [game_id]);
-    const code = res.rowCount === 1 ? res.rows[0].code : null;
-    if (!code) return { token: null, code: null };
+    const response = await db.query(CREATE_LOBBY, [game_id]);
+
+    if (response.rowCount !== 1) return { token: null, code: null };
+    const code = response.rows[0].code;
 
     await db.query(JOIN_LOBBY, [name, code]);
 

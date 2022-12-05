@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'react';
+import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import { color } from '../../styles/theme';
 import Game from '../../types/game';
@@ -74,8 +74,8 @@ const GeneralInfo: FunctionComponent<Props> = ({ game, setGame }) => (
             <ChangeableImage src={game.image || imagePlaceholder.src} onChange={image => setGame({ ...game, image })} />
         </ImageContainer>
         <TextContainer>
-            <Title value={game.title} onChange={e => setGame({ ...game, title: e.target.value })} maxLength={60} />
-            <Description value={game.description} onChange={e => setGame({ ...game, description: e.target.value })} maxLength={1000} />
+            <Title value={game.title} onChange={event => setGame({ ...game, title: event.target.value })} maxLength={60} />
+            <Description value={game.description} onChange={event => setGame({ ...game, description: event.target.value })} maxLength={1000} />
         </TextContainer>
     </Container>
 );

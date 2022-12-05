@@ -1,9 +1,10 @@
-import { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { v4 as generateUUID } from 'uuid';
 import { gql, useApolloClient } from '@apollo/client';
+import { ParsedUrlQuery } from 'querystring';
 import GameInfo from '../../types/gameInfo';
 import GameCard from '../../components/gameBrowser/GameCard';
 import Header from '../../components/Header';
@@ -12,7 +13,6 @@ import { color } from '../../styles/theme';
 import createApolloClient from '../../graphql/apolloClient';
 import useOnVisible from '../../hooks/useOnVisible';
 import useDebounce from '../../hooks/useDebounce';
-import { ParsedUrlQuery } from 'querystring';
 
 const Container = styled.div`
     display: flex;
@@ -93,16 +93,21 @@ const GameBrowser: NextPage<Props> = ({ cards: _cards, showMyGames }) => {
     const loadMore = useDebounce<void>(
         async () => {
             const cards = cardsRef.current;
-            const lastCard = cards.length === 0 ? undefined : cards[cards.length - 1];
 
             const searchOptions = searchOptionsRef.current;
             const prompt = searchOptions.prompt;
-            let { questionNum, orderBy, sortingOrder } = searchOptions.filters;
+            const { questionNum: _questionNum, orderBy, sortingOrder } = searchOptions.filters;
 
-            questionNum = showMyGames ? -1 : questionNum === 'any' ? 0 : Number(questionNum);
+            let questionNum = 0;
+            if (showMyGames) questionNum = -1;
+            if (_questionNum !== 'any') questionNum = Number(_questionNum);
 
-            const lastValue = lastCard && orderBy && String((lastCard as any)[orderBy.replace('_', '')]);
-            const lastId = lastCard?.id;
+            let lastValue, lastId;
+            if (cards.length > 0) {
+                const lastCard = cards[cards.length - 1];
+                if (orderBy) lastValue = String(lastCard[orderBy.replace('_', '') as keyof GameInfo]);
+                lastId = lastCard.id;
+            }
 
             const { data } = await apollo.query({
                 query: GET_GAMES,
@@ -139,12 +144,12 @@ const GameBrowser: NextPage<Props> = ({ cards: _cards, showMyGames }) => {
     const createGame = () => router.push(`/edit/${generateUUID()}`);
 
     return (
-        <Container onClick={e => setAreFiltersOpened((e.nativeEvent.composedPath() as HTMLElement[]).filter(el => el.id === 'searchbar').length > 0)}>
+        <Container onClick={event => setAreFiltersOpened((event.nativeEvent.composedPath() as HTMLElement[]).some(element => element.id === 'searchbar'))}>
             <Header />
             {!showMyGames && <SearchBar areFiltersOpened={areFiltersOpened} searchOptions={searchOptions} setSearchOptions={setSearchOptions} />}
             <Cards>
-                {cards.map((card, idx) => (
-                    <GameCard {...card} key={card.id} ref={idx === Math.max(cards.length - 10, 0) ? lastCardRef : undefined} />
+                {cards.map((card, index) => (
+                    <GameCard {...card} key={card.id} ref={index === Math.max(cards.length - 10, 0) ? lastCardRef : undefined} />
                 ))}
             </Cards>
             {showMyGames && <CreateButton onClick={createGame}>Create Game +</CreateButton>}

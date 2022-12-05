@@ -3,10 +3,15 @@ import { getPublishers } from '../db/jobScheduler/schedulers';
 import { publish } from '../graphql/gamePubSub';
 import Question from '../types/question';
 
-const MAX_SCORE = 1000;
 const MIN_SCORE = 500;
+const MAX_SCORE = 1000;
 
-const GET_ANSWERS = `SELECT * FROM answers WHERE lobby_id = $1 AND question_id = $2;`;
+const calculateScore = (additionalScorePercentage: number): number => {
+    if (additionalScorePercentage > 0.8) additionalScorePercentage = 1;
+    if (additionalScorePercentage < 0.2) additionalScorePercentage = 0;
+
+    return (MAX_SCORE - MIN_SCORE) * additionalScorePercentage + MIN_SCORE;
+};
 
 const UPDATE_SCORE = (values: string) => `
     UPDATE players p 
@@ -15,38 +20,70 @@ const UPDATE_SCORE = (values: string) => `
     WHERE p.username = v.username AND lobby_id = $1;
 `;
 
-const GET_SCORE = `SELECT username, score FROM players WHERE lobby_id = $1;`;
+type Answer = {
+    username: string;
+    answers: number[];
+    answered_at: Date;
+};
 
-const showAnswer = async ({ lobbyId, questions, finishTime }: { lobbyId: string; finishTime: Date; questions: Question[] }) => {
-    finishTime = new Date(finishTime);
+const generateUpdateScoreQuery = (question: Question, finishTime: number, answers: Answer[]): string | undefined => {
+    const scoreToAdd: { username: string; addScore: number }[] = [];
 
-    const question = questions.shift();
-    if (!question) throw new Error();
-
-    const client = await getClient();
-    const getAnswersRes = await client.query(GET_ANSWERS, [lobbyId, question.id]);
-
-    const addScore: { username: string; addScore: number }[] = [];
-    getAnswersRes.rows.forEach(({ username, answers, answered_at }: { username: string; answers: number[]; answered_at: Date }) => {
-        if (answered_at > finishTime || question.answers.length !== answers.length) return;
+    answers.forEach(({ username, answers, answered_at }) => {
+        if (question.answers.length !== answers.length || answered_at > new Date(finishTime)) return;
         for (const answer of answers) if (!question.answers.includes(Number(answer))) return;
 
-        let timeLeftPercentage = (finishTime.getTime() - answered_at.getTime()) / (question.time * 1000);
-        if (timeLeftPercentage > 0.9) timeLeftPercentage = 1;
-        if (timeLeftPercentage < 0.2) timeLeftPercentage = 0;
+        const timeLeftPercentage = (finishTime - answered_at.getTime()) / (question.time * 1000);
 
-        addScore.push({ username, addScore: (MAX_SCORE - MIN_SCORE) * timeLeftPercentage + MIN_SCORE });
+        scoreToAdd.push({ username, addScore: calculateScore(timeLeftPercentage) });
     });
 
-    const values = addScore.map(({ username, addScore }) => `('${username}', ${addScore})`);
-    if (values.length > 0) await client.query(UPDATE_SCORE(values.join(', ')), [lobbyId]);
+    if (scoreToAdd.length === 0) return;
+    const scoreToAddValuesString = scoreToAdd.map(({ username, addScore }) => `('${username}', ${addScore})`).join(', ');
 
-    const getScoreRes = await client.query(GET_SCORE, [lobbyId]);
-    publish(lobbyId, { event: 'SHOW_ANSWER', data: { question, points: getScoreRes.rows } });
+    return UPDATE_SCORE(scoreToAddValuesString);
+};
 
-    const nextEventDate = new Date(Date.now() + 10 * 1000);
-    if (questions.length === 0) await getPublishers().endGamePub.pub({ lobbyId, questionNum: question.index + 1 }, nextEventDate);
-    else await getPublishers().showQuestionPub.pub({ lobbyId, questions }, nextEventDate);
+const GET_ANSWERS = `SELECT * FROM answers WHERE lobby_id = $1 AND question_id = $2;`;
+
+const GET_SCORE = `SELECT username, score FROM players WHERE lobby_id = $1;`;
+
+type ShowAnswerData = {
+    lobbyId: string;
+    finishTime: number;
+    questions: Question[];
+};
+
+const showAnswer = async ({ lobbyId, questions, finishTime }: ShowAnswerData) => {
+    try {
+        const client = await getClient();
+
+        const question = questions.shift();
+        if (!question) return;
+
+        const getAnswersResponse = await client.query(GET_ANSWERS, [lobbyId, question.id]);
+        const answers = getAnswersResponse.rows;
+
+        const updateScoreQuery = generateUpdateScoreQuery(question, finishTime, answers);
+        if (updateScoreQuery) await client.query(updateScoreQuery, [lobbyId]);
+
+        const getScoreResponse = await client.query(GET_SCORE, [lobbyId]);
+        const points = getScoreResponse.rows;
+
+        publish(lobbyId, { event: 'SHOW_ANSWER', data: { question, points } });
+
+        const nextEventDate = new Date(Date.now() + 10 * 1000);
+        const isLastQuestion = questions.length === 0;
+
+        if (isLastQuestion) {
+            const questionNum = question.index + 1;
+            await getPublishers().endGamePub.pub({ lobbyId, questionNum }, nextEventDate);
+        } else {
+            await getPublishers().showQuestionPub.pub({ lobbyId, questions }, nextEventDate);
+        }
+    } catch (error) {
+        console.error('showAnswer', error);
+    }
 };
 
 export default showAnswer;

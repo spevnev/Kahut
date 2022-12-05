@@ -1,5 +1,5 @@
+import React, { FunctionComponent, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { FunctionComponent, useEffect } from 'react';
 import styled from 'styled-components';
 import { EndGameData, GamePageProps } from '../../pages/lobby/[code]';
 import { color } from '../../styles/theme';
@@ -119,7 +119,7 @@ type Props = GamePageProps & EndGameData;
 const GameEnd: FunctionComponent<Props> = ({ results, questions, gameData }) => {
     const router = useRouter();
     const sortedResults = results.sort((a, b) => b.score - a.score);
-    const currentUserResult = sortedResults.map((result, idx) => ({ ...result, idx })).filter(result => result.username === gameData.username)[0];
+    const currentUserResult = sortedResults.map((result, index) => ({ ...result, index })).find(result => result.username === gameData.username);
 
     useEffect(() => void deleteCookie('game_token'), []);
 
@@ -128,7 +128,7 @@ const GameEnd: FunctionComponent<Props> = ({ results, questions, gameData }) => 
             <LeaveButton onClick={() => router.push('/')}>Leave</LeaveButton>
             {currentUserResult && (
                 <UsersPlace>
-                    You are #{currentUserResult.idx + 1} with {currentUserResult.score} points!
+                    You are #{currentUserResult.index + 1} with {currentUserResult.score} points!
                 </UsersPlace>
             )}
             <Row>

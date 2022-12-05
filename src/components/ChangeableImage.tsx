@@ -1,4 +1,4 @@
-import { FunctionComponent, useContext, useState } from 'react';
+import React, { FunctionComponent, useContext, useState } from 'react';
 import styled from 'styled-components';
 import { FileUploadContext } from '../providers/FileUploadProvider';
 import { color } from '../styles/theme';
@@ -38,23 +38,24 @@ type Props = {
     onChange: (data: string) => void | string | Promise<string>;
 };
 
-const ChangeableImage: FunctionComponent<Props> = ({ src: _src, onChange }) => {
+const ChangeableImage: FunctionComponent<Props> = ({ src: initialSource, onChange }) => {
     const { upload } = useContext(FileUploadContext);
     if (!upload) throw new Error('Changeable image can only be used inside of FileUploadProvider!');
 
-    const [src, setSrc] = useState(_src);
+    const [source, setSource] = useState(initialSource);
 
     const uploadImage = () => {
         upload(async image => {
-            setSrc(image);
-            const res = await onChange(image);
-            if (res) setSrc(res);
+            setSource(image);
+
+            const result = await onChange(image);
+            if (result) setSource(result);
         });
     };
 
     return (
         <ImageContainer onClick={uploadImage}>
-            <Image src={src || imagePlaceholder.src} />
+            <Image src={source || imagePlaceholder.src} />
         </ImageContainer>
     );
 };

@@ -1,4 +1,4 @@
-import { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import styled from 'styled-components';
 import { v4 as generateUUID } from 'uuid';
 import Game from '../../types/game';
@@ -21,10 +21,10 @@ type Props = {
 
 const Questions: FunctionComponent<Props> = ({ game, setGame }) => {
     const questionNum = game.questions.length;
-    const [openedQuestions, setOpenedQuestions] = useState(questionNum ? new Array(game.questions[questionNum - 1].index + 1).fill(false) : []);
+    const [isQuestionOpened, setIsQuestionOpened] = useState(questionNum ? Array.from({ length: game.questions[questionNum - 1].index + 1 }).fill(false) : []);
 
     const newQuestion = () => {
-        const maxIndex = game.questions.reduce((max, cur) => Math.max(max, cur.index), -1);
+        const maxIndex = game.questions.reduce((max, current) => Math.max(max, current.index), -1); // eslint-disable-line unicorn/no-array-reduce
 
         setGame({
             ...game,
@@ -43,23 +43,24 @@ const Questions: FunctionComponent<Props> = ({ game, setGame }) => {
             ],
         });
 
-        setOpenedQuestions([...openedQuestions, true]);
+        setIsQuestionOpened([...isQuestionOpened, true]);
     };
 
-    const setOpenedQuestion = (elIdx: number, newValue: boolean) => setOpenedQuestions(openedQuestions.map((cur, idx) => (idx === elIdx ? newValue : cur)));
-
-    const deleteQuestion = (index: number) => setGame({ ...game, questions: game.questions.filter(question => question.index !== index) });
+    const setOpenedQuestion = (searchedIndex: number, newValue: boolean) =>
+        setIsQuestionOpened(isQuestionOpened.map((currentValue, index) => (index === searchedIndex ? newValue : currentValue)));
 
     return (
         <div>
             {game.questions.map(question =>
-                openedQuestions[question.index] ? (
+                isQuestionOpened[question.index] ? (
                     <Question
                         key={question.id}
                         question={question}
-                        setQuestion={new_question => setGame({ ...game, questions: game.questions.map(cur => (cur.index === question.index ? new_question : cur)) })}
+                        setQuestion={new_question =>
+                            setGame({ ...game, questions: game.questions.map(currentIndex => (currentIndex.index === question.index ? new_question : currentIndex)) })
+                        }
                         closeQuestion={() => setOpenedQuestion(question.index, false)}
-                        deleteQuestion={() => deleteQuestion(question.index)}
+                        deleteQuestion={() => setGame({ ...game, questions: game.questions.filter(({ index: currentIndex }) => currentIndex !== question.index) })}
                     />
                 ) : (
                     <div key={question.id} onClick={() => setOpenedQuestion(question.index, true)}>

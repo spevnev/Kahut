@@ -1,3 +1,4 @@
+import React from 'react';
 import { NextApiRequest } from 'next';
 import App, { AppContext, AppProps } from 'next/app';
 import Head from 'next/head';
@@ -11,7 +12,10 @@ import FileUploadProvider from '../providers/FileUploadProvider';
 import User from '../types/user';
 import GlobalStyles from '../styles/globalStyles';
 
-type Props = AppProps & { props: { user?: User }; pageProps: any };
+type Props = AppProps & {
+    props: { user?: User };
+    pageProps: any;
+};
 
 const MyApp = ({ pageProps, props, Component }: Props) => {
     const apolloClient = useApollo();
