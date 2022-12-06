@@ -1,7 +1,7 @@
 import getClient from '../db/client';
 import { JOB_SCHEDULER_SCHEMA, jobSchedulerTables, getPublishers } from '../db/jobScheduler/schedulers';
 
-const CLEAN_TABLES_INTERVAL_MS = 10 * 60 * 1000;
+const CLEAN_TABLES_INTERVAL_MS = 60 * 1000;
 
 const DELETE_FINISHED_JOBS = () => {
     let query = 'WITH ';
@@ -26,7 +26,7 @@ const DELETE_FINISHED_LOBBIES = `
         SELECT code
         FROM lobbies
         WHERE state = 'CLOSED'
-        LIMIT 5000
+        LIMIT 100
     ), delete_lobbies AS (
         DELETE FROM lobbies
         WHERE code = ANY(ARRAY(SELECT * FROM lobbies_to_delete))

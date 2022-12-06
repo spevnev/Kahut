@@ -105,8 +105,24 @@ const GameBrowser: NextPage<Props> = ({ cards: _cards, showMyGames }) => {
             let lastValue, lastId;
             if (cards.length > 0) {
                 const lastCard = cards[cards.length - 1];
-                if (orderBy) lastValue = String(lastCard[orderBy.replace('_', '') as keyof GameInfo]);
+
                 lastId = lastCard.id;
+
+                switch (orderBy) {
+                    case 'question_num': {
+                        lastValue = lastCard.questionNum;
+                        break;
+                    }
+                    case 'created_at': {
+                        lastValue = lastCard.createdAt;
+                        break;
+                    }
+                    case 'players': {
+                        lastValue = lastCard.players;
+                        break;
+                    }
+                }
+                if (lastValue) lastValue = String(lastValue);
             }
 
             const { data } = await apollo.query({

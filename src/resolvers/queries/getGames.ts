@@ -39,7 +39,7 @@ const getGames = async (
     { db }: ResolverContext
 ): Promise<GameInfo[]> => {
     if (limit > 100) limit = 100;
-    prompt = prompt ? `${prompt}%` : '';
+    if (prompt) prompt += '%';
 
     if (orderBy !== 'players' && orderBy !== 'created_at' && orderBy !== 'question_num') return [];
     if (sortingOrder !== 'ASC' && sortingOrder !== 'DESC') return [];

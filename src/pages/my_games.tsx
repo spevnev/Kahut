@@ -1,4 +1,5 @@
-import React, { GetServerSideProps, NextPage } from 'next';
+import React from 'react';
+import { GetServerSideProps, NextPage } from 'next';
 import { gql } from '@apollo/client';
 import jwt from 'jsonwebtoken';
 import GameInfo from '../types/gameInfo';

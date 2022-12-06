@@ -14,10 +14,9 @@ export const createJwt = (data: { [key: string]: any }, expiresIn?: number): Pro
     });
 };
 
-export const verifyJwt = (token: string): Promise<boolean> => {
-    return new Promise((resolve, reject) => {
+export const verifyJwt = (token: string): Promise<boolean> =>
+    new Promise((resolve, reject) => {
         if (!process.env.JWT_KEY) return reject('JWT_KEY is undefined!');
 
         jwt.verify(token, process.env.JWT_KEY, {}, error => resolve(!error));
     });
-};
