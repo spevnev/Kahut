@@ -11,3 +11,4 @@ npm-debug.log*
 next-env.d.ts
 .vscode/*
 dist
+secret.yaml

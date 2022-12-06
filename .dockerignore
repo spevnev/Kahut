@@ -1,0 +1,12 @@
+node_modules/
+.next/
+dist/
+.vscode/
+.git/
+.gitignore
+.eslintrc.json
+.dockerignore
+Dockerfile
+*.yaml
+nodemon.json
+package-lock.json
