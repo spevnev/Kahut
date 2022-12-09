@@ -1,4 +1,4 @@
-import { ApolloClient, HttpLink, InMemoryCache, split } from '@apollo/client';
+import { ApolloClient, DocumentNode, HttpLink, InMemoryCache, NormalizedCacheObject, split } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { useMemo } from 'react';
@@ -13,7 +13,7 @@ const getLink = () => {
     const wsLink = new GraphQLWsLink(createClient({ url: WEBSOCKET_URL }));
 
     return split(
-        ({ query }: any) => {
+        ({ query }: { query: DocumentNode }) => {
             const definition = getMainDefinition(query);
             return definition.kind === 'OperationDefinition' && definition.operation === 'subscription';
         },
@@ -24,7 +24,7 @@ const getLink = () => {
 
 const createApolloClient = () => new ApolloClient({ ssrMode: !isBrowser(), link: getLink(), cache: new InMemoryCache() });
 
-let apolloClient: ApolloClient<any>;
+let apolloClient: ApolloClient<NormalizedCacheObject>;
 export const initializeApollo = () => {
     if (!isBrowser()) return createApolloClient();
 

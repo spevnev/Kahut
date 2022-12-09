@@ -120,7 +120,7 @@ const SearchBar: FunctionComponent<Props> = ({ areFiltersOpened, searchOptions, 
         500
     );
 
-    const setFilter = (key: string, value: any) => setSearchOptions({ prompt, filters: { ...filters, [key]: value } });
+    const setFilter = (key: string, value: string) => setSearchOptions({ prompt, filters: { ...filters, [key]: value } });
 
     useEffect(() => {
         const questionNum = searchOptions.filters.questionNum;
@@ -144,8 +144,8 @@ const SearchBar: FunctionComponent<Props> = ({ areFiltersOpened, searchOptions, 
                                 <Label htmlFor="q_any">any</Label>
                             </Option>
                             <Option>
-                                <Radio name="questions" defaultChecked={filters.questionNum !== 'any'} onChange={() => setFilter('questionNum', questionNum)} />
-                                <OptionInput value={questionNum} onChange={event => setFilter('questionNum', Number(event.target.value))} />
+                                <Radio name="questions" defaultChecked={filters.questionNum !== 'any'} onChange={() => setFilter('questionNum', questionNum.toString())} />
+                                <OptionInput value={questionNum} onChange={event => setFilter('questionNum', event.target.value)} />
                                 <Label>+</Label>
                             </Option>
                         </div>

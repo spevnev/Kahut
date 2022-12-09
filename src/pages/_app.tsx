@@ -14,7 +14,7 @@ import GlobalStyles from '../styles/globalStyles';
 
 type Props = AppProps & {
     props: { user?: User };
-    pageProps: any;
+    pageProps: { [key: string]: string };
 };
 
 const MyApp = ({ pageProps, props, Component }: Props) => {

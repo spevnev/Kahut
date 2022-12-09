@@ -9,7 +9,7 @@ const isVisible = (element?: HTMLElement, screenPositionCoefficient = 1): boolea
 
 type Props = {
     screenPositionCoefficient?: number;
-    callback: () => any;
+    callback: () => void;
 };
 
 const useOnVisible = ({ screenPositionCoefficient, callback }: Props) => {

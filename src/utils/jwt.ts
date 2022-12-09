@@ -8,8 +8,8 @@ export const createJwt = (data: { [key: string]: any }, expiresIn?: number): Pro
         if (!process.env.JWT_KEY) return reject('JWT_KEY is undefined!');
 
         jwt.sign(payload, process.env.JWT_KEY, {}, (error, token) => {
-            if (error) reject(error);
-            else resolve(token!);
+            if (error || !token) reject(error);
+            else resolve(token);
         });
     });
 };

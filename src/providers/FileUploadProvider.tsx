@@ -19,10 +19,10 @@ const FileUploadProvider: FunctionComponent<{ children: ReactElement }> = ({ chi
     };
 
     const onChange = () => {
-        if (!inputRef.current) throw new Error('Error uploading file!');
-        const file = inputRef.current.files![0];
-        const reader = new FileReader();
+        if (!inputRef.current?.files) throw new Error('Error uploading file!');
+        const file = inputRef.current.files[0];
 
+        const reader = new FileReader();
         reader.onloadend = () => {
             const result = reader.result;
             if (!result || typeof result !== 'string' || !callbackFunction.current) throw new Error('Error uploading file!');
