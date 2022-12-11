@@ -1,4 +1,3 @@
-import React from 'react';
 import { NextApiRequest } from 'next';
 import App, { AppContext, AppProps } from 'next/app';
 import Head from 'next/head';

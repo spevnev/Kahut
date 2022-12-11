@@ -1,4 +1,3 @@
-import React from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import { gql } from '@apollo/client';
 import jwt from 'jsonwebtoken';

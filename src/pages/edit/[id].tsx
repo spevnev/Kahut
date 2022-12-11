@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import { gql, useMutation } from '@apollo/client';
 import Game from '../../types/game';

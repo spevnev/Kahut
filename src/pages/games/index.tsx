@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';

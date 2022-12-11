@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { gql, useSubscription } from '@apollo/client';
 import { GetServerSideProps, NextPage } from 'next';
 import jwt from 'jsonwebtoken';
