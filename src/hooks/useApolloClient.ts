@@ -32,4 +32,4 @@ export const initializeApollo = () => {
     return apolloClient;
 };
 
-export const useApollo = () => useMemo(() => initializeApollo(), []);
+export const useApolloClient = () => useMemo(() => initializeApollo(), []);

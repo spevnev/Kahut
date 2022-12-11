@@ -4,7 +4,7 @@ import App, { AppContext, AppProps } from 'next/app';
 import Head from 'next/head';
 import jwt from 'jsonwebtoken';
 import { ApolloProvider } from '@apollo/client';
-import { useApollo } from '../hooks/useApollo';
+import { useApolloClient } from '../hooks/useApolloClient';
 import { isBrowser } from '../utils/helper';
 import { getCookie } from '../utils/cookies';
 import GoogleAuthProvider from '../providers/GoogleAuthProvider';
@@ -18,7 +18,7 @@ type Props = AppProps & {
 };
 
 const MyApp = ({ pageProps, props, Component }: Props) => {
-    const apolloClient = useApollo();
+    const apolloClient = useApolloClient();
 
     return (
         <>
