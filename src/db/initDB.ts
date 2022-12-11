@@ -4,6 +4,7 @@ const initDB = async () => {
     const client = await getClient();
 
     try {
+        await client.query('BEGIN;');
         await client.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`, []);
 
         await client.query(
@@ -109,7 +110,9 @@ const initDB = async () => {
             []
         );
         await client.query(`CREATE UNIQUE INDEX IF NOT EXISTS answers_idx ON answers (lobby_id, question_id, username);`, []);
+        await client.query('COMMIT;');
     } catch (error) {
+        await client.query('ROLLBACK;');
         throw new Error('Error while initializing DB! ' + error);
     }
 };
