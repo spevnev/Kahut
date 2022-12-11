@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { v4 as generateUUID } from 'uuid';
 import { gql, useApolloClient } from '@apollo/client';
 import { ParsedUrlQuery } from 'querystring';
+import jwt from 'jsonwebtoken';
 import GameInfo from '../../types/gameInfo';
 import GameCard from '../../components/gameBrowser/GameCard';
 import Header from '../../components/Header';
@@ -13,6 +14,8 @@ import { color } from '../../styles/theme';
 import createApolloClient from '../../graphql/apolloClient';
 import useOnVisible from '../../hooks/useOnVisible';
 import useDebounce from '../../hooks/useDebounce';
+import { getCookie } from '../../utils/cookies';
+import User from '../../types/user';
 
 const Container = styled.div`
     display: flex;
@@ -54,8 +57,8 @@ const CreateButton = styled.button`
 `;
 
 const GET_GAMES = gql`
-    query getGames($prompt: String, $questionNum: Int!, $orderBy: String!, $sortingOrder: String!, $lastId: String, $lastValue: String) {
-        getGames(limit: 30, prompt: $prompt, lastId: $lastId, lastValue: $lastValue, questionNum: $questionNum, orderBy: $orderBy, sortingOrder: $sortingOrder) {
+    query getGames($prompt: String, $questionNum: Int!, $orderBy: String!, $sortingOrder: String!, $lastId: String, $lastValue: String, $creator: String) {
+        getGames(limit: 30, prompt: $prompt, lastId: $lastId, lastValue: $lastValue, questionNum: $questionNum, orderBy: $orderBy, sortingOrder: $sortingOrder, creator: $creator) {
             id
             title
             description
@@ -100,12 +103,11 @@ const GameBrowser: NextPage<Props> = ({ cards: _cards, showMyGames }) => {
 
             let questionNum = 0;
             if (showMyGames) questionNum = -1;
-            if (_questionNum !== 'any') questionNum = Number(_questionNum);
+            else if (_questionNum !== 'any') questionNum = Number(_questionNum);
 
             let lastValue, lastId;
             if (cards.length > 0) {
                 const lastCard = cards[cards.length - 1];
-
                 lastId = lastCard.id;
 
                 switch (orderBy) {
@@ -122,12 +124,19 @@ const GameBrowser: NextPage<Props> = ({ cards: _cards, showMyGames }) => {
                         break;
                     }
                 }
-                if (lastValue) lastValue = String(lastValue);
+                if (lastValue !== undefined) lastValue = String(lastValue);
+            }
+
+            let creator;
+            if (showMyGames) {
+                const token = getCookie('token');
+                const { email } = jwt.decode(token) as User;
+                creator = email;
             }
 
             const { data } = await apollo.query({
                 query: GET_GAMES,
-                variables: { lastValue, lastId, questionNum, orderBy, sortingOrder, prompt },
+                variables: { lastValue, lastId, questionNum, orderBy, sortingOrder, prompt, creator },
                 fetchPolicy: 'network-only',
             });
             const newCards = data.getGames;
@@ -146,15 +155,13 @@ const GameBrowser: NextPage<Props> = ({ cards: _cards, showMyGames }) => {
     const [lastCardRef, wasSeen] = useOnVisible({ callback: loadMore });
 
     useEffect(() => {
-        if (showMyGames) return;
-
         searchOptionsRef.current = searchOptions;
         cardsRef.current = [];
         wasSeen.current = false;
 
         loadMore();
 
-        router.replace({ pathname: router.pathname, query: { ...searchOptions.filters, prompt: searchOptions.prompt } });
+        if (!showMyGames) router.replace({ pathname: router.pathname, query: { ...searchOptions.filters, prompt: searchOptions.prompt } });
     }, [searchOptions]);
 
     const createGame = () => router.push(`/edit/${generateUUID()}`);

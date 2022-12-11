@@ -1,7 +1,7 @@
 import GameInfo from '../../types/gameInfo';
 import { ResolverContext } from '../../pages/api/graphql';
 
-const GET_GAMES = (orderBy: string, sortingOrder: string, lastId?: string, lastValue?: string, creator?: string) => {
+const GET_GAMES = (orderBy: string, sortingOrder: string, lastId?: string, lastValue?: string, creator?: string, prompt?: string) => {
     let compareLastIdStatement = '';
     if (lastId) compareLastIdStatement = `AND id > '${lastId}'`;
 
@@ -14,11 +14,14 @@ const GET_GAMES = (orderBy: string, sortingOrder: string, lastId?: string, lastV
     let compareCreatorStatement = '';
     if (creator) compareCreatorStatement = `AND creator = '${creator}'`;
 
+    let compareTitleStatement = '';
+    if (prompt) compareTitleStatement = `AND title LIKE '${prompt}'`;
+
     return `
         SELECT * FROM games 
-        WHERE question_num > $1 AND ($2 = '' OR title LIKE $2) ${compareLastIdStatement} ${compareLastValueStatement} ${compareCreatorStatement}
+        WHERE question_num > $1 ${compareTitleStatement} ${compareLastIdStatement} ${compareLastValueStatement} ${compareCreatorStatement}
         ORDER BY ${orderBy} ${sortingOrder}, id ASC
-        LIMIT $3;
+        LIMIT $2;
     `;
 };
 
@@ -49,7 +52,7 @@ const getGames = async (
         lastValue = '';
     }
 
-    const response = await db.query(GET_GAMES(orderBy, sortingOrder, lastId, lastValue, creator), [questionNum, prompt, limit]);
+    const response = await db.query(GET_GAMES(orderBy, sortingOrder, lastId, lastValue, creator, prompt), [questionNum, limit]);
     return response.rows;
 };
 

@@ -41,9 +41,9 @@ const editQuestion = async (_parent: void, { token, id, question }: EditQuestion
     const { email } = jwt.decode(token) as User;
 
     const { index, title, type, image, time, choices, answers } = question;
-    const response = await db.query(EDIT_QUESTION_IF_CREATOR, [question.id, id, index, title, type, image, time, choices, answers, email]);
+    await db.query(EDIT_QUESTION_IF_CREATOR, [question.id, id, index, title, type, image, time, choices, answers, email]);
 
-    return response.rowCount === 1;
+    return true;
 };
 
 export default editQuestion;

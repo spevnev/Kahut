@@ -75,7 +75,6 @@ const EditGame: NextPage<Props> = ({ game: _game, isNew }) => {
     const setGame = useDebounce<Game>(
         async game => {
             const previousGame = previousGameRef.current;
-            const token = getCookie('token');
 
             if (game.image && previousGame?.image !== game.image) {
                 const response = await fetch(`${location.origin}/api/uploadImage`, { method: 'POST', body: game.image });
@@ -83,6 +82,7 @@ const EditGame: NextPage<Props> = ({ game: _game, isNew }) => {
                 game.image = url;
             }
 
+            const token = getCookie('token');
             if (!areGamesEqual(previousGame, game)) await editGame({ variables: { token, game: { ...game, questions: undefined, __typename: undefined } } });
 
             const idToQuestion: { [key: string]: Question } = {};
