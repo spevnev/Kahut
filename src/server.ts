@@ -7,9 +7,7 @@ import schema from './graphql/schema';
 import { verifyJwt } from './utils/jwt';
 import initDB from './db/initDB';
 import { initSubscribers } from './db/jobScheduler/schedulers';
-import { GRAPHQL_ENDPOINT, PORT, WEBSOCKET_PORT } from './utils/urls';
-
-const IS_DEV = process.env.NODE_ENV !== 'production';
+import { GRAPHQL_ENDPOINT, IS_DEV, PORT, WEBSOCKET_PORT } from './utils/urls';
 
 const nextApp = next({ dev: IS_DEV });
 const nextHandler = nextApp.getRequestHandler();
@@ -22,6 +20,12 @@ const startServer = async () => {
 
     const httpServer = createServer(async (request: IncomingMessage, response: ServerResponse) => {
         try {
+            if (request.method === 'OPTIONS') {
+                response.statusCode = 200;
+                response.end('ok');
+                return;
+            }
+
             if (request.url) {
                 const parsedUrl = parse(request.url, true);
                 await nextHandler(request, response, parsedUrl);

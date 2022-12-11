@@ -13,7 +13,7 @@ let handler: any;
 const handle: NextApiHandler = async (request, response) => {
     if (!handler) {
         const context: ResolverContext = { db: await getClient(), pubs: getPublishers() };
-        handler = createYoga({ graphqlEndpoint: '/api/graphql', schema, context });
+        handler = createYoga({ graphqlEndpoint: '/api/graphql', schema, context, cors: false });
     }
 
     return handler(request, response);

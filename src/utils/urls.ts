@@ -1,6 +1,6 @@
 import { isBrowser } from './helper';
 
-const IS_DEV = process.env.NODE_ENV !== 'production';
+export const IS_DEV = process.env.NODE_ENV !== 'production';
 
 export const PORT = Number(process.env.PORT) || 3000;
 export const WEBSOCKET_PORT = IS_DEV ? PORT + 1 : PORT;
