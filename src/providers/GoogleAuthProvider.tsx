@@ -1,4 +1,4 @@
-import React, { createContext, FunctionComponent, ReactElement, useRef, useState } from 'react';
+import { createContext, FunctionComponent, ReactElement, useRef, useState } from 'react';
 import { GoogleOAuthProvider, GoogleLogin, CredentialResponse } from '@react-oauth/google';
 import jwt from 'jsonwebtoken';
 import User from '../types/user';

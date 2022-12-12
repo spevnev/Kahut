@@ -1,9 +1,9 @@
-import React, { createContext, useRef, FunctionComponent, ReactElement } from 'react';
+import { createContext, useRef, FunctionComponent, ReactElement } from 'react';
 import { voidFunction } from '../utils/helper';
 
-type FileUploadContextData = {
-    upload: (callback: (img: string) => void) => void;
-};
+type UploadFile = (callback: (img: string) => void) => void;
+
+type FileUploadContextData = { upload: UploadFile };
 
 export const FileUploadContext = createContext<FileUploadContextData>({ upload: () => voidFunction });
 
@@ -21,6 +21,7 @@ const FileUploadProvider: FunctionComponent<{ children: ReactElement }> = ({ chi
     const onChange = () => {
         if (!inputRef.current?.files) throw new Error('Error uploading file!');
         const file = inputRef.current.files[0];
+        if (!file) return;
 
         const reader = new FileReader();
         reader.onloadend = () => {

@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import clockIcon from '../../../public/icons/clock.svg';
 import { color } from '../../styles/theme';
@@ -39,7 +39,7 @@ const Title = styled.p`
     white-space: nowrap;
     overflow: hidden;
     display: inline-block;
-    max-width: 80vw;
+    max-width: 60vw;
     text-overflow: ellipsis;
 `;
 

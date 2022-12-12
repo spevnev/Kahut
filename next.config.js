@@ -4,4 +4,4 @@ const nextConfig = {
     swcMinify: true,
 };
 
-module.exports = nextConfig;
+module.exports = nextConfig; // eslint-disable-line unicorn/prefer-module

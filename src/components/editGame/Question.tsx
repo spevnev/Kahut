@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import { color } from '../../styles/theme';
 import QuestionType from '../../types/question';
@@ -110,7 +110,7 @@ const Question: FunctionComponent<Props> = ({ question, setQuestion, closeQuesti
             <img src={trashIcon.src} onClick={deleteQuestion} />
             <img src={chevronIcon.src} onClick={closeQuestion} />
         </Buttons>
-        <div>
+        <div style={{ width: '50%' }}>
             <ImageContainer>
                 <ChangeableImage src={question.image} onChange={image => setQuestion({ ...question, image })} />
             </ImageContainer>

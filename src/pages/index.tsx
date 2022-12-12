@@ -1,5 +1,4 @@
-import React from 'react';
-import { GetStaticProps, NextPage } from 'next';
+import { NextPage } from 'next';
 import styled from 'styled-components';
 import Header from '../components/Header';
 import { ButtonColor } from '../components/QuizButton';
@@ -184,7 +183,5 @@ const Landing: NextPage = () => (
         </Column>
     </Page>
 );
-
-export const getStaticProps: GetStaticProps = () => ({ props: {} });
 
 export default Landing;

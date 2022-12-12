@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { gql, useMutation } from '@apollo/client';
@@ -143,9 +143,11 @@ const GameDetails: NextPage<Props> = ({ isCreator, card: { id, image, title, des
         <Container>
             <Header />
 
-            <ImageContainer>
-                <img style={{ width: '100%' }} src={image} alt="Game's image" />
-            </ImageContainer>
+            {image && (
+                <ImageContainer>
+                    <img style={{ width: '100%' }} src={image} />
+                </ImageContainer>
+            )}
             <Details>
                 <Title>{title}</Title>
                 <Info>

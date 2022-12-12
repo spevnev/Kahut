@@ -32,16 +32,16 @@ const EDIT_QUESTION_IF_CREATOR = `
 
 type EditQuestionArgs = {
     token: string;
-    id: string;
+    game_id: string;
     question: Question;
 };
 
-const editQuestion = async (_parent: void, { token, id, question }: EditQuestionArgs, { db }: ResolverContext): Promise<boolean> => {
+const editQuestion = async (_parent: void, { token, game_id, question }: EditQuestionArgs, { db }: ResolverContext): Promise<boolean> => {
     if (!(await verifyJwt(token))) return false;
     const { email } = jwt.decode(token) as User;
 
-    const { index, title, type, image, time, choices, answers } = question;
-    await db.query(EDIT_QUESTION_IF_CREATOR, [question.id, id, index, title, type, image, time, choices, answers, email]);
+    const { id, index, title, type, image, time, choices, answers } = question;
+    await db.query(EDIT_QUESTION_IF_CREATOR, [id, game_id, index, title, type, image, time, choices, answers, email]);
 
     return true;
 };

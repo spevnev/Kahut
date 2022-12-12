@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { GetStaticProps, NextPage } from 'next';
+import { useContext, useEffect, useRef, useState } from 'react';
+import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { gql, useMutation } from '@apollo/client';
@@ -103,7 +103,5 @@ const Play: NextPage = () => {
         </Container>
     );
 };
-
-export const getStaticProps: GetStaticProps = () => ({ props: {} });
 
 export default Play;
