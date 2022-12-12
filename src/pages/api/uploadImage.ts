@@ -1,7 +1,7 @@
 import { NextApiHandler } from 'next';
 import sizeOf from 'image-size';
 import FormData from 'form-data';
-import axios from 'axios';
+import fetch from 'node-fetch';
 import { verifyJwt } from '../../utils/jwt';
 
 const uploadImageToImgbb = async (image: string): Promise<string> => {
@@ -11,13 +11,14 @@ const uploadImageToImgbb = async (image: string): Promise<string> => {
     payload.append('key', process.env.IMG_UPLOAD_API_KEY);
     payload.append('image', image);
 
-    const { data } = await axios.post(`https://api.imgbb.com/1/upload`, payload, payload.getHeaders());
+    const response = await fetch(`https://api.imgbb.com/1/upload`, { ...payload.getHeaders(), body: payload, method: 'POST' });
+    const { data } = (await response.json()) as any;
 
-    return data?.data?.image?.url;
+    return data?.image?.url;
 };
 
-const MIN_IMAGE_SIZE = [256, 256];
-const MAX_IMAGE_SIZE = [2560, 1600];
+const MIN_IMAGE_SIZE = [64, 64];
+const MAX_IMAGE_SIZE = [2560, 2560];
 
 const handler: NextApiHandler = async (request, response) => {
     if (request.method !== 'POST') return response.status(405).send({ message: 'Only POST requests are allowed!' });
