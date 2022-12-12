@@ -31,16 +31,7 @@ const typeDefs = gql`
 
     type Query {
         getGame(id: String!): OGame
-        getGames(
-            limit: Int!
-            questionNum: Int!
-            orderBy: String!
-            sortingOrder: String!
-            lastId: String
-            lastValue: String
-            creator: String
-            prompt: String
-        ): [OGame!]!
+        getGames(limit: Int!, questionNum: Int!, orderBy: String!, sortingOrder: String!, lastId: String, lastValue: String, creator: String, prompt: String): [OGame!]!
 
         canEditGame(token: String!, id: String!): Boolean!
 
@@ -85,7 +76,7 @@ const typeDefs = gql`
         editGame(token: String!, game: GameInfo!): Boolean!
         deleteGame(token: String!, id: String!): Boolean!
 
-        editQuestion(token: String!, question: IQuestion!, id: String!): Boolean!
+        editQuestion(token: String!, question: IQuestion!, game_id: String!): Boolean!
         deleteQuestion(token: String!, game_id: String!, question_id: String!): Boolean!
     }
 

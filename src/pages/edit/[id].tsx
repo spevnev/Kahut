@@ -47,8 +47,8 @@ const EDIT_GAME = gql`
 `;
 
 const EDIT_QUESTION = gql`
-    mutation editQuestion($question: IQuestion!, $token: String!, $id: String!) {
-        editQuestion(token: $token, question: $question, id: $id)
+    mutation editQuestion($question: IQuestion!, $game_id: String!, $token: String!) {
+        editQuestion(token: $token, question: $question, game_id: $game_id)
     }
 `;
 
@@ -72,37 +72,60 @@ const EditGame: NextPage<Props> = ({ game: _game, isNew }) => {
 
     const previousGameRef = useRef<Game | undefined>(isNew ? undefined : _game);
     const [game, _setGame] = useState(_game);
+
+    const commitGameChanges = async (newGame: Game, previousGame?: Game) => {
+        const token = getCookie('token');
+
+        if (newGame.image && previousGame?.image !== newGame.image) {
+            const response = await fetch(`${location.origin}/api/uploadImage`, { method: 'POST', body: newGame.image });
+            const { url } = await response.json();
+            newGame.image = url;
+        }
+
+        if (areGamesEqual(previousGame, newGame)) return;
+
+        const game = { ...newGame, questions: undefined, __typename: undefined };
+        await editGame({ variables: { token, game } });
+    };
+
+    const commitQuestionChanges = async (newGame: Game, previousGame?: Game) => {
+        const token = getCookie('token');
+
+        const idToQuestion: { [key: string]: Question } = {};
+        if (previousGame?.questions) previousGame.questions.forEach(question => (idToQuestion[question.id] = question));
+
+        const questionsWithUploadedImages = await Promise.all(
+            newGame.questions.map(async question => {
+                if (question.image?.startsWith('data:image')) {
+                    const response = await fetch(`${location.origin}/api/uploadImage`, { method: 'POST', body: question.image });
+                    const { url } = await response.json();
+                    question.image = url;
+                }
+
+                return question;
+            })
+        );
+
+        const changedQuestions = questionsWithUploadedImages.filter(question => {
+            const areEqual = areQuestionsEqual(idToQuestion[question.id], question);
+            delete idToQuestion[question.id];
+
+            return !areEqual;
+        });
+        await Promise.all(changedQuestions.map(question => editQuestion({ variables: { token, question: { ...question, __typename: undefined }, game_id: newGame.id } })));
+
+        const deletedQuestions = Object.values(idToQuestion);
+        await Promise.all(deletedQuestions.map(({ id }) => deleteQuestion({ variables: { token, question_id: id, game_id: newGame.id } })));
+    };
+
     const setGame = useDebounce<Game>(
-        async game => {
+        async newGame => {
             const previousGame = previousGameRef.current;
 
-            if (game.image && previousGame?.image !== game.image) {
-                const response = await fetch(`${location.origin}/api/uploadImage`, { method: 'POST', body: game.image });
-                const { url } = await response.json();
-                game.image = url;
-            }
+            await commitGameChanges(newGame, previousGame);
+            await commitQuestionChanges(newGame, previousGame);
 
-            const token = getCookie('token');
-            if (!areGamesEqual(previousGame, game)) await editGame({ variables: { token, game: { ...game, questions: undefined, __typename: undefined } } });
-
-            const idToQuestion: { [key: string]: Question } = {};
-            if (previousGame?.questions) previousGame.questions.forEach(question => (idToQuestion[question.id] = question));
-
-            await Promise.all(
-                game.questions
-                    .filter(question => {
-                        const areEqual = areQuestionsEqual(idToQuestion[question.id], question);
-                        delete idToQuestion[question.id];
-
-                        return !areEqual;
-                    })
-                    .map(question => editQuestion({ variables: { token, question: { ...question, __typename: undefined }, id: game.id } }))
-            );
-
-            const deletedQuestions = Object.values(idToQuestion);
-            await Promise.all(deletedQuestions.map(({ id }) => deleteQuestion({ variables: { token, question_id: id, game_id: game.id } })));
-
-            previousGameRef.current = game;
+            previousGameRef.current = newGame;
             setIsSafeToLeave(true);
         },
         (_, current) => {
