@@ -20,7 +20,7 @@ resource "google_container_cluster" "primary" {
 resource "google_container_node_pool" "primary_nodes" {
     name = google_container_cluster.primary.name
     cluster = google_container_cluster.primary.name
-    node_count = 2
+    node_count = 1
 
     node_config {
         oauth_scopes = [

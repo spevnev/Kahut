@@ -17,8 +17,8 @@ const uploadImageToImgbb = async (image: string): Promise<string> => {
     return data?.image?.url;
 };
 
-const MIN_IMAGE_SIZE = [64, 64];
-const MAX_IMAGE_SIZE = [2560, 2560];
+const MIN_IMAGE_SIZE = [256, 256];
+const MAX_IMAGE_SIZE = [3000, 2000];
 
 const handler: NextApiHandler = async (request, response) => {
     if (request.method !== 'POST') return response.status(405).send({ message: 'Only POST requests are allowed!' });
@@ -31,7 +31,8 @@ const handler: NextApiHandler = async (request, response) => {
     image = image.split(';base64,')[1];
 
     const { width, height } = sizeOf(Buffer.from(image, 'base64'));
-    if (!width || !height || width < MIN_IMAGE_SIZE[0] || height < MIN_IMAGE_SIZE[1] || width > MAX_IMAGE_SIZE[0] || height > MAX_IMAGE_SIZE[1]) return response.status(400);
+    if (!width || !height || width < MIN_IMAGE_SIZE[0] || height < MIN_IMAGE_SIZE[1] || width > MAX_IMAGE_SIZE[0] || height > MAX_IMAGE_SIZE[1])
+        return response.status(400).send({ message: 'Width/Height is more than maximum!' });
 
     const url = await uploadImageToImgbb(image);
 

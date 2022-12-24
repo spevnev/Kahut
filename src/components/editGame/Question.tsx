@@ -38,6 +38,9 @@ const Buttons = styled.div`
 `;
 
 const ImageContainer = styled.div`
+    min-width: 240px;
+    min-height: 135px;
+    height: 100%;
     max-width: 480px;
     max-height: 270px;
 `;
